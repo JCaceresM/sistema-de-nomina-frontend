@@ -1,3 +1,9 @@
 export const WEB_SERVICE_API = process.env.REACT_APP_WEB_SERVICE_API
-export const WEB_SERVICE_API_LOGIN = `${WEB_SERVICE_API}/login`
-export const WEB_SERVICE_API_PERSONAL_MENU = `${WEB_SERVICE_API}/menu_personal`
+export const WEB_SERVICE_API_LOGIN = `${WEB_SERVICE_API}/auth/login`
+export const WEB_SERVICE_API_PERSONAL_MENU = `${WEB_SERVICE_API}/activity/personal_menu`
+export const WEB_SERVICE_API_EMPLOYEE_ALL = `${WEB_SERVICE_API}/employees/all`
+export const WEB_SERVICE_API_PROVINCES_ALL = `${WEB_SERVICE_API}/provinces`
+export const WEB_SERVICE_API_DEPARTMENT_ALL = `${WEB_SERVICE_API}/departments/all`
+export const WEB_SERVICE_API_DEPARTMENT_CREATE = `${WEB_SERVICE_API}/departments`
+export const WEB_SERVICE_API_POSITION_ALL = `${WEB_SERVICE_API}/positions/all`
+export const WEB_SERVICE_API_POSITION_CREATE = `${WEB_SERVICE_API}/positions`

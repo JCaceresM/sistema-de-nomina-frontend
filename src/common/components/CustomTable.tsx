@@ -5,9 +5,10 @@ import { TableProps } from 'antd/lib/table'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTable: FunctionComponent<TableProps<any>> = ({
   size = 'small',
+  bordered=true,
   ...props
 }): ReactElement => (
-  <Table size={size} {...props}>
+  <Table bordered={bordered} size={size} {...props}>
     {props.children}
   </Table>
 )

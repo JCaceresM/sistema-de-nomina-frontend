@@ -1,0 +1,1 @@
+export const currencyLocale = (value: number): string => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'DOP' }).format(value)

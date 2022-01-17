@@ -1,24 +1,25 @@
 import React, { ReactElement } from "react"
-import {
-  Route,
-  BrowserRouter as Router,
-  Routes,
-} from "react-router-dom"
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 import ProtectedRoutesWrapper from "./common/components/ProtectedRoutesWrapper"
 import {
+  PATH_CONFIG_DEPARTMENT_CONSULTING,
+  PATH_CONFIG_EMPLOYEE_CONSULTING,
+  PATH_CONFIG_POSITIONS_CONSULTING,
+  PATH_FIXED_CONSULTING,
   PATH_LOGIN,
   PATH_MAIN,
 } from "./common/constants/web-site-route.constants"
 import CompanyLogo from "./common/components/CompanyLogo"
 import Login from "./pages/login/Login"
-import {  Result } from "antd"
-import { isLoggedIn } from "./common/utils/session/session"
-import { HomeRedirect } from "./common/components/HomeRedirect"
 import { RemoveSessionRedirect } from "./common/components/RemoveSessionRedirect"
+import Consulting from "./pages/fix-payroll/consulting"
+import EmployeeConsulting from "./pages/employee/employee"
+import Department from "./pages/department/department"
+import Position from "./pages/position/position"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>
-      <React.Fragment>
+      {/* <React.Fragment> */}
         <Routes>
           <Route path={PATH_LOGIN} element={<Login />} />
           <Route
@@ -29,27 +30,51 @@ const WebSiteRoutes = (): ReactElement => {
               </ProtectedRoutesWrapper>
             }
           />
+          <Route
+            path={PATH_FIXED_CONSULTING}
+            element={
+              <ProtectedRoutesWrapper>
+                <Consulting />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_CONFIG_DEPARTMENT_CONSULTING}
+            element={
+              <ProtectedRoutesWrapper>
+                <Department />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_CONFIG_EMPLOYEE_CONSULTING}
+            element={
+              <ProtectedRoutesWrapper>
+                <EmployeeConsulting />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_CONFIG_POSITIONS_CONSULTING}
+            element={
+              <ProtectedRoutesWrapper>
+                <Position />
+              </ProtectedRoutesWrapper>
+            }
+          />
 
           <Route
             element={
-              isLoggedIn() ? (
-                <RemoveSessionRedirect></RemoveSessionRedirect>
-              ) : (
-                <Result
-                  status="404"
-                  title="404"
-                  subTitle="Sorry, the page you visited does not exist."
-                  extra={<HomeRedirect/>}
-                />
-              )
+              <ProtectedRoutesWrapper>
+                <RemoveSessionRedirect />
+              </ProtectedRoutesWrapper>
             }
             path="*"
           />
         </Routes>
-      </React.Fragment>
+      {/* </React.Fragment> */}
     </Router>
   )
 }
-
 
 export default WebSiteRoutes

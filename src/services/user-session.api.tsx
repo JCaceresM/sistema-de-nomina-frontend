@@ -16,14 +16,13 @@ const authenticateUser = (
   }
   
   type FetchUserMenuOptionsPayload = {
-    username: string
-    businessId: string
+    user_id: string
   }
   
   const getUserMenuOptions = (
     data: FetchUserMenuOptionsPayload
   ): Promise<AxiosResponse<FetchUserMenuOptionsPayload>> => {
-    return axiosHelper.postRequest(WEB_SERVICE_API_PERSONAL_MENU, data)
+    return axiosHelper.getRequest(WEB_SERVICE_API_PERSONAL_MENU, data)
   }
   
   export const userApiRequest = {

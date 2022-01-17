@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react"
+import React, { ReactElement, useEffect } from "react"
 import { Link, Navigate,  } from "react-router-dom"
 import styled from "styled-components"
 import {
@@ -33,6 +33,9 @@ import CustomButton from "./CustomButton"
 import CustomMenuItem from "./CustomMenuItem"
 import CustomDropdown from "./CustomDropdown"
 import LogoComponent from "./LogoComponent"
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../../reducers/root_reducers"
+import { getMenuOptions } from "../../actions/user/user.actions"
 
 const SiderHeaderContainer = styled.div`
   text-align: center;
@@ -50,6 +53,7 @@ const SiderHeaderContainer = styled.div`
 const HeaderTextContainer = styled(CustomText)`
   color: #fff;
   font-size: 20px;
+  
 `
 
 type Props = {
@@ -58,12 +62,18 @@ type Props = {
 
 const ProtectedRoutesWrapper = (props: Props): ReactElement => {
  
-  
+  const dispatch = useDispatch()
   const [isCollapsed, setIsCollapsed] = React.useState(false)
-  const { username = "" } = getSessionInfo()
+  const { menuOptions } = useSelector((state: RootState) => state.user)
+
+ 
+  const { userId = "",username = "",} = getSessionInfo()
   const handleDrawerToggle = () => {
     setIsCollapsed(!isCollapsed)
   }
+  useEffect(() => {
+    dispatch(getMenuOptions(userId))
+  }, [ userId])
 
   if (!isLoggedIn()) {
     removeSession()
@@ -105,7 +115,7 @@ const ProtectedRoutesWrapper = (props: Props): ReactElement => {
           <p className="username">{username}</p>
           <CustomDivider />
         </SiderHeaderContainer>
-        <DrawerOptions userMenuOptions={[]} />
+        <DrawerOptions userMenuOptions={menuOptions} />
       </CustomSider>
       <CustomLayout>
         <CustomHeader
@@ -127,6 +137,7 @@ const ProtectedRoutesWrapper = (props: Props): ReactElement => {
             style={{
               width: "100%",
               position: "relative",
+              // padding: "0 0 3px 0"
             }}
           >
             <CustomCol xs={1}>
@@ -135,8 +146,6 @@ const ProtectedRoutesWrapper = (props: Props): ReactElement => {
                 {
                   onClick: handleDrawerToggle,
                   style: {
-                    fontSize: "18px",
-                    padding: "0 15px",
                     cursor: "pointer",
                     textAlign: "center",
                   },
@@ -145,8 +154,8 @@ const ProtectedRoutesWrapper = (props: Props): ReactElement => {
             </CustomCol>
             <CustomCol xs={20}>
               <HeaderTextContainer ellipsis={true}>
-                {" a"}
-                {"d"}
+                {"Sistema de nomina"}
+                {/* {"d"} */}
               </HeaderTextContainer>
             </CustomCol>
 

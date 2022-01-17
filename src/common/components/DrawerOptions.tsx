@@ -1,35 +1,51 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ReactElement, useEffect, useState, } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, { ReactElement, useEffect, useState } from "react"
+import {
+  Location,
+  NavigateFunction,
+  useLocation,
+  useNavigate,
+} from "react-router-dom"
 import {
   CustomButton,
   CustomMenu,
   CustomMenuItem,
   CustomSubMenu,
   CustomTooltip,
-} from '.'
+} from "."
 // import { useLocation } from 'react-router-dom'
-import CustomRow from './CustomRow'
-import { MenuOption } from '../types/general.type'
+import CustomRow from "./CustomRow"
+import { MenuOption } from "../types/general.type"
 
-let history
-
-const getMenuItems = (userOptions: MenuOption[]) => {
+// let history: NavigateFunction
+let location: Location
+const getMenuItems = (userOptions: MenuOption[],history: NavigateFunction) => {
   return userOptions.map((route: MenuOption) => {
     return route.CHILDREN && route.CHILDREN.length ? (
-      <CustomSubMenu key={route.ID} title={route.NAME}>
-        {getMenuItems(route.CHILDREN)}
+      <CustomSubMenu key={route.id_actividad} title={route.description}>
+        {getMenuItems(route.CHILDREN,history)}
       </CustomSubMenu>
     ) : (
       <CustomMenuItem
-        key={route.ID}
+        key={route.id_actividad}
         onClick={() => {
-          if (route.MODULE) {
-            history.push(route.MODULE, { activityId: route.ID })
+          if (route.route) {
+            // eslint-disable-next-line no-console
+            console.log(route.route)
+            // eslint-disable-next-line no-console
+            console.log(location)
+            if (location.pathname !== `/${route.route}`) {
+              history('/'+route.route, {
+                replace: true,
+                state: { activityId: route.id_actividad },
+              })
+            }
           }
         }}
       >
-        <CustomTooltip title={route.NAME}>{route.NAME}</CustomTooltip>
+        <CustomTooltip title={route.description}>
+          {route.description}
+        </CustomTooltip>
       </CustomMenuItem>
     )
   })
@@ -41,14 +57,14 @@ type Props = {
 }
 
 const DrawerOptions = (props: Props): ReactElement => {
-  const location = useLocation()
+  location = useLocation()
 
-  history = useNavigate()
+  const history = useNavigate()
   const [openKeys, setOpenKeys] = useState(
-    JSON.parse(window.localStorage.getItem('optionMenuKey')||'{}')
+    JSON.parse(window.localStorage.getItem("optionMenuKey") || "{}")
   )
   const [selectedKeys, setSelectedKeys] = useState([
-    window.localStorage.getItem('subMenuKey')||'',
+    window.localStorage.getItem("subMenuKey") || "",
   ])
   const routeIdList: string[] = []
 
@@ -61,57 +77,55 @@ const DrawerOptions = (props: Props): ReactElement => {
   const _onOpenChange = (_openKeys: string[]) => {
     const latestOpenKey = _openKeys.find((key) => openKeys.indexOf(key) === -1)
 
-    if (routeIdList.indexOf(latestOpenKey || '') === -1) {
+    if (routeIdList.indexOf(latestOpenKey || "") === -1) {
       setOpenKeys(_openKeys)
     } else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
       window.localStorage.setItem(
-        'optionMenuKey',
+        "optionMenuKey",
         JSON.stringify(latestOpenKey ? [latestOpenKey] : [])
       )
     }
   }
   useEffect(() => {
-    if (location.pathname === '/') {
-      window.localStorage.removeItem('optionMenuKey')
-      window.localStorage.setItem('optionMenuKey', JSON.stringify(['']))
-      setOpenKeys([''])
+    if (location.pathname === "/") {
+      window.localStorage.removeItem("optionMenuKey")
+      window.localStorage.setItem("optionMenuKey", JSON.stringify([""]))
+      setOpenKeys([""])
 
-      window.localStorage.removeItem('subMenuKey')
-      window.localStorage.setItem('subMenuKey', JSON.stringify(['']))
-      setSelectedKeys([''])
+      window.localStorage.removeItem("subMenuKey")
+      window.localStorage.setItem("subMenuKey", JSON.stringify([""]))
+      setSelectedKeys([""])
     } else {
-      window.localStorage.setItem('optionMenuKey', JSON.stringify(openKeys))
+      window.localStorage.setItem("optionMenuKey", JSON.stringify(openKeys))
     }
   }, [location.pathname])
 
   return (
     <>
-      <CustomRow justify={'end'}>
-        <CustomButton type={'link'} >
-          Contraer todo
-        </CustomButton>
+      <CustomRow justify={"end"}>
+        <CustomButton type={"link"}>Contraer todo</CustomButton>
       </CustomRow>
       <CustomMenu
-        mode={'inline'}
+        mode={"inline"}
         inlineIndent={10}
         // openKeys={openKeys}
         // defaultOpenKeys={openKeys}
         // selectedKeys={selectedKeys}
         // onOpenChange={(keys) =>
-          // _onOpenChange(
-          //   keys.length
-          //     ? (keys as string[])
-          //     : JSON.parse(window.localStorage.getItem('optionMenuKey')||'{}')
-          // )
+        // _onOpenChange(
+        //   keys.length
+        //     ? (keys as string[])
+        //     : JSON.parse(window.localStorage.getItem('optionMenuKey')||'{}')
+        // )
         // }
         onClick={(keys) => {
           const { key } = keys
-          window.localStorage.setItem('subMenuKey', key.toString())
+          window.localStorage.setItem("subMenuKey", key.toString())
           // setSelectedKeys([window.localStorage.getItem('subMenuKey')||''])
         }}
       >
-        {/* {getMenuItems(props.userMenuOptions)} */}
+        {getMenuItems(props.userMenuOptions, history)}
       </CustomMenu>
     </>
   )

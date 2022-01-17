@@ -13,7 +13,6 @@ type UserData = {
   businessId: string
   username: string
   userId: string
-  costCenterId: string
   sessionCookie: {
     token: string
     expiration: string
@@ -21,14 +20,14 @@ type UserData = {
 }
 
 const createSession = (user: UserData): void => {
-  const { businessId, username, sessionCookie, userId, costCenterId } = user
+  
+  const { businessId, username, sessionCookie, userId, } = user
   const { token: sessionToken, expiration: sessionExpiration } = sessionCookie
   const cookiesExpiration = new Date(sessionExpiration)
   const sessionInfo = JSON.stringify({
     businessId,
     username,
     userId,
-    costCenterId,
   })
 
   Cookies.set(COOKIE_KEY_USER_DATA, sessionInfo, { expires: cookiesExpiration })

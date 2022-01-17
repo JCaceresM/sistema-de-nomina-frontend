@@ -7,18 +7,18 @@ import { Modal } from 'antd'
 import { ModalFuncProps } from 'antd/lib/modal'
 import React from 'react'
 
-export const CustomModalComfirmation = (props: ModalFuncProps): void => {
+export const CustomModalConfirmation = (props: ModalFuncProps): void => {
   Modal.confirm({
     visible: false,
     title: 'Confirmar',
-    content: 'content: Alguna descripcion',
+    content: 'content: Alguna descripción',
     ...props,
   })
 }
 export const CustomModalError = (props: ModalFuncProps): void => {
   Modal.error({
     title: 'Confirmar',
-    content: 'content: Alguna descripcinón',
+    content: 'content: Alguna descripción',
     ...props,
   })
 }

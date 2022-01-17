@@ -7,22 +7,19 @@ import {
     USER_GET_MENU_OPTIONS,
     USER_GET_MENU_OPTIONS_FAILURE,
     USER_GET_MENU_OPTIONS_SUCCESS,
-  } from './user.constants'
+  } from '../../constants/user/user.constants'
   
   export type GetMenuOptionsAction = {
     type: typeof USER_GET_MENU_OPTIONS
-    username: string
-    businessId: string
+    userId: string
   }
   
   export const getMenuOptions = (
-    username: string,
-    businessId: string
+    userId: string,
   ): GetMenuOptionsAction => {
     return {
       type: USER_GET_MENU_OPTIONS,
-      username,
-      businessId,
+      userId,
     }
   }
   

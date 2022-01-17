@@ -9,10 +9,11 @@ type CustomDatePickerProps = DatePickerProps & {
 
 const CustomDatePicker: React.FunctionComponent<CustomDatePickerProps> = ({
   locale = localeProp,
+
   ...props
 }): React.ReactElement => {
   return (
-    <DatePicker locale={locale} {...props}>
+    <DatePicker format ={'DD-MM-YYYY'}locale={locale} {...props}>
       {props.children}
     </DatePicker>
   )

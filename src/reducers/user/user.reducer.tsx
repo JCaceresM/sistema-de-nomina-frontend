@@ -7,8 +7,8 @@ import {
     USER_GET_MENU_OPTIONS,
     USER_GET_MENU_OPTIONS_FAILURE,
     USER_GET_MENU_OPTIONS_SUCCESS,
-  } from './user.constants'
-  import { UserAction } from './user.actions'
+  } from '../../constants/user/user.constants'
+  import { UserAction } from '../../actions/user/user.actions'
   
 
   

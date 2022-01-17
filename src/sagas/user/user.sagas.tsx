@@ -9,22 +9,20 @@ import {
   GetMenuOptionsAction,
   getMenuOptionsFailure,
   getMenuOptionsSuccess,
-} from "./user.actions"
-import { USER_AUTHENTICATE, USER_GET_MENU_OPTIONS } from "./user.constants"
+} from "../../actions/user/user.actions"
+import { USER_AUTHENTICATE, USER_GET_MENU_OPTIONS } from "../../constants/user/user.constants"
 
 function* getUserMenuOptionsSaga({
-  username,
-  businessId,
+  userId,
 }: GetMenuOptionsAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
       userApiRequest.getUserMenuOptions({
-        businessId,
-        username,
+        user_id: userId,
       })
     )
 
-    const { data: menuOptions } = response.data
+    const { data: menuOptions } = response
 
     yield put(getMenuOptionsSuccess(menuOptions))
   } catch (error) {
@@ -45,7 +43,7 @@ function* authenticateUserSaga({ username, password }: AuthenticateUserAction) {
       })
     )
 
-    const { data: userInfo } = response.data
+    const { data: userInfo } = response
 
     createSession(userInfo)
     yield put(authenticateUserSuccess())

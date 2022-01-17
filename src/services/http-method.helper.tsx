@@ -17,14 +17,20 @@ const getResponseParams = (): RequestHeaders => {
   }
 }
 
-function postRequest<T>(url: string, data: Record<string, unknown>): Promise<AxiosResponse<T>> {
+function postRequest<T>(
+  url: string,
+  data: Record<string, unknown>
+): Promise<AxiosResponse<T>> {
   const config = getResponseParams()
   const result = axios.post(url, data, config)
 
   return result
 }
 
-function putRequest<T>(url: string, data: Record<string, unknown>): Promise<AxiosResponse<T>> {
+function putRequest<T>(
+  url: string,
+  data: Record<string, unknown>
+): Promise<AxiosResponse<T>> {
   const config = getResponseParams()
   const result = axios.put(url, data, config)
 
@@ -40,13 +46,16 @@ function unauthorizedPostRequest<T>(
   return axios.post(url, data, config)
 }
 
-function getRequest<T>(url: string, params: Record<string, unknown>): Promise<AxiosResponse<T>> {
+function getRequest<T>(
+  url: string,
+  params: Record<string, unknown>={}
+): Promise<AxiosResponse<T>> {
   const config = getResponseParams()
 
   return axios.get(url, { ...config, params })
 }
-const getPaginatedUrl = (url: string, page = 1, size = 1): string => {
-  return `${url}?page=${page}&size=${size}`
+const getPaginatedUrl = (url: string, take = 1, skip = 1): string => {
+  return `${url}?take=${take}&skip=${skip}`
 }
 
 export const axiosHelper = {

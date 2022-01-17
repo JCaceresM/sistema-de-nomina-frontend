@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 import { Input } from 'antd'
 import { InputProps } from 'antd/lib/input'
@@ -13,6 +14,8 @@ const CustomInput: React.FunctionComponent<CustomInputProps> = ({
   ...props
 }): React.ReactElement => (
   <Input autoComplete={autoComplete} disabled={disabled} type={type} {...props}>
+   
+    
     {props.children}
   </Input>
 )

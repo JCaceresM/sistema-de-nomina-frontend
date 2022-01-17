@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
 import { Modal } from "antd"
@@ -22,7 +22,7 @@ import {
 import {
   authenticateUser,
   authenticateUserHideError,
-} from "../../feature/user/user.actions"
+} from "../../actions/user/user.actions"
 
 import { isLoggedIn } from "../../common/utils/session/session"
 import { PATH_MAIN } from "../../common/constants/web-site-route.constants"
@@ -34,12 +34,20 @@ const StyledRow = styled(CustomRow)``
 
 const ContentContainer = styled.div`
   text-align: center;
-  background-color: ${({ theme }) => theme.backgroundColor};
   height: 100vh;
-  padding: 35px 20px;
+  padding: 25vh 0 25vh  20px;
 
+ 
+`
+const ContentContainer1 = styled.div`
+  text-align: center;
+  height: 84%;
+  background-color: ${({ theme }) => theme.backgroundColor};
+
+  padding: 35px  20px;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-    0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+
 `
 
 const FormContainer = styled.div``
@@ -50,29 +58,30 @@ const Login: React.FunctionComponent = () => {
   )
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    if (showAuthenticationError) {
+      Modal.error({
+        title: "Error",
+        content:
+        "Ocurrió un error al iniciar sesión, por favor verifique sus datos.",
+        onOk() {
+          dispatch(authenticateUserHideError())
+        },
+      })
+    }
+  }, [showAuthenticationError])
+  
   if (isLoggedIn()) {
     return <Navigate to={PATH_MAIN} />
   }
-
-  if (showAuthenticationError) {
-    Modal.error({
-      title: "Error",
-      content:
-        "Ocurrió un error al iniciar sesión, por favor verifique sus datos.",
-      onOk() {
-        dispatch(authenticateUserHideError())
-      },
-    })
-  }
-
   return (
     <CustomLayout>
       <CustomContent>
-        <StyledRow justify={"end"}>
-          <StyledCol xs={24} sm={16} md={10}>
+        <StyledRow justify={"center"} >
+          <StyledCol  xs={13}  sm={11} md={9} lg={8} xl={5}>
             <ContentContainer>
+              <ContentContainer1>
               <CustomAvatar
-                style={{ marginTop: "200px" }}
                 size={40}
                 icon={<LockOutlined />}
               />
@@ -135,7 +144,7 @@ const Login: React.FunctionComponent = () => {
                   </CustomRow>
                 </FormContainer>
               </CustomForm>
-              <Copyright />
+              <Copyright /></ContentContainer1>
             </ContentContainer>
           </StyledCol>
         </StyledRow>
