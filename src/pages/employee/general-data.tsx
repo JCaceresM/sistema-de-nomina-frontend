@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Select } from "antd"
 import { FormInstance } from "antd/lib/form"
 import moment from "moment"
@@ -31,9 +30,8 @@ const formItemLayout = {
     xl: { span: 16 },
   },
 }
-const GeneralData = ({ form ,stepChanger}: { form: FormInstance, stepChanger: (step:number) => void}): ReactElement => {
+const GeneralData = ({ form }: { form: FormInstance, stepChanger: (step:number) => void}): ReactElement => {
   const { Option } = Select
-  // const [state, setState] = React.useState(0)
   return (
     <CustomForm
       {...formItemLayout}
@@ -70,19 +68,15 @@ const GeneralData = ({ form ,stepChanger}: { form: FormInstance, stepChanger: (s
         <CustomCol xs={24} lg={12}>
           <CustomFormItem  required rules={[{required: true}]} name={"born_date"} label="Fecha de naci.">
             <CustomDatePicker
+            defaultPickerValue={moment().subtract(18, 'years').endOf('day')}
               onChange={(e) => {
-                const a = moment().subtract(18, 'years').calendar()
-                const b = moment().days()
-                // eslint-disable-next-line no-console
-                console.log(a,new Date(777));
-                
                 const days = moment().diff(e, "d")
                 const diff = moment.duration(days,'days')
                 form.setFieldsValue({
-                  age: `Año(s) ${Number(diff.years())}, Meses ${Number(
+                  ageStored: `Año(s) ${Number(diff.years())}, Meses ${Number(
                     diff.months()
                   )} , Dias ${diff.days()}`,
-                  ageStored: days
+                  age: days
                 })
               }}
               style={{ width: "100%" }}
@@ -94,8 +88,8 @@ const GeneralData = ({ form ,stepChanger}: { form: FormInstance, stepChanger: (s
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>
-          <CustomFormItem  required rules={[{required: true}]} name={"age"} label="Edad">
-            <CustomInput readOnly placeholder="Aqui aparece la edad" />
+          <CustomFormItem  required rules={[{required: true}]} name={"ageStored"} label="Edad">
+            <CustomInput readOnly placeholder="Aquí aparece la edad" />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>

@@ -1,5 +1,5 @@
-export function addPropertyKey<T>(record: T,key='key'): T  {
-  function arrayToExample(values: T): T {
+export function addPropertyKey<T> (record: T,key='key'): T  {
+  function arrayToExample (values: T): T {
     return (values as unknown as T[]).map((item, index) => options(item, index) as T) as unknown as T
   }
   const options = (values: T, index: number): T  => {

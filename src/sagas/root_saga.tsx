@@ -3,13 +3,24 @@ import {
   watchCreateDepartment,
   watchGetAllDepartment,
 } from "./department/department.sagas"
-import { watchGetAllEmployee } from "./employee/employee.sagas"
+import {
+  watchCreateEmployee,
+  watchGetEmployee,
+} from "./employee/employee.sagas"
 import { watchLocalState } from "./local/localState.sagas"
+import { watchGetMunicipalities } from "./municipality/municipality.saga"
+import {
+  watchCreatePayrollRecord,
+  watchGetAllPayrollRecord,
+} from "./payroll-record/payroll.sagas"
+import { watchCreatePayroll, watchGetAllPayroll } from "./payroll/payroll.sagas"
 import {
   watchCreatePosition,
   watchGetAllPositions,
-} from "./positions/positions.redux"
-import { watchGetAllProvinces } from "./provinces/provinces"
+  watchGetAllPositionsDepartment,
+} from "./positions/positions.saga"
+import { watchGetAllProvinces } from "./provinces/provinces.saga"
+import { watchGetSectors } from "./sector/sector.saga"
 import {
   watchAuthenticateUser,
   watchGetUserMenuOptions,
@@ -19,12 +30,20 @@ export default function* rootSaga(): Generator {
   yield all([
     watchGetUserMenuOptions(),
     watchAuthenticateUser(),
-    watchGetAllEmployee(),
+    watchGetEmployee(),
     watchLocalState(),
     watchGetAllDepartment(),
     watchCreateDepartment(),
     watchCreatePosition(),
     watchGetAllPositions(),
     watchGetAllProvinces(),
+    watchGetMunicipalities(),
+    watchGetSectors(),
+    watchGetAllPositionsDepartment(),
+    watchCreateEmployee(),
+    watchCreatePayroll(),
+    watchGetAllPayroll(),
+    watchGetAllPayrollRecord(),
+    watchCreatePayrollRecord(),
   ])
 }

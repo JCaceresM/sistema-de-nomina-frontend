@@ -11,7 +11,7 @@ import {
 import { DepartmentActions,DepartmentType } from "../../actions/department/department.actions"
 import { ResponseMetadata } from "../../common/types/response.type"
 
-type DepartmentState = {
+export type DepartmentState = {
   getDepartmentsIsLoading: boolean
   createDepartmentsIsLoading: boolean,
   isCreated:boolean

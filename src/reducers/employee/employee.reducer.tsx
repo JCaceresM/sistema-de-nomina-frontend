@@ -1,23 +1,32 @@
-
 import {
-  EMPLOYEE_GET_ALL_EMPLOYEE,
-  EMPLOYEE_GET_ALL_EMPLOYEE_FAILURE,
-  EMPLOYEE_GET_ALL_EMPLOYEE_SUCCESS,
+  EMPLOYEE_CREATE_EMPLOYEE,
+  EMPLOYEE_CREATE_EMPLOYEE_FAILURE,
+  EMPLOYEE_CREATE_EMPLOYEE_SUCCESS,
+  EMPLOYEE_GET_EMPLOYEE,
+  EMPLOYEE_GET_EMPLOYEE_FAILURE,
+  EMPLOYEE_GET_EMPLOYEE_SUCCESS,
+  EMPLOYEE_MANAGER_REDUX_STATE_EMPLOYEE,
 } from "../../constants/employee/employee.constants"
-import { EmployeeAction,EmployeeType } from "../../actions/employee/employee.actions"
+import {
+  EmployeeAction,
+  EmployeeType,
+} from "../../actions/employee/employee.actions"
 import { ResponseMetadata } from "../../common/types/response.type"
 
-type EmployeeState = {
-  isLoading: boolean
-  employees: EmployeeType[],
-  employeesMetadata:ResponseMetadata
-
+export type EmployeeState = {
+  getEmployeesIsLoading: boolean
+  createEmployeesIsLoading: boolean
+  isEmployeeCreated: boolean
+  employees: EmployeeType[]
+  employeesMetadata: ResponseMetadata
 }
 
 const initialState = {
-  isLoading: false,
+  getEmployeesIsLoading: false,
+  createEmployeesIsLoading: false,
+  isEmployeeCreated: false,
   employees: new Array<EmployeeType>(),
-  employeesMetadata:{} as ResponseMetadata,
+  employeesMetadata: {} as ResponseMetadata,
 }
 
 const Employee = (
@@ -25,24 +34,46 @@ const Employee = (
   action: EmployeeAction
 ): EmployeeState => {
   switch (action.type) {
-    case EMPLOYEE_GET_ALL_EMPLOYEE:
+    case EMPLOYEE_GET_EMPLOYEE:
       return {
         ...state,
 
-        isLoading: true,
+        getEmployeesIsLoading: true,
       }
-    case EMPLOYEE_GET_ALL_EMPLOYEE_FAILURE:
+    case EMPLOYEE_GET_EMPLOYEE_FAILURE:
       return {
         ...state,
-        isLoading: false,
+        getEmployeesIsLoading: false,
       }
-    case EMPLOYEE_GET_ALL_EMPLOYEE_SUCCESS:
-        
+    case EMPLOYEE_GET_EMPLOYEE_SUCCESS:
       return {
         ...state,
-        employees: action.AllEmployee,
+        employees: action.Employees,
         employeesMetadata: action.metadata,
-        isLoading: false,
+        getEmployeesIsLoading: false,
+      }
+    case EMPLOYEE_CREATE_EMPLOYEE:
+      return {
+        ...state,
+
+        createEmployeesIsLoading: true,
+      }
+    case EMPLOYEE_CREATE_EMPLOYEE_FAILURE:
+      return {
+        ...state,
+        createEmployeesIsLoading: false,
+      }
+    case EMPLOYEE_CREATE_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        employees: [...state.employees, action.created],
+        createEmployeesIsLoading: false,
+        isEmployeeCreated: true,
+      }
+      case EMPLOYEE_MANAGER_REDUX_STATE_EMPLOYEE:  
+      return {
+        ...state,
+        ...action.state
       }
     default:
       return state

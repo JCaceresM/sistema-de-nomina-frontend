@@ -16,9 +16,14 @@ import {
 // import { useLocation } from 'react-router-dom'
 import CustomRow from "./CustomRow"
 import { MenuOption } from "../types/general.type"
+import { useDispatch } from "react-redux"
+import { Dispatch } from "redux"
+import { setInitialState } from "../../actions/state/index.state"
 
 // let history: NavigateFunction
 let location: Location
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let dispatch: Dispatch<any>
 const getMenuItems = (userOptions: MenuOption[],history: NavigateFunction) => {
   return userOptions.map((route: MenuOption) => {
     return route.CHILDREN && route.CHILDREN.length ? (
@@ -30,10 +35,7 @@ const getMenuItems = (userOptions: MenuOption[],history: NavigateFunction) => {
         key={route.id_actividad}
         onClick={() => {
           if (route.route) {
-            // eslint-disable-next-line no-console
-            console.log(route.route)
-            // eslint-disable-next-line no-console
-            console.log(location)
+            dispatch(setInitialState())
             if (location.pathname !== `/${route.route}`) {
               history('/'+route.route, {
                 replace: true,
@@ -58,6 +60,7 @@ type Props = {
 
 const DrawerOptions = (props: Props): ReactElement => {
   location = useLocation()
+   dispatch = useDispatch()
 
   const history = useNavigate()
   const [openKeys, setOpenKeys] = useState(

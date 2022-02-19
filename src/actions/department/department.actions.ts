@@ -8,15 +8,26 @@ import {
   DEPARTMENT_GET_ALL_DEPARTMENT_SUCCESS,
   DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT,
 } from "../../constants/department/department.constants"
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type DepartmentType = {}
+import { DepartmentState } from "../../reducers/department/department.reducer"
+export type DepartmentType = {
+  id:string
+name:string
+location:string
+budget:string
+status:string
+type:string
+updated_at:string
+created_at:string
+user_update:string
+user_insert:string
+}
 export type DepartmentManagerReduxStateAction = {
-  state: DepartmentType
+  state: Partial<DepartmentState>
   type: typeof DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT
 }
 
 export const departmentManagerReduxState = (
-  state: DepartmentType
+  state: Partial<DepartmentState>
 ): DepartmentManagerReduxStateAction => {
   return {
     type: DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT,

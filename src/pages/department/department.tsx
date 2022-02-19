@@ -8,7 +8,7 @@ import {
 import React, { ReactElement, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllDepartment } from "../../actions/department/department.actions"
-import { getAllEmployee } from "../../actions/employee/employee.actions"
+import { getEmployee } from "../../actions/employee/employee.actions"
 import {
   CustomButton,
   CustomCol,

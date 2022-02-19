@@ -1,10 +1,11 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Select } from "antd"
 import { FormInstance } from "antd/lib/form"
 import React, { ReactElement, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllProvinces } from "../../actions/provinces/provinces.actions"
+import { getMunicipality } from "../../actions/municipality/municipality.actions"
+import { getAllProvinces, ProvincesType } from "../../actions/provinces/provinces.actions"
+import { getSector, SectorType } from "../../actions/sector/sector.actions"
 import {
   CustomCol,
   CustomDivider,
@@ -23,18 +24,24 @@ import { RootState } from "../../reducers/root_reducers"
 
 const ContactInfo = ({
   form,
-  stepChanger,
 }: {
   form: FormInstance
   stepChanger: (step: number) => void
 }): ReactElement => {
   const { Option } = Select
   const dispatch = useDispatch()
-  const {provinces=[]}= useSelector((state:RootState)=> state.provinces)
-useEffect(() => {
- dispatch(getAllProvinces())
-},[])
-return (
+  const {
+    provinces: provinceState,
+    municipality,
+    sector,
+  } = useSelector((state: RootState) => state)
+  const { provinces = [] } = provinceState
+  const { municipalities = [] } = municipality
+  const { sectors = [] } = sector
+  useEffect(() => {
+    dispatch(getAllProvinces())
+  }, [])
+  return (
     <CustomForm
       {...formItemLayout}
       form={form}
@@ -62,7 +69,10 @@ return (
               },
             ]}
           >
-            <CustomInputNumber  placeholder={"Escriba un numero Movil"} maxLength={10} />
+            <CustomInputNumber
+              placeholder={"Escriba un numero Movil"}
+              maxLength={10}
+            />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>
@@ -80,14 +90,17 @@ return (
               },
             ]}
             name={"tell"}
-            label="Telefono"
+            label="Teléfono"
           >
-            <CustomInputNumber  placeholder={"Escriba un numero telefónico"} maxLength={10} />
+            <CustomInputNumber
+              placeholder={"Escriba un numero telefónico"}
+              maxLength={10}
+            />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>
           <CustomFormItem name={"fax"} label="fax">
-            <CustomInput  placeholder={"Escriba un fax"} />
+            <CustomInput placeholder={"Escriba un fax"} />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>
@@ -101,12 +114,12 @@ return (
             name={"email"}
             label="Correo"
           >
-            <CustomInput  placeholder={"Escriba un correo"} />
+            <CustomInput placeholder={"Escriba un correo"} />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24}>
           <CustomDivider orientation="left">
-            Direccion de residencia
+            Dirección de residencia
           </CustomDivider>
         </CustomCol>
         <CustomCol xs={24} lg={12}>
@@ -116,11 +129,19 @@ return (
             name={"province"}
             label="Provincia"
           >
-            <CustomSelect  placeholder={"Seleccione un Provincia"}>
-              {(provinces||[]).map((province:any,ind)=>
-                 (<Option key={`${ind}`} value={province.id}>{province.Name}</Option>))
-              }
-              
+            <CustomSelect
+              onChange={(value) => {
+                form.resetFields(["municipality", "sector"])
+
+                dispatch(getMunicipality(parseInt(`${value}`)))
+              }}
+              placeholder={"Seleccione un Provincia"}
+            >
+              {(provinces || []).map((province: ProvincesType, ind) => (
+                <Option key={`${ind}`} value={province.id}>
+                  {province.Name}
+                </Option>
+              ))}
             </CustomSelect>
           </CustomFormItem>
         </CustomCol>
@@ -128,12 +149,22 @@ return (
           <CustomFormItem
             required
             rules={[{ required: true }]}
-            name={"municipalities"}
+            name={"municipality"}
             label="Municipio"
           >
-            <CustomSelect placeholder={"Seleccione un Municipio"}>
-              <Option value={"M"}>A</Option>
-              <Option value={"F"}>B</Option>
+            <CustomSelect
+              onChange={(value) => {
+                form.resetFields(["sector"])
+
+                dispatch(getSector(parseInt(`${value}`)))
+              }}
+              placeholder={"Seleccione un Municipio"}
+            >
+              {municipalities.map((municipality: ProvincesType, ind) => (
+                <Option key={`${ind}`} value={municipality.id}>
+                  {municipality.Name}
+                </Option>
+              ))}
             </CustomSelect>
           </CustomFormItem>
         </CustomCol>
@@ -145,8 +176,11 @@ return (
             label="Sector"
           >
             <CustomSelect placeholder={"Seleccione un Sector"}>
-              <Option value={"M"}>A</Option>
-              <Option value={"F"}>B</Option>
+              {sectors.map((sector: SectorType, ind) => (
+                <Option key={`${ind}`} value={sector.id}>
+                  {sector.Name}
+                </Option>
+              ))}
             </CustomSelect>
           </CustomFormItem>
         </CustomCol>
@@ -163,7 +197,7 @@ return (
 
         <CustomCol xs={24} lg={12}>
           <CustomFormItem name={"full_name_emergency_contact"} label="Nombres">
-            <CustomInput  placeholder={"Escriba nombre completo"}/>
+            <CustomInput placeholder={"Escriba nombre completo"} />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>
@@ -183,13 +217,16 @@ return (
               },
             ]}
           >
-            <CustomInputNumber placeholder={"Escriba un Movil"} maxLength={10} />
+            <CustomInputNumber
+              placeholder={"Escriba un Movil"}
+              maxLength={10}
+            />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>
           <CustomFormItem
             name={"tell_emergency_contact"}
-            label="Telefono"
+            label="Teléfono"
             normalize={(value: string) => {
               return `${value}`.replace(/(\d{3})(\d{3})(\d{4})/g, "$1-$2-$3")
             }}
@@ -203,7 +240,10 @@ return (
               },
             ]}
           >
-            <CustomInputNumber placeholder={"Escriba un numero telefónico"} maxLength={10} />
+            <CustomInputNumber
+              placeholder={"Escriba un numero telefónico"}
+              maxLength={10}
+            />
           </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24} lg={12}>

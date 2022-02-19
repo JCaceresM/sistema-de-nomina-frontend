@@ -11,7 +11,11 @@ export type MenuOption = {
   user_insert: string
   CHILDREN:MenuOption[]
 }
-
+export type SelectConditionType = {
+  field: string;
+  operator: string;
+  condition: string | number;
+};
 export type Nullable<T> = T | null
 
 export type PaginationType = {

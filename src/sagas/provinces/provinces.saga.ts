@@ -5,7 +5,7 @@ import { PROVINCES_GET_ALL_PROVINCES } from "../../constants/provinces/provinces
 import { GeneralRequest } from "../../services/general.api";
 
 const { getProvinces } = GeneralRequest
-function* getAllProvincesSaga() {
+function* getAllProvincesSaga () {
   try {
 
     const response: ResponseGenerator = yield call(() =>
@@ -18,7 +18,7 @@ function* getAllProvincesSaga() {
     yield put(getAllProvincesFailure())
   }
 }
-function* watchGetAllProvinces(): Generator<ForkEffect<never>, void, unknown> {
+function* watchGetAllProvinces (): Generator<ForkEffect<never>, void, unknown> {
   
   yield takeLatest(PROVINCES_GET_ALL_PROVINCES, getAllProvincesSaga)
 }

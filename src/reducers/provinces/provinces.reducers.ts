@@ -9,12 +9,12 @@ import {
 } from "../../constants/provinces/provinces.constants"
 
 export type PositionState = {
-  getPositionsIsLoading: boolean
+  getProvincesIsLoading: boolean
   provinces: ProvincesType[]
 }
 
 const initialState = {
-  getPositionsIsLoading: false,
+  getProvincesIsLoading: false,
   provinces: new Array<ProvincesType>(),
 }
 
@@ -27,19 +27,19 @@ const provinces = (
       return {
         ...state,
 
-        getPositionsIsLoading: true,
+        getProvincesIsLoading: true,
       }
     case PROVINCES_GET_ALL_PROVINCES_FAILURE:
       return {
         ...state,
 
-        getPositionsIsLoading: false,
+        getProvincesIsLoading: false,
       }
     case PROVINCES_GET_ALL_PROVINCES_SUCCESS:
       return {
         ...state,
         provinces: action.AllProvinces,
-        getPositionsIsLoading: false,
+        getProvincesIsLoading: false,
       }
     default:
       return state

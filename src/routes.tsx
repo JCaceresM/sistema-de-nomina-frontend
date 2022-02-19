@@ -6,6 +6,10 @@ import {
   PATH_CONFIG_EMPLOYEE_CONSULTING,
   PATH_CONFIG_POSITIONS_CONSULTING,
   PATH_FIXED_CONSULTING,
+  PATH_FIXED_PAYROLL,
+  PATH_FIXED_PAYROLL_APPROVE,
+  PATH_FIXED_PAYROLL_AUTHORIZATION,
+  PATH_FIXED_PAYROLL_CHECK_REGISTER,
   PATH_LOGIN,
   PATH_MAIN,
 } from "./common/constants/web-site-route.constants"
@@ -16,6 +20,10 @@ import Consulting from "./pages/fix-payroll/consulting"
 import EmployeeConsulting from "./pages/employee/employee"
 import Department from "./pages/department/department"
 import Position from "./pages/position/position"
+import VerifyRegisterFixedPayroll from "./pages/fix-payroll/verify-register"
+import Payroll from "./pages/payroll/payroll"
+import ApproveFixedPayroll from "./pages/fix-payroll/fixed-payroll-approve"
+import FixedPayrollAuthorization from "./pages/fix-payroll/fixed-payroll-authorization"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>
@@ -59,6 +67,38 @@ const WebSiteRoutes = (): ReactElement => {
             element={
               <ProtectedRoutesWrapper>
                 <Position />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_PAYROLL_CHECK_REGISTER}
+            element={
+              <ProtectedRoutesWrapper>
+                <VerifyRegisterFixedPayroll />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_PAYROLL}
+            element={
+              <ProtectedRoutesWrapper>
+                <Payroll />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_PAYROLL_APPROVE}
+            element={
+              <ProtectedRoutesWrapper>
+                <ApproveFixedPayroll />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_PAYROLL_AUTHORIZATION}
+            element={
+              <ProtectedRoutesWrapper>
+                <FixedPayrollAuthorization />
               </ProtectedRoutesWrapper>
             }
           />

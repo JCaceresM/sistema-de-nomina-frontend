@@ -42,7 +42,7 @@
         "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
       }
     ],
-    "space-before-function-paren": "off",
+    "space-before-function-paren": "error",
     "one-var": ["error", "never"],
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/member-delimiter-style": "off",

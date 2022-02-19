@@ -3,14 +3,12 @@ import {
   PROVINCES_GET_ALL_PROVINCES_FAILURE,
   PROVINCES_GET_ALL_PROVINCES_SUCCESS,
 } from "../../constants/provinces/provinces.constants"
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type ProvincesType = {}
+export type ProvincesType = { id: number; Name: string }
 export type GetAllProvincesAction = {
   type: typeof PROVINCES_GET_ALL_PROVINCES
 }
 
-export const getAllProvinces = (
-): GetAllProvincesAction => {
+export const getAllProvinces = (): GetAllProvincesAction => {
   return {
     type: PROVINCES_GET_ALL_PROVINCES,
   }
@@ -19,12 +17,10 @@ export const getAllProvinces = (
 type GetAllProvincesSuccessAction = {
   type: typeof PROVINCES_GET_ALL_PROVINCES_SUCCESS
   AllProvinces: ProvincesType[]
- 
 }
 
 export const getAllProvincesSuccess = (
-  AllProvinces: ProvincesType[],
- 
+  AllProvinces: ProvincesType[]
 ): GetAllProvincesSuccessAction => {
   return {
     type: PROVINCES_GET_ALL_PROVINCES_SUCCESS,

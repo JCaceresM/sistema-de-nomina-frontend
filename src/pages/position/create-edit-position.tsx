@@ -54,9 +54,11 @@ const CreatEditPosition = ({
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const [minSalary, setMinSalary] = useState(0)
-  const { createPositionsIsLoading, isCreated } = useSelector(
-    (state: RootState) => state.positions
+  const { positions, departments:departmentState} = useSelector(
+    (state: RootState) => state
   )
+  const { createPositionsIsLoading, isCreated } = positions
+  const { getDepartmentsIsLoading, departments } = departmentState
   const cancelPayment = () => {
     CustomModalConfirmation({
       content: "¿Seguro que desea cancelar la operación?",
@@ -178,9 +180,12 @@ const CreatEditPosition = ({
                   name={"department_id"}
                   label={"Departamento"}
                 >
-                  <CustomSelect placeholder={"Seleccione el Departamento"}>
-                    <Option value={1}>Activo</Option>
-                    <Option value={2}>Inactivo</Option>
+                  <CustomSelect loading={getDepartmentsIsLoading} placeholder={"Seleccione el Departamento"}>
+                  {departments.map((municipality: any, ind) => (
+                <Option key={`${ind}`} value={municipality.id}>
+                  {municipality.name}
+                </Option>
+              ))}
                   </CustomSelect>
                 </CustomFormItem>
               </CustomCol>

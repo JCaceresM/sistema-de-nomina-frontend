@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons"
 import React, { ReactElement, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllEmployee } from "../../actions/employee/employee.actions"
+import { EmployeeType, getEmployee } from "../../actions/employee/employee.actions"
 import {
   CustomButton,
   CustomCol,
@@ -21,7 +20,7 @@ import CreatEditEmployee from "./create-edit-employee"
 const EmployeeConsulting = (): ReactElement => {
   const dispatch = useDispatch()
   const [createEditIsVisible, setCreateEditIsVisible] = useState(false)
-  const { employees, employeesMetadata, isLoading } = useSelector(
+  const { employees, employeesMetadata, getEmployeesIsLoading: isLoading } = useSelector(
     (state: RootState) => state.employee
   )
   const columns = [
@@ -32,8 +31,9 @@ const EmployeeConsulting = (): ReactElement => {
     },
     {
       title: "Name",
-      render: (record: Record<string, unknown>) => {
-        return record.fist_name + " " + record.last_name || "-"
+      render: (record: EmployeeType) => {
+        const  name = `${record.first_name ? record.first_name:'-'  } ${record.last_name ? record.last_name:'-'}`
+        return name
       },
     },
     {
@@ -85,7 +85,14 @@ const EmployeeConsulting = (): ReactElement => {
     },
   ]
   useEffect(() => {
-    dispatch(getAllEmployee({ skip: 0, take: 15 }))
+  const   searchConditions= [
+      {
+          "field": "user_name",
+          "operator": "=",
+          "condition": "admin"
+      }
+  ]
+    dispatch(getEmployee({searchConditions,pagination:{ skip: 0, take: 15 }}))
   }, [])
   const hideCreateEditModal = () => {
     setCreateEditIsVisible(false)

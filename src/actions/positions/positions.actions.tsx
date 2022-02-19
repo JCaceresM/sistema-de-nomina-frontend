@@ -6,20 +6,35 @@ import {
   POSITIONS_GET_ALL_POSITIONS,
   POSITIONS_GET_ALL_POSITIONS_FAILURE,
   POSITIONS_GET_ALL_POSITIONS_SUCCESS,
+  POSITIONS_GET_POSITIONS_DEPARTMENT,
+  POSITIONS_GET_POSITIONS_DEPARTMENT_FAILURE,
+  POSITIONS_GET_POSITIONS_DEPARTMENT_SUCCESS,
   POSITIONS_MANAGER_REDUX_STATE_POSITIONS,
 } from "../../constants/positions/positions.constants"
 import { PositionState } from "../../reducers/positions/positions.reducers"
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type PositionsType = {}
+export type PositionsType = {
+  name: string
+  min_salary: number
+  max_salary: number
+  department_id: number
+  status: string
+  description: string
+  company_id: number
+  updated_at: Date
+  user_update: string
+  user_insert: string
+  id: number
+  created_at: Date
+}
 
-export type DepartmentManagerReduxStateAction = {
+export type PositionsManagerReduxStateAction = {
   state: Partial<PositionState>
   type: typeof POSITIONS_MANAGER_REDUX_STATE_POSITIONS
 }
 
 export const positionsManagerReduxState = (
-  state:  Partial<PositionState>
-): DepartmentManagerReduxStateAction => {
+  state: Partial<PositionState>
+): PositionsManagerReduxStateAction => {
   return {
     type: POSITIONS_MANAGER_REDUX_STATE_POSITIONS,
     state,
@@ -101,6 +116,46 @@ export const createPositionFailure = (): CreatePositionFailureAction => {
     type: POSITIONS_CREATE_POSITIONS_FAILURE,
   }
 }
+// ------------------------get-position-department_id------------------------
+
+export type GetPositionDepartmentAction = {
+  type: typeof POSITIONS_GET_POSITIONS_DEPARTMENT
+  departmentId: number
+}
+
+export const getPositionDepartment = (
+  departmentId: number
+): GetPositionDepartmentAction => {
+  return {
+    type: POSITIONS_GET_POSITIONS_DEPARTMENT,
+    departmentId,
+  }
+}
+
+type GetPositionDepartmentSuccessAction = {
+  type: typeof POSITIONS_GET_POSITIONS_DEPARTMENT_SUCCESS
+  positionsDepartment: PositionsType[]
+}
+
+export const getPositionDepartmentSuccess = (
+  positionsDepartment: PositionsType[]
+): GetPositionDepartmentSuccessAction => {
+  return {
+    type: POSITIONS_GET_POSITIONS_DEPARTMENT_SUCCESS,
+    positionsDepartment,
+  }
+}
+
+type GetPositionDepartmentFailureAction = {
+  type: typeof POSITIONS_GET_POSITIONS_DEPARTMENT_FAILURE
+}
+
+export const getPositionDepartmentFailure =
+  (): GetPositionDepartmentFailureAction => {
+    return {
+      type: POSITIONS_GET_POSITIONS_DEPARTMENT_FAILURE,
+    }
+  }
 export type PositionsActions =
   | GetAllPositionAction
   | GetAllPositionSuccessAction
@@ -108,3 +163,6 @@ export type PositionsActions =
   | CreatePositionAction
   | CreatePositionSuccessAction
   | CreatePositionFailureAction
+  | GetPositionDepartmentFailureAction
+  | GetPositionDepartmentSuccessAction
+  | GetPositionDepartmentAction
