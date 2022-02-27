@@ -14,3 +14,4 @@ export const WEB_SERVICE_API_POSITION_CREATE = `${WEB_SERVICE_API}/positions`
 export const WEB_SERVICE_API_PAYROLL_RECORD = `${WEB_SERVICE_API}/payroll/collection`
 export const WEB_SERVICE_API_PAYROLL_CREATE = `${WEB_SERVICE_API}/payroll`
 export const WEB_SERVICE_API_PAYROLL_RECORD_CREATE = `${WEB_SERVICE_API}/payroll-record`
+export const WEB_SERVICE_API_PAYROLL_GET_COLLECTION = `${WEB_SERVICE_API}/payroll-record/collection`

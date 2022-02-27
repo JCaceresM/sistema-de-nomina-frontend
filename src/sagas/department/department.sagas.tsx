@@ -11,7 +11,7 @@ import { DEPARTMENT_CREATE_DEPARTMENT, DEPARTMENT_GET_ALL_DEPARTMENT } from "../
 import { DepartmentApiRequest } from "../../services/department.api"
 
 const {getDepartments,createDepartment } = DepartmentApiRequest
-function* getAllDepartmentSaga( ) {
+function* getAllDepartmentSaga ( ) {
   try {
     const response: ResponseGenerator = yield call(() =>
     getDepartments()
@@ -25,10 +25,10 @@ function* getAllDepartmentSaga( ) {
   }
 }
 
-function* watchGetAllDepartment(): Generator<ForkEffect<never>, void, unknown> {
+function* watchGetAllDepartment (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(DEPARTMENT_GET_ALL_DEPARTMENT, getAllDepartmentSaga)
 }
-function* createDepartmentSaga( body:CreateDepartmentAction) {
+function* createDepartmentSaga ( body:CreateDepartmentAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
     createDepartment(body.createDepartment)
@@ -43,7 +43,7 @@ function* createDepartmentSaga( body:CreateDepartmentAction) {
   }
 }
 
-function* watchCreateDepartment(): Generator<ForkEffect<never>, void, unknown> {
+function* watchCreateDepartment (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(DEPARTMENT_CREATE_DEPARTMENT, createDepartmentSaga)
 }
 

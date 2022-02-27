@@ -64,7 +64,7 @@ const Login: React.FunctionComponent = () => {
         title: "Error",
         content:
         "Ocurrió un error al iniciar sesión, por favor verifique sus datos.",
-        onOk() {
+        onOk () {
           dispatch(authenticateUserHideError())
         },
       })

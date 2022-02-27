@@ -12,7 +12,7 @@ import {
 } from "../../actions/user/user.actions"
 import { USER_AUTHENTICATE, USER_GET_MENU_OPTIONS } from "../../constants/user/user.constants"
 
-function* getUserMenuOptionsSaga({
+function* getUserMenuOptionsSaga ({
   userId,
 }: GetMenuOptionsAction) {
   try {
@@ -30,11 +30,11 @@ function* getUserMenuOptionsSaga({
   }
 }
 
-function* watchGetUserMenuOptions(): Generator<ForkEffect<never>, void, unknown> {
+function* watchGetUserMenuOptions (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(USER_GET_MENU_OPTIONS, getUserMenuOptionsSaga)
 }
 
-function* authenticateUserSaga({ username, password }: AuthenticateUserAction) {
+function* authenticateUserSaga ({ username, password }: AuthenticateUserAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
       userApiRequest.authenticateUser({
@@ -52,7 +52,7 @@ function* authenticateUserSaga({ username, password }: AuthenticateUserAction) {
   }
 }
 
-function* watchAuthenticateUser(): Generator<ForkEffect<never>, void, unknown> {
+function* watchAuthenticateUser (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(USER_AUTHENTICATE, authenticateUserSaga)
 }
 

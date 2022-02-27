@@ -16,7 +16,7 @@ import {
 import { PayrollApiRequest } from "../../services/payroll.api"
 
 const { getPayroll, createPayroll } = PayrollApiRequest
-function* getAllPayrollSaga({ searchConditions }: GetAllPayrollAction) {
+function* getAllPayrollSaga ({ searchConditions }: GetAllPayrollAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
       getPayroll(searchConditions as unknown as SelectConditionType[])
@@ -29,10 +29,10 @@ function* getAllPayrollSaga({ searchConditions }: GetAllPayrollAction) {
   }
 }
 
-function* watchGetAllPayroll(): Generator<ForkEffect<never>, void, unknown> {
+function* watchGetAllPayroll (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(PAYROLL_GET_ALL_PAYROLL, getAllPayrollSaga)
 }
-function* createPayrollSaga(body: CreatePayrollAction) {
+function* createPayrollSaga (body: CreatePayrollAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
       createPayroll(body.createPayroll)
@@ -46,7 +46,7 @@ function* createPayrollSaga(body: CreatePayrollAction) {
   }
 }
 
-function* watchCreatePayroll(): Generator<ForkEffect<never>, void, unknown> {
+function* watchCreatePayroll (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(PAYROLL_CREATE_PAYROLL, createPayrollSaga)
 }
 

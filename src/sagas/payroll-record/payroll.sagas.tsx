@@ -7,23 +7,26 @@ import { PayrollRecordApiRequest } from "../../services/payroll-record.api"
 
 
 const { getPayrollRecord, createPayrollRecord } = PayrollRecordApiRequest
-function* getAllPayrollRecordSaga({ searchConditions }: GetPayrollRecordCollectionAction) {
+function* getAllPayrollRecordSaga ({ searchConditions }: GetPayrollRecordCollectionAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
       getPayrollRecord(searchConditions as unknown as SelectConditionType[])
     )
 
     const { data,  } = response
+    // eslint-disable-next-line no-console
+    console.log(data,'klk');
+    
     yield put(getPayrollRecordCollectionSuccess(data,))
   } catch (error) {
     yield put(getPayrollRecordCollectionFailure())
   }
 }
 
-function* watchGetAllPayrollRecord(): Generator<ForkEffect<never>, void, unknown> {
+function* watchGetAllPayrollRecord (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(PAYROLL_RECORD_GET_COLLECTION_PAYROLL_RECORD, getAllPayrollRecordSaga)
 }
-function* createPayrollRecordSaga(body: CreatePayrollRecordAction) {
+function* createPayrollRecordSaga (body: CreatePayrollRecordAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
       createPayrollRecord(body.PayrollRecord)
@@ -37,7 +40,7 @@ function* createPayrollRecordSaga(body: CreatePayrollRecordAction) {
   }
 }
 
-function* watchCreatePayrollRecord(): Generator<ForkEffect<never>, void, unknown> {
+function* watchCreatePayrollRecord (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(PAYROLL_RECORD_CREATE_PAYROLL_RECORD, createPayrollRecordSaga)
 }
 

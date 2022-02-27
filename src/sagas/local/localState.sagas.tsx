@@ -6,7 +6,7 @@ import {
 } from "../../actions/local/localState.actions"
 import { LOCAL_SET_LOCAL_STATE } from "../../constants/local/localState.constans"
 
-function* localStateSaga({ state }: SetLocalStateAction) {
+function* localStateSaga ({ state }: SetLocalStateAction) {
   try {
     yield put(setLocalStateSuccess(state))
   } catch (error) {
@@ -14,7 +14,7 @@ function* localStateSaga({ state }: SetLocalStateAction) {
   }
 }
 
-function* watchLocalState(): Generator<ForkEffect<never>, void, unknown> {
+function* watchLocalState (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(LOCAL_SET_LOCAL_STATE, localStateSaga)
 }
 

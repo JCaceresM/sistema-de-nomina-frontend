@@ -17,7 +17,7 @@ const getResponseParams = (): RequestHeaders => {
   }
 }
 
-function postRequest<T>(
+function postRequest<T> (
   url: string,
   data: Record<string, unknown>
 ): Promise<AxiosResponse<T>> {
@@ -27,7 +27,7 @@ function postRequest<T>(
   return result
 }
 
-function putRequest<T>(
+function putRequest<T> (
   url: string,
   data: Record<string, unknown>
 ): Promise<AxiosResponse<T>> {
@@ -37,7 +37,7 @@ function putRequest<T>(
   return result
 }
 
-function unauthorizedPostRequest<T>(
+function unauthorizedPostRequest<T> (
   url: string,
   data: T
 ): Promise<AxiosResponse<T>> {
@@ -46,7 +46,7 @@ function unauthorizedPostRequest<T>(
   return axios.post(url, data, config)
 }
 
-function getRequest<T>(
+function getRequest<T> (
   url: string,
   params: Record<string, unknown>={}
 ): Promise<AxiosResponse<T>> {

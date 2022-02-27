@@ -26,7 +26,7 @@ import {
   watchGetUserMenuOptions,
 } from "./user/user.sagas"
 
-export default function* rootSaga(): Generator {
+export default function* rootSaga (): Generator {
   yield all([
     watchGetUserMenuOptions(),
     watchAuthenticateUser(),

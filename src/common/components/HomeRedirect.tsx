@@ -2,9 +2,9 @@ import { Button } from "antd"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 
-export function HomeRedirect(): JSX.Element {
+export function HomeRedirect (): JSX.Element {
   const navigate = useNavigate()
-  function handleClick() {
+  function handleClick () {
     navigate("/")
   }
   return (
