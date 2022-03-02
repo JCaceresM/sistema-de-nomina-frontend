@@ -1,18 +1,26 @@
-export function addPropertyKey<T> (record: T,key='key'): T  {
-  function arrayToExample (values: T): T {
-    return (values as unknown as T[]).map((item, index) => options(item, index) as T) as unknown as T
+export function addPropertyKey<T> (
+  record: Record<string, unknown> | Record<string, unknown>[] = [],
+  key = "key"
+): T {
+  function arrayToExample (
+    values: Record<string, unknown>[] = []
+  ): Record<string, unknown>[] {
+    return values.map((item, index) => options(item, index) as Record<string, unknown>);
   }
-  const options = (values: T, index: number): T  => {
-    if (typeof values === "object" && (values as unknown as T[]).length > 0) {
-      return arrayToExample(values) 
+  const options = (
+    values: Record<string, unknown> | Record<string, unknown>[],
+    index: number
+  ): Record<string, unknown> | Record<string, unknown>[] => {
+    if (typeof values === "object" && (values as unknown as T[])?.length > 0) {
+      return arrayToExample(values as Record<string, unknown>[]);
     } else if (typeof values === "object") {
-      (values as Record<string,unknown>)[key] = index
-      return values
+      (values as Record<string, unknown>)[key] = index;
+      return values;
     } else {
-      return values
+      return values;
     }
-  }
-  return options(record, 0) as T 
+  };
+  return (record || []).length ? (options(record, 0) as T) : ([] as unknown as T);
 }
 export const updateObjectArray = <T, K extends keyof T>(
   targetArray: T[],
@@ -21,9 +29,9 @@ export const updateObjectArray = <T, K extends keyof T>(
 ): T[] => {
   const targetIndex = targetArray.findIndex(
     (arrayElement: T) => arrayElement[targetKey] === updatedElement[targetKey]
-  )
+  );
 
-  targetArray[targetIndex] = updatedElement
+  targetArray[targetIndex] = updatedElement;
 
-  return [...targetArray]
-}
+  return [...targetArray];
+};

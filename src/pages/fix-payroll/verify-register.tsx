@@ -1,38 +1,44 @@
-import { Form, Select, Table } from "antd"
-import { ColumnsType, TableRowSelection } from "antd/lib/table/interface"
-import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { DeleteTwoTone, PlusOutlined } from "@ant-design/icons";
+import { Form, Select, Table } from "antd";
+import { ColumnsType, TableRowSelection } from "antd/lib/table/interface";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   employeeManagerReduxState,
   EmployeeType,
   getEmployee,
-} from "../../actions/employee/employee.actions"
-import { PayrollNewsType } from "../../actions/payroll news/payroll-news.actions"
+} from "../../actions/employee/employee.actions";
+import { PayrollNewsType } from "../../actions/payroll news/payroll-news.actions";
 import {
   createPayrollRecord,
   payrollRecordManagerReduxState,
-} from "../../actions/payroll record/payroll-record.actions"
+} from "../../actions/payroll record/payroll-record.actions";
 import {
   getAllPayroll,
   PayrollType,
-} from "../../actions/payroll/payroll.actions"
+} from "../../actions/payroll/payroll.actions";
 import {
   CustomButton,
   CustomCol,
   CustomDatePicker,
   CustomForm,
   CustomFormItem,
+  CustomInput,
+  CustomInputNumber,
   CustomModal,
   CustomRow,
   CustomSelect,
   CustomTable,
   CustomText,
+  CustomTextArea,
   CustomTitle,
-} from "../../common/components"
-import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow"
-import { addPropertyKey, getSessionInfo } from "../../common/utils"
-import { validateMessages } from "../../common/utils/forms/validations"
-import { currencyLocale } from "../../common/utils/locale/locale.format.utils"
+  CustomTooltip,
+} from "../../common/components";
+import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow";
+import CustomPopConfirm from "../../common/components/CustomPopConfirm";
+import { addPropertyKey, getSessionInfo } from "../../common/utils";
+import { validateMessages } from "../../common/utils/forms/validations";
+import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
 import {
   AFP,
   ISR,
@@ -40,15 +46,30 @@ import {
   othersIncome,
   SFS,
   totalDiscount,
-} from "../../common/utils/tax/index.helpers"
-import { RootState } from "../../reducers/root_reducers"
+} from "../../common/utils/tax/index.helpers";
+import { RootState } from "../../reducers/root_reducers";
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+    md: { span: 8 },
+    lg: { span: 6 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+    md: { span: 16 },
+    lg: { span: 18 },
+  },
+};
 const VerifyRegisterFixedPayroll = (): React.ReactElement => {
-  const dispatch = useDispatch()
-  const [form] = Form.useForm()
-  const [registerIsVisible, setRegisterIsVisible] = useState(false)
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const [registerIsVisible, setRegisterIsVisible] = useState(false);
   const [payrollSelected, setPayrollSelected] = useState<PayrollType>(
     {} as PayrollType
-  )
+  );
   const retentions: Record<string, PayrollNewsType> = {
     ISR: {
       id: 0,
@@ -71,25 +92,28 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       type: "P",
       amount: 0,
     },
-  }
-  const [discounts, setDiscounts] = useState<PayrollNewsType[]>([])
+  };
+  const [discounts, setDiscounts] = useState<PayrollNewsType[]>([]);
+  const [addPersonalDiscount, setAddPersonalDiscount] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [isPayrollSelected, setIsPayrollSelected] = useState(true);
   const [employeeToRegister, setEmployeeToRegister] = useState<EmployeeType[]>(
     []
-  )
+  );
   const [payrollDiscounts, setPayrollDiscounts] = useState<PayrollNewsType[]>(
     []
-  )
-  const [employeeNews, setEmployeeNews] = useState<PayrollNewsType[]>([])
-  const [totals, setTotals] = useState<Record<string, number>>({})
-  const { Option } = Select
+  );
+  const [employeeNews, setEmployeeNews] = useState<PayrollNewsType[]>([]);
+  const [totals, setTotals] = useState<Record<string, number>>({});
+  const { Option } = Select;
   const {
     payroll: payrollState,
     employee: employeeState,
     payrollRecord: payrollRecordState,
-  } = useSelector((state: RootState) => state)
-  const { getPayrollIsLoading, payroll } = payrollState
-  const { getEmployeesIsLoading, employees } = employeeState
-  const { isPayrollRecordCreated } = payrollRecordState
+  } = useSelector((state: RootState) => state);
+  const { getPayrollIsLoading, payroll } = payrollState;
+  const { getEmployeesIsLoading, employees } = employeeState;
+  const { isPayrollRecordCreated } = payrollRecordState;
   const columns: ColumnsType<EmployeeType> = [
     {
       key: 4,
@@ -99,7 +123,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
     {
       title: "Nombres y Apellidos",
       render: (record: EmployeeType) => {
-        return record.first_name + " " + record.last_name || "-"
+        return record.first_name + " " + record.last_name || "-";
       },
       ellipsis: true,
     },
@@ -140,7 +164,45 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       ellipsis: true,
       align: "right",
     },
-  ]
+    {
+      title: (
+        <CustomRow>
+          <CustomCol xs={12}>Monto</CustomCol>
+          <CustomCol style={{ textAlign: "end" }} xs={12}>
+            <CustomTooltip title={"Agregar"}>
+              <CustomButton icon={<PlusOutlined />} />
+            </CustomTooltip>
+          </CustomCol>
+        </CustomRow>
+      ),
+      render: (record) => {
+        return (
+          <CustomRow justify={"center"}>
+            <CustomCol xs={4}>
+              {" "}
+              <CustomPopConfirm
+                title={"¿Excluir de la nomina?"}
+                onConfirm={() => {
+                  setEmployeeToRegister(
+                    employeeToRegister.filter(
+                      (employee) => employee.id !== record.id
+                    )
+                  );
+                }}
+              >
+                <CustomTooltip placement={"bottom"} title={"Editar"}>
+                  <CustomButton
+                    type={"link"}
+                    icon={<DeleteTwoTone twoToneColor={"red"} />}
+                  />
+                </CustomTooltip>
+              </CustomPopConfirm>
+            </CustomCol>
+          </CustomRow>
+        );
+      },
+    },
+  ];
   const columnsDiscount = [
     {
       key: 4,
@@ -168,7 +230,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       render: (value: number) => currencyLocale(value),
       // ellipsis: true,
     },
-  ]
+  ];
   // rowSelection objects indicates the need for row selection
   const rowSelection: TableRowSelection<EmployeeType> = {
     onSelect: (record: EmployeeType) => {
@@ -177,20 +239,24 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         { ...retentions.ISR, amount: ISR(record.salary) },
         { ...retentions.AFP, amount: AFP(record.salary) },
         { ...retentions.SFS, amount: SFS(record.salary) },
-      ]
-      setDiscounts(discounts)
-      setEmployeeNews(record.payroll_news)
+      ];
+      setDiscounts(discounts);
+      setAddPersonalDiscount(true);
+      setEmployeeNews(record.payroll_news);
     },
 
     type: "radio",
-  }
+  };
   const hideRegisterModal = () => {
-    setRegisterIsVisible(false)
-  }
+    setRegisterIsVisible(false);
+  };
+  const hidePayrollNewsModal = () => {
+    setVisible(false);
+  };
   const searchEmployee = (record: PayrollType) => {
-    setPayrollSelected(record)
-    setPayrollDiscounts(record.payroll_news)
-    setDiscounts(record.payroll_news)
+    setPayrollSelected(record);
+    setPayrollDiscounts(record.payroll_news);
+    setDiscounts(record.payroll_news);
 
     const condition = [
       {
@@ -198,19 +264,19 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         operator: "=",
         condition: record.id,
       },
-    ]
+    ];
     dispatch(
       getEmployee({
         searchConditions: condition,
         pagination: { skip: 0, take: 155 },
       })
-    )
-  }
+    );
+  };
   const handleSubmit = async () => {
     // eslint-disable-next-line no-console
-    const dataFields = await form.validateFields().catch((e) => e)
+    const dataFields = await form.validateFields().catch((e) => e);
     if (!Object.getOwnPropertyDescriptor(dataFields, "errorFields")) {
-      const payrollNewsPayrollSelected = payrollSelected?.payroll_news || []
+      const payrollNewsPayrollSelected = payrollSelected?.payroll_news || [];
       const data = {
         description: payrollSelected.description,
         type: payrollSelected.type,
@@ -221,13 +287,13 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         user_id: getSessionInfo().userId,
         company_id: getSessionInfo().businessId,
         employees: employeeToRegister.map((employee) => {
-          const payrollNewsCurrentEmployee = employee?.payroll_news || []
+          const payrollNewsCurrentEmployee = employee?.payroll_news || [];
           return {
             salary: employee.salary,
-      
+
             employee_id: employee.id,
             company_id: getSessionInfo().businessId,
-          
+
             payroll_news: [
               ...payrollNewsPayrollSelected.map((item) => ({
                 amount: item.amount,
@@ -244,94 +310,118 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                 operation: item.operation,
               })),
             ],
-          }
+          };
         }),
-      }
+      };
       // eslint-disable-next-line no-console
-      console.log(data)
-      dispatch(createPayrollRecord(data))
+      console.log(data);
+      dispatch(createPayrollRecord(data));
     }
-  }
+  };
   useEffect(() => {
-    
     const condition = [
       {
         field: "type",
         operator: "=",
         condition: `F`,
       },
-    ]
-    dispatch(getAllPayroll(condition))
-  }, [])
+    ];
+    dispatch(getAllPayroll(condition));
+  }, []);
   useEffect(() => {
     const salaries = employeeToRegister.reduce(
       (acc, employee) => acc + employee.salary,
       0
-    )
+    );
     const discounts = employeeToRegister.reduce(
       (acc, employee) => acc + totalDiscount(employee, payrollDiscounts),
       0
-    )
+    );
     const income = employeeToRegister.reduce(
       (acc, employee) => acc + othersIncome(employee, payrollDiscounts),
       0
-    )
+    );
     const earnings = employeeToRegister.reduce(
       (acc, employee) => acc + netEarnings(employee, payrollDiscounts),
       0
-    )
-    setTotals({ salaries, discounts, income, earnings })
-  }, [employeeToRegister])
+    );
+    setTotals({ salaries, discounts, income, earnings });
+  }, [employeeToRegister]);
   useEffect(() => {
-    setEmployeeToRegister(employees)
-  }, [employees])
+    setEmployeeToRegister(employees);
+    employees.length && setIsPayrollSelected(false);
+  }, [employees]);
   useEffect(() => {
     if (isPayrollRecordCreated) {
-      form.resetFields()
-      isPayrollRecordCreated && hideRegisterModal()
+      form.resetFields();
+      isPayrollRecordCreated && hideRegisterModal();
       dispatch(
         payrollRecordManagerReduxState({ isPayrollRecordCreated: false })
-      )
-      dispatch(employeeManagerReduxState({ employees: [] }))
-      setTotals({})
-      setEmployeeNews([])
-      setPayrollDiscounts([])
-      setEmployeeToRegister([])
-      setPayrollSelected({} as PayrollType)
-      setDiscounts([])
+      );
+      dispatch(employeeManagerReduxState({ employees: [] }));
+      setTotals({});
+      setEmployeeNews([]);
+      setPayrollDiscounts([]);
+      setEmployeeToRegister([]);
+      setPayrollSelected({} as PayrollType);
+      setDiscounts([]);
     }
-  }, [isPayrollRecordCreated])
+  }, [isPayrollRecordCreated]);
 
   const Title = () => {
     return (
       <CustomRow>
         <CustomCol xs={10}>
-          <CustomTitle level={3}>Consulta</CustomTitle>
+          <CustomFormItem label={"Nomina"}>
+            <CustomSelect
+              onChange={(_, e) =>
+                searchEmployee((e as unknown as { data: PayrollType }).data)
+              }
+              loading={getPayrollIsLoading}
+              showSearch
+              value={payrollSelected.id}
+              style={{ width: "80%" }}
+            >
+              {payroll.map((item: PayrollType, ind: number) => (
+                <Option key={`${ind}`} value={item.id} data={item}>
+                  {item.name}
+                </Option>
+              ))}
+            </CustomSelect>
+          </CustomFormItem>
         </CustomCol>
         <CustomCol xs={14}>
           <CustomRow justify={"end"}>
-            <CustomFormItem noStyle>
+            <CustomFormItem style={{ width: "80%" }} label={"Empleados"}>
               <CustomSelect
                 onChange={(_, e) =>
-                  searchEmployee((e as unknown as { data: PayrollType }).data)
+                  setEmployeeToRegister([
+                    ...employeeToRegister,
+                    (e as unknown as { data: EmployeeType }).data,
+                  ])
                 }
-                loading={getPayrollIsLoading}
                 showSearch
-                value={payrollSelected.id}
-                style={{ width: "80%" }}
+                disabled={isPayrollSelected}
+                // style={{ width: "80%" }}
               >
-                {payroll.map((item: PayrollType, ind: number) => (
-                  <Option key={`${ind}`} value={item.id} data={item}>
-                    {item.name}
-                  </Option>
-                ))}
+                {employees
+                  .filter((item) =>
+                    employeeToRegister.every((elem) => elem.id !== item.id)
+                  )
+                  .map((item: EmployeeType, ind: number) => {
+                    return (
+                      <Option key={`${ind}`} value={item.id} data={item}>
+                        {item.first_name + " " + item.last_name}
+                      </Option>
+                    );
+                  })}
               </CustomSelect>
             </CustomFormItem>
           </CustomRow>
         </CustomCol>
       </CustomRow>
-    )
-  }
+    );
+  };
   const MenuOptions = () => {
     return (
       <CustomRow gutter={[16, 16]}>
@@ -344,8 +434,8 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         <CustomCol xs={6} />
         <CustomCol xs={6} />
       </CustomRow>
-    )
-  }
+    );
+  };
   const summaryPaymentHistory = () => (
     <Table.Summary.Row>
       <Table.Summary.Cell colSpan={4} index={1} align={"right"}>
@@ -365,7 +455,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         {currencyLocale(totals.earnings)}
       </Table.Summary.Cell>
     </Table.Summary.Row>
-  )
+  );
 
   return (
     <CustomLayoutBoxShadow>
@@ -388,11 +478,21 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         </CustomCol>
         <CustomCol style={{ minHeight: 222 }} xs={12}>
           {" "}
-          <CustomRow align="top">
-            <CustomCol xs={24}>
+          <CustomRow justify={"space-around"} align="top">
+            <CustomCol xs={20}>
               <CustomTitle level={5}>
                 Ingresos / Descuentos Por Empleado
               </CustomTitle>
+            </CustomCol>
+            <CustomCol xs={4} style={{ textAlign: "end" }}>
+              {addPersonalDiscount ? (
+                <CustomButton
+                  icon={<PlusOutlined />}
+                  onClick={() => setVisible(true)}
+                />
+              ) : (
+                <p />
+              )}
             </CustomCol>
             <CustomCol xs={24}>
               <CustomTable
@@ -455,9 +555,78 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
             </CustomForm>
           </CustomModal>
         </CustomCol>
+        <CustomCol xs={24}>
+          <CustomModal
+            title={"Agregar Ingreso / Descuento"}
+            visible={visible}
+            width={"40%"}
+            onCancel={hidePayrollNewsModal}
+            onOk={async () => {
+              // eslint-disable-next-line no-console
+              console.log(await form.validateFields());
+              const data = await form.validateFields()
+              if(Object.keys(data).every((key)=> data[key]!== undefined)){
+              setEmployeeNews([...employeeNews, data])
+              form.resetFields()
+              hidePayrollNewsModal()
+              }
+            }}
+          >
+            <CustomForm
+              {...formItemLayout}
+              name={"payroll_news"}
+              validateMessages={validateMessages}
+              form={form}
+            >
+              <CustomRow gutter={[5, 5]}>
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    rules={[{ required: true }]}
+                    name={"name"}
+                    label={"Nombre"}
+                  >
+                    <CustomInput />
+                  </CustomFormItem>
+                </CustomCol>
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    rules={[{ required: true }]}
+                    name={"amaunt"}
+                    label={"Monto"}
+                  >
+                    <CustomInputNumber style={{ width: "100%" }} />
+                  </CustomFormItem>
+                </CustomCol>
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    rules={[{ required: true }]}
+                    name={"operation"}
+                    label={"Operacion"}
+                  >
+                    <CustomSelect>
+                      <Option value={"RESTA"}>Suma</Option>
+                      <Option value={"RESTA"}>Resta</Option>
+                    </CustomSelect>
+                  </CustomFormItem>
+                </CustomCol>
+                <CustomCol xs={24} />
+
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    rules={[{ required: true }]}
+                    name={"description"}
+                    label={"Descripcion"}
+                  >
+                    <CustomTextArea />
+                  </CustomFormItem>
+                </CustomCol>
+              </CustomRow>
+            </CustomForm>
+          </CustomModal>
+        </CustomCol>
       </CustomRow>
     </CustomLayoutBoxShadow>
-  )
-}
+  );
+};
 
-export default VerifyRegisterFixedPayroll
+export default VerifyRegisterFixedPayroll;

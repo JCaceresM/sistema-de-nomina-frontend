@@ -49,14 +49,16 @@ export const totalDiscount = (employee: EmployeeType, payrollNews: any=[]) => {
   const retentionSFS = SFS(employee.salary)
   const retentionAFP = AFP(employee.salary)
   const retentionISR = ISR(employee.salary)
-  const discountsMixed = [...employee?.payroll_news, ...payrollNews]
+  const payroll_news = employee?.payroll_news || []
+  const discountsMixed = [...payroll_news, ...payrollNews]
     .filter((e) => e.operation === "RESTA")
     .reduce((acc, news) => acc + news.amount, 0)
   return  discountsMixed + retentionSFS+ retentionAFP +retentionISR
   
 }
 export const othersIncome = (employee: any, payrollNews: any) => {
-  return [...employee.payroll_news, ...payrollNews]
+  const payroll_news = employee.payroll_news||[]
+  return [...payroll_news, ...payrollNews]
     .filter((e) => e.operation === "SUMA")
     .reduce((acc, news) => acc + news.amount, 0)
 }

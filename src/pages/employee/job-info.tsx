@@ -84,11 +84,14 @@ const JobInfo = ({
                 form.resetFields(["position_id", "payroll_id"])
                 const condition = [
                   {
-                    field: "department_id",
+                    field: "",
                     operator: "=",
                     condition: `${value}`,
                   },
                 ]
+                // eslint-disable-next-line no-console
+                console.log(value,'v');
+                
                 dispatch(getAllPayroll(condition))
                 dispatch(getPositionDepartment(parseInt(`${value}`)))
               }}
