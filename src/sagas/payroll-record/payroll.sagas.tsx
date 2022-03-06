@@ -1,22 +1,19 @@
 import { call, ForkEffect, put, takeLatest } from "redux-saga/effects"
-import { CreatePayrollRecordAction, createPayrollRecordFailure, createPayrollRecordSuccess, GetPayrollRecordCollectionAction, getPayrollRecordCollectionFailure, getPayrollRecordCollectionSuccess } from "../../actions/payroll record/payroll-record.actions"
+import { CreatePayrollRecordAction, createPayrollRecordFailure, createPayrollRecordSuccess, GetPayrollRecordCollectionAction, getPayrollRecordCollectionFailure, getPayrollRecordCollectionSuccess, UpdatePayrollRecordAction, updatePayrollRecordFailure, updatePayrollRecordSuccess } from "../../actions/payroll record/payroll-record.actions"
 import { SelectConditionType } from "../../common/types/general.type"
 import { ResponseGenerator } from "../../common/types/response.type"
-import { PAYROLL_RECORD_CREATE_PAYROLL_RECORD, PAYROLL_RECORD_GET_COLLECTION_PAYROLL_RECORD,  } from "../../constants/payroll-record/payroll-record.constants"
+import { PAYROLL_RECORD_CREATE_PAYROLL_RECORD, PAYROLL_RECORD_GET_COLLECTION_PAYROLL_RECORD, PAYROLL_RECORD_UPDATE_PAYROLL_RECORD,  } from "../../constants/payroll-record/payroll-record.constants"
 import { PayrollRecordApiRequest } from "../../services/payroll-record.api"
 
 
-const { getPayrollRecord, createPayrollRecord } = PayrollRecordApiRequest
+const { getPayrollRecord, createPayrollRecord , updatePayrollRecord} = PayrollRecordApiRequest
 function* getAllPayrollRecordSaga ({ searchConditions }: GetPayrollRecordCollectionAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
       getPayrollRecord(searchConditions as unknown as SelectConditionType[])
     )
 
-    const { data,  } = response
-    // eslint-disable-next-line no-console
-    console.log(data,'klk');
-    
+    const { data,  } = response    
     yield put(getPayrollRecordCollectionSuccess(data,))
   } catch (error) {
     yield put(getPayrollRecordCollectionFailure())
@@ -43,5 +40,22 @@ function* createPayrollRecordSaga (body: CreatePayrollRecordAction) {
 function* watchCreatePayrollRecord (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(PAYROLL_RECORD_CREATE_PAYROLL_RECORD, createPayrollRecordSaga)
 }
+function* updatePayrollRecordSaga (body: UpdatePayrollRecordAction) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+      updatePayrollRecord(body.id, body.PayrollRecord)
+    )
 
-export { watchGetAllPayrollRecord, watchCreatePayrollRecord }
+    const { data } = response
+
+    yield put(updatePayrollRecordSuccess(data))
+  } catch (error) {
+    yield put(updatePayrollRecordFailure())
+  }
+}
+
+function* watchUpdatePayrollRecord (): Generator<ForkEffect<never>, void, unknown> {
+  yield takeLatest(PAYROLL_RECORD_UPDATE_PAYROLL_RECORD, updatePayrollRecordSaga)
+}
+
+export { watchGetAllPayrollRecord, watchCreatePayrollRecord , watchUpdatePayrollRecord}

@@ -7,7 +7,7 @@ import {
 } from "../common/constants/external-route.constants"
 import { PaginationType, SelectConditionType } from "../common/types/general.type"
 import { axiosHelper } from "./http-method.helper"
-const {  postRequest } = axiosHelper
+const {  postRequest, patchRequest } = axiosHelper
 
 const getPayrollRecord = (searchConditions: SelectConditionType[]): Promise<AxiosResponse<PaginationType>> => {
   // eslint-disable-next-line no-console
@@ -20,8 +20,14 @@ const createPayrollRecord = (
 ): Promise<AxiosResponse<PayrollType>> => {
   return postRequest(WEB_SERVICE_API_PAYROLL_RECORD_CREATE, creatData)
 }
+const updatePayrollRecord = (
+  id: number ,
+  creatData: PayrollRecordType
+): Promise<AxiosResponse<PayrollType>> => {
+  return patchRequest(`${WEB_SERVICE_API_PAYROLL_RECORD_CREATE}/${id}`, creatData)
+}
 
 export const PayrollRecordApiRequest = {
    getPayrollRecord,
-   createPayrollRecord,
+   createPayrollRecord,updatePayrollRecord
 }

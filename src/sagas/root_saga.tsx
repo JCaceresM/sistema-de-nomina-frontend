@@ -12,6 +12,7 @@ import { watchGetMunicipalities } from "./municipality/municipality.saga"
 import {
   watchCreatePayrollRecord,
   watchGetAllPayrollRecord,
+  watchUpdatePayrollRecord,
 } from "./payroll-record/payroll.sagas"
 import { watchCreatePayroll, watchGetAllPayroll } from "./payroll/payroll.sagas"
 import {
@@ -44,6 +45,6 @@ export default function* rootSaga (): Generator {
     watchCreatePayroll(),
     watchGetAllPayroll(),
     watchGetAllPayrollRecord(),
-    watchCreatePayrollRecord(),
+    watchCreatePayrollRecord(),watchUpdatePayrollRecord()
   ])
 }

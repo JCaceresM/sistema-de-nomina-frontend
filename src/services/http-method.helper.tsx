@@ -36,6 +36,15 @@ function putRequest<T> (
 
   return result
 }
+function patchRequest<T> (
+  url: string,
+  data: Record<string, unknown>
+): Promise<AxiosResponse<T>> {
+  const config = getResponseParams()
+  const result = axios.patch(url, data, config)
+
+  return result
+}
 
 function unauthorizedPostRequest<T> (
   url: string,
@@ -64,5 +73,5 @@ export const axiosHelper = {
   putRequest,
   unauthorizedPostRequest,
   getRequest,
-  getPaginatedUrl,
+  getPaginatedUrl,patchRequest
 }

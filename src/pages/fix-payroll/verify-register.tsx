@@ -188,6 +188,9 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                       (employee) => employee.id !== record.id
                     )
                   );
+                  setDiscounts([]);
+                  setAddPersonalDiscount(false);
+                  setEmployeeNews([]);
                 }}
               >
                 <CustomTooltip placement={"bottom"} title={"Editar"}>
@@ -273,7 +276,6 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
     );
   };
   const handleSubmit = async () => {
-    // eslint-disable-next-line no-console
     const dataFields = await form.validateFields().catch((e) => e);
     if (!Object.getOwnPropertyDescriptor(dataFields, "errorFields")) {
       const payrollNewsPayrollSelected = payrollSelected?.payroll_news || [];
@@ -313,8 +315,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
           };
         }),
       };
-      // eslint-disable-next-line no-console
-      console.log(data);
+
       dispatch(createPayrollRecord(data));
     }
   };
@@ -402,7 +403,6 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                 }
                 showSearch
                 disabled={isPayrollSelected}
-                // style={{ width: "80%" }}
               >
                 {employees
                   .filter((item) =>
@@ -564,11 +564,11 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
             onOk={async () => {
               // eslint-disable-next-line no-console
               console.log(await form.validateFields());
-              const data = await form.validateFields()
-              if(Object.keys(data).every((key)=> data[key]!== undefined)){
-              setEmployeeNews([...employeeNews, data])
-              form.resetFields()
-              hidePayrollNewsModal()
+              const data = await form.validateFields();
+              if (Object.keys(data).every((key) => data[key] !== undefined)) {
+                setEmployeeNews([...employeeNews, data]);
+                form.resetFields();
+                hidePayrollNewsModal();
               }
             }}
           >
