@@ -6,7 +6,6 @@
 .pnp.js
 .env
 .env.development
-yarn.lock
 package-lock.json
 # testing
 /coverage
