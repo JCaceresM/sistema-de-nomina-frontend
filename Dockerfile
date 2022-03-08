@@ -19,5 +19,7 @@ COPY . ./
 # Build the application
 RUN npm run build
 
+RUN npm install -g serve
+
 # Run the web service on container startup.
-CMD [ "npm", "run", "start:prod" ]
+CMD [ "serve", "-s ", "build" ]
