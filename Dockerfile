@@ -2,24 +2,26 @@
 # https://hub.docker.com/_/node
 FROM node:14-slim
 
-# Create and change to the app directory.
-WORKDIR /usr/src/app
-
-# Copy application dependency manifests to the container image.
-# A wildcard is used to ensure both package.json AND package-lock.json are copied.
-# Copying this separately prevents re-running npm install on every code change.
-COPY package*.json ./
-
-# Install dependencies
+# for caching optimisations
+COPY package*.json /
 RUN npm install
-
-# Copy local code to the container image.
-COPY . ./
-
-# Build the application
-RUN npm run build
-
+# required to serve the react app on the live server
 RUN npm install -g serve
 
-# Run the web service on container startup.
-CMD [ "serve", "-s ", "build" ]
+COPY . /app
+WORKDIR /app
+
+# noop files for non python projects and local development
+RUN echo "#!/bin/bash" > /app/migrate.sh && chmod +x /app/migrate.sh
+RUN echo "#!/bin/bash" > /usr/local/bin/start && chmod +x /usr/local/bin/start
+
+ENV PATH=/node_modules/.bin:$PATH
+ENV PORT=80
+ENV HOST=0.0.0.0
+ENV BROWSER='none'
+
+RUN npm run build
+
+EXPOSE 8080
+
+CMD ["serve", "-s", "build", "-l", "8080"]
