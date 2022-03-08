@@ -22,6 +22,6 @@ ENV BROWSER='none'
 
 RUN npm run build
 
-EXPOSE 8080
+EXPOSE 3000
 
-CMD ["serve", "-s", "build", "-l", "8080"]
+CMD ["serve", "-s", "build", "-l", "3000"]
