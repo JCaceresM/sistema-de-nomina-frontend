@@ -1,31 +1,38 @@
-import { all } from "redux-saga/effects"
+import { all } from "redux-saga/effects";
 import {
   watchCreateDepartment,
   watchGetAllDepartment,
-} from "./department/department.sagas"
+} from "./department/department.sagas";
 import {
   watchCreateEmployee,
   watchGetEmployee,
-} from "./employee/employee.sagas"
-import { watchLocalState } from "./local/localState.sagas"
-import { watchGetMunicipalities } from "./municipality/municipality.saga"
+} from "./employee/employee.sagas";
+import { watchLocalState } from "./local/localState.sagas";
+import { watchGetMunicipalities } from "./municipality/municipality.saga";
+import {
+  watchCreatePayrollNews,
+  watchGetPayrollNews,
+} from "./payroll-news/payroll-news.sagas";
 import {
   watchCreatePayrollRecord,
   watchGetAllPayrollRecord,
   watchUpdatePayrollRecord,
-} from "./payroll-record/payroll.sagas"
-import { watchCreatePayroll, watchGetAllPayroll } from "./payroll/payroll.sagas"
+} from "./payroll-record/payroll.sagas";
+import {
+  watchCreatePayroll,
+  watchGetAllPayroll,
+} from "./payroll/payroll.sagas";
 import {
   watchCreatePosition,
   watchGetAllPositions,
   watchGetAllPositionsDepartment,
-} from "./positions/positions.saga"
-import { watchGetAllProvinces } from "./provinces/provinces.saga"
-import { watchGetSectors } from "./sector/sector.saga"
+} from "./positions/positions.saga";
+import { watchGetAllProvinces } from "./provinces/provinces.saga";
+import { watchGetSectors } from "./sector/sector.saga";
 import {
   watchAuthenticateUser,
   watchGetUserMenuOptions,
-} from "./user/user.sagas"
+} from "./user/user.sagas";
 
 export default function* rootSaga (): Generator {
   yield all([
@@ -45,6 +52,9 @@ export default function* rootSaga (): Generator {
     watchCreatePayroll(),
     watchGetAllPayroll(),
     watchGetAllPayrollRecord(),
-    watchCreatePayrollRecord(),watchUpdatePayrollRecord()
-  ])
+    watchCreatePayrollRecord(),
+    watchUpdatePayrollRecord(),
+    watchGetPayrollNews(),
+    watchCreatePayrollNews(),
+  ]);
 }

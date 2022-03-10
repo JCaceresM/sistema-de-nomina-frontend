@@ -10,7 +10,7 @@ const isLoggedIn = (): boolean => {
 }
 
 type UserData = {
-  businessId: string
+  businessId: number
   username: string
   userId: string
   sessionCookie: {

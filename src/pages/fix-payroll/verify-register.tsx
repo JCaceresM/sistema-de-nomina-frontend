@@ -8,7 +8,7 @@ import {
   EmployeeType,
   getEmployee,
 } from "../../actions/employee/employee.actions";
-import { PayrollNewsType } from "../../actions/payroll news/payroll-news.actions";
+import { PayrollNewsType } from "../../actions/payroll-news/payroll-news.actions";
 import {
   createPayrollRecord,
   payrollRecordManagerReduxState,
@@ -422,11 +422,14 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       </CustomRow>
     );
   };
+  // eslint-disable-next-line no-console
+  console.log(employeeToRegister);
+  
   const MenuOptions = () => {
     return (
       <CustomRow gutter={[16, 16]}>
         <CustomCol xs={6}>
-          <CustomButton onClick={() => setRegisterIsVisible(true)}>
+          <CustomButton disabled={!payrollSelected.id || !employeeToRegister.length} onClick={() => setRegisterIsVisible(true)}>
             Registrar
           </CustomButton>
         </CustomCol>
@@ -591,7 +594,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                 <CustomCol xs={24}>
                   <CustomFormItem
                     rules={[{ required: true }]}
-                    name={"amaunt"}
+                    name={"amount"}
                     label={"Monto"}
                   >
                     <CustomInputNumber style={{ width: "100%" }} />

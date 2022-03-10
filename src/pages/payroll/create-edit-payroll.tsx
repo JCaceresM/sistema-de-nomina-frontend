@@ -1,10 +1,16 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Form, Select, Steps } from "antd"
-import React, { ReactElement, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { createDepartment, departmentManagerReduxState } from "../../actions/department/department.actions"
-import { setLocalState } from "../../actions/local/localState.actions"
+import { Form, Select, Steps } from "antd";
+import React, { ReactElement, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createDepartment,
+  departmentManagerReduxState,
+  DepartmentType,
+  getAllDepartment,
+} from "../../actions/department/department.actions";
+import { setLocalState } from "../../actions/local/localState.actions";
+import { createPayroll, payrollManagerReduxState } from "../../actions/payroll/payroll.actions";
 import {
   CustomCol,
   CustomContent,
@@ -15,60 +21,70 @@ import {
   CustomModal,
   CustomRow,
   CustomSelect,
-} from "../../common/components"
-import { CustomModalConfirmation  } from "../../common/components/ConfirmModalMethod"
-import CustomSpin from "../../common/components/CustomSpin"
-import { PropsType } from "../../common/types/modal.type"
+  CustomTextArea,
+} from "../../common/components";
+import { CustomModalConfirmation } from "../../common/components/ConfirmModalMethod";
+import CustomSpin from "../../common/components/CustomSpin";
+import { PropsType } from "../../common/types/modal.type";
+import { getSessionInfo } from "../../common/utils";
 import {
   formItemLayout,
   validateMessages,
-} from "../../common/utils/forms/validations"
-import { RootState } from "../../reducers/root_reducers"
+} from "../../common/utils/forms/validations";
+import { RootState } from "../../reducers/root_reducers";
 
-const { Option } = Select
+const { Option } = Select;
 
 const CreatEditPayroll = ({
   visible,
   width,
   hideModal,
 }: PropsType): ReactElement => {
-  const [form] = Form.useForm()
-  const dispatch = useDispatch()
-  const { createDepartmentsIsLoading,isCreated } = useSelector(
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+  const { createPayrollIsLoading, isPayrollCreated } = useSelector(
+    (state: RootState) => state.payroll
+  );
+  const { departments, createDepartmentsIsLoading } = useSelector(
     (state: RootState) => state.departments
-  )
+  );
   const cancelPayment = () => {
     CustomModalConfirmation({
       content: "¿Seguro que desea cancelar la operación?",
       onOk: () => {
-        hideModal()
+        hideModal();
       },
-    })
-  }
+    });
+  };
   const handleSubmit = async () => {
-    const data = await form.validateFields().catch((e) => e)    
+    const data = await form.validateFields().catch((e) => e);
+    console.log(data);
+
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
-      dispatch(createDepartment({ ...data,  }))
+      dispatch(createPayroll({ ...data, company_id: getSessionInfo().businessId, status: "A", }));
     }
-  }
+  };
   useEffect(() => {
-    if (isCreated) {
-      form.resetFields()
-      isCreated&&hideModal()
-      dispatch(departmentManagerReduxState({isCreated:false }))
+    if (isPayrollCreated) {
+      form.resetFields();
+      isPayrollCreated && hideModal();
+      dispatch(payrollManagerReduxState({ isPayrollCreated: false }));
     }
-  },[isCreated])
+  }, [isPayrollCreated]);
+  useEffect(() => {
+    dispatch(getAllDepartment());
+  }, []);
   return (
     <CustomModal
       title={"Modal"}
       onCancel={cancelPayment}
       visible={visible}
       width={width}
-      confirmLoading={createDepartmentsIsLoading}
-      closable={!createDepartmentsIsLoading}
-      maskClosable={!createDepartmentsIsLoading}
-      cancelButtonProps={{ disabled: createDepartmentsIsLoading }}
-      okButtonProps={{ disabled: createDepartmentsIsLoading }}
+      confirmLoading={createPayrollIsLoading}
+      closable={!createPayrollIsLoading}
+      maskClosable={!createPayrollIsLoading}
+      cancelButtonProps={{ disabled: createPayrollIsLoading }}
+      okButtonProps={{ disabled: createPayrollIsLoading }}
       onOk={handleSubmit}
     >
       <CustomContent>
@@ -79,50 +95,78 @@ const CreatEditPayroll = ({
           validateMessages={validateMessages}
           labelAlign="left"
         >
-          <CustomSpin spinning={createDepartmentsIsLoading}>
+          <CustomSpin spinning={createPayrollIsLoading}>
             <CustomRow>
               <CustomCol xs={12}>
                 <CustomFormItem
-                  rules={[
-                    { required: true,  },
-                  ]}
+                  rules={[{ required: true }]}
                   name={"name"}
                   label={"Name"}
                   required
                 >
-                  <CustomInput placeholder={"Escriba el nombre"}/>
+                  <CustomInput placeholder={"Escriba el nombre"} />
                 </CustomFormItem>
               </CustomCol>
               <CustomCol xs={12}>
                 <CustomFormItem
-                  rules={[{ required: true, type: "number" }]}
-                  name={"budget"}
-                  label={"Presupuesto"}
+                  rules={[{ required: true }]}
+                  name={"bank_account"}
+                  label={"Debitado de"}
                   required
                 >
-                  <CustomInputNumber placeholder={"Escriba el presupuesto"} />
+                  <CustomSelect
+                    placeholder={"Seleccione Cuenta predeterminada"}
+                  >
+                    <Option value={1}>Activo</Option>
+                    <Option value={2}>Inactivo</Option>
+                  </CustomSelect>
                 </CustomFormItem>
               </CustomCol>
               <CustomCol xs={12}>
-                <CustomFormItem name={"status"} label={"Estado"}>
+                <CustomFormItem
+                  required
+                  rules={[{ required: true }]}
+                  name={"type"}
+                  label={"Tipo"}
+                >
                   <CustomSelect placeholder={"Seleccione el estado"}>
-                    <Option value={"A"}>Activo</Option>
-                    <Option value={"I"}>Inactivo</Option>
+                    <Option value={"F"}>Fija </Option>
+                    <Option value={"O"}>Ocacional</Option>
                   </CustomSelect>
                 </CustomFormItem>
               </CustomCol>
               <CustomCol xs={12}>
-              <CustomFormItem  name={"location"} label={"Oficina"}>
-                <CustomInput placeholder={"oficina de localización"}></CustomInput>
-              </CustomFormItem>
-            </CustomCol>
-
-              <CustomCol xs={12} pull={12}>
-                <CustomFormItem name={"type"} label={"Tipo"}>
-                <CustomSelect placeholder={"Seleccione el tipo"}>
-                    <Option value={"P"}>Provisional</Option>
-                    <Option value={"F"}>Fijo</Option>
+                <CustomFormItem
+                  required
+                  rules={[{ required: true }]}
+                  name={"deparmentd_id"}
+                  label={"Departamento"}
+                >
+                  <CustomSelect
+                    loading={createDepartmentsIsLoading}
+                    placeholder={"Seleccione el departamento"}
+                  >
+                    {(departments || []).map((dep: DepartmentType, ind) => (
+                      <Option key={`${ind}`} value={dep.id}>
+                        {dep.name}
+                      </Option>
+                    ))}
                   </CustomSelect>
+                </CustomFormItem>
+              </CustomCol>
+
+              <CustomCol xs={24}>
+                <CustomFormItem
+                 required
+                 rules={[{ required: true }]}
+                  labelCol={{ span: 4 }}
+                  wrapperCol={{ span: 20 }}
+                  name={"description"}
+                  label={"Descripcion"}
+                >
+                  <CustomTextArea
+                    placeholder={"Escriba una descripcion de la nomina"}
+                  />
                 </CustomFormItem>
               </CustomCol>
             </CustomRow>
@@ -130,6 +174,6 @@ const CreatEditPayroll = ({
         </CustomForm>
       </CustomContent>
     </CustomModal>
-  )
-}
-export default CreatEditPayroll
+  );
+};
+export default CreatEditPayroll;

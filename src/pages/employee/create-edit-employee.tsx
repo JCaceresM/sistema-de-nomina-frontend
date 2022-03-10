@@ -16,6 +16,7 @@ import {
 import { CustomModalConfirmation } from "../../common/components/ConfirmModalMethod"
 import CustomSpin from "../../common/components/CustomSpin"
 import { PropsType } from "../../common/types/modal.type"
+import { getSessionInfo } from "../../common/utils"
 
 import { getFromLocalState } from "../../common/utils/local/dynamicState.helper"
 import { RootState } from "../../reducers/root_reducers"
@@ -85,7 +86,7 @@ const CreatEditEmployee = ({
       if (stepState === 2) {
         const data: Record<string, unknown> = getFromLocalState("dataEmployee")
         delete data.ageStored
-        dispatch(createEmployee({ ...data, company_id: 1 }))
+        dispatch(createEmployee({ ...data, company_id: getSessionInfo().businessId, }))
       }
       stepState < 2 && stepChanger(stepState + 1)
     }

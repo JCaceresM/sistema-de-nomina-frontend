@@ -3,6 +3,7 @@ import departments from "./department/department.reducer"
 import Employee from "./employee/employee.reducer"
 import dynamicLocalState from "./local/localState.reducers"
 import municipality from "./municipality/municipality.reducers"
+import payrollNews from "./payroll-news/payroll-news.reducer"
 import payrollRecord from "./payroll-record/payroll-record.reducer"
 import payroll from "./payroll/payroll.reducer"
 import positions from "./positions/positions.reducers"
@@ -23,6 +24,7 @@ const state = {
   payroll,
   payrollRecord,
   InitialState,
+  payrollNews
 }
 const appReducer = combineReducers(state)
 

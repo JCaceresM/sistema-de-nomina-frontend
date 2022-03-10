@@ -8,7 +8,8 @@ import {
   PAYROLL_GET_ALL_PAYROLL_SUCCESS,
   PAYROLL_MANAGER_REDUX_STATE_PAYROLL,
 } from "../../constants/payroll/payroll.constants"
-import { PayrollNewsType } from "../payroll news/payroll-news.actions"
+import { PayrollState } from "../../reducers/payroll/payroll.reducer"
+import { PayrollNewsType } from "../payroll-news/payroll-news.actions"
 
 export type PayrollType = {
   id: number
@@ -25,12 +26,12 @@ export type PayrollType = {
   department_id: number,payroll_news:PayrollNewsType[]
 }
 export type PayrollManagerReduxStateAction = {
-  state: PayrollType
+  state: Partial<PayrollState>
   type: typeof PAYROLL_MANAGER_REDUX_STATE_PAYROLL
 }
 
 export const payrollManagerReduxState = (
-  state: PayrollType
+  state: Partial<PayrollState>
 ): PayrollManagerReduxStateAction => {
   return {
     type: PAYROLL_MANAGER_REDUX_STATE_PAYROLL,

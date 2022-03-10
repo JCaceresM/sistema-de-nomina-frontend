@@ -14,7 +14,7 @@ import {
   PAYROLL_RECORD_UPDATE_PAYROLL_RECORD_SUCCESS,
 } from "../../constants/payroll-record/payroll-record.constants";
 
-import { PayrollNewsType } from "../payroll news/payroll-news.actions";
+import { PayrollNewsType } from "../payroll-news/payroll-news.actions";
 
 export type PayrollRecordType = {
   id: number;

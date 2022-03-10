@@ -28,6 +28,7 @@ import {
 import { CustomModalConfirmation } from "../../common/components/ConfirmModalMethod"
 import CustomSpin from "../../common/components/CustomSpin"
 import { PropsType } from "../../common/types/modal.type"
+import { getSessionInfo } from "../../common/utils"
 import { validateMessages } from "../../common/utils/forms/validations"
 import { RootState } from "../../reducers/root_reducers"
 
@@ -70,7 +71,7 @@ const CreatEditPosition = ({
   const handleSubmit = async () => {
     const data = await form.validateFields().catch((e) => e)
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
-      dispatch(createPosition({ ...data ,company_id:1}))
+      dispatch(createPosition({ ...data ,company_id:getSessionInfo().businessId,}))
     }
   }
   useEffect(() => {

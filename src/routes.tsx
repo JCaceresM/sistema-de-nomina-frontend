@@ -10,6 +10,7 @@ import {
   PATH_FIXED_PAYROLL_APPROVE,
   PATH_FIXED_PAYROLL_AUTHORIZATION,
   PATH_FIXED_PAYROLL_CHECK_REGISTER,
+  PATH_FIXED_PAYROLL_NEWS,
   PATH_LOGIN,
   PATH_MAIN,
 } from "./common/constants/web-site-route.constants"
@@ -24,6 +25,7 @@ import VerifyRegisterFixedPayroll from "./pages/fix-payroll/verify-register"
 import Payroll from "./pages/payroll/payroll"
 import ApproveFixedPayroll from "./pages/fix-payroll/fixed-payroll-approve"
 import FixedPayrollAuthorization from "./pages/fix-payroll/fixed-payroll-authorization"
+import FixPayrollNews from "./pages/fix-payroll/fixed-payroll-cash-discount"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>
@@ -75,6 +77,14 @@ const WebSiteRoutes = (): ReactElement => {
             element={
               <ProtectedRoutesWrapper>
                 <VerifyRegisterFixedPayroll />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_PAYROLL_NEWS}
+            element={
+              <ProtectedRoutesWrapper>
+                <FixPayrollNews />
               </ProtectedRoutesWrapper>
             }
           />

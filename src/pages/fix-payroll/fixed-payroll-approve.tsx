@@ -10,7 +10,7 @@ import { AlignType } from "rc-table/lib/interface";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { EmployeeType } from "../../actions/employee/employee.actions";
-import { PayrollNewsType } from "../../actions/payroll news/payroll-news.actions";
+import { PayrollNewsType } from "../../actions/payroll-news/payroll-news.actions";
 import {
   getPayrollRecordCollection,
   PayrollRecordType,
@@ -98,7 +98,7 @@ const ApproveFixedPayroll = (): ReactElement => {
       render: (record: Record<string, any>) => {
         return currencyLocale(
           record.payroll_record_detail.reduce(
-            (prev: number, next: Record<string, number>) => prev + next.salary,
+            (prev: number, next: Record<string, number>) => prev + next?.salary,
             0
           )
         );

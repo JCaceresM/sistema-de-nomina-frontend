@@ -11,7 +11,7 @@ import {
 import { ResponseMetadata } from "../../common/types/response.type"
 import { PayrollActions, PayrollType } from "../../actions/payroll/payroll.actions"
 
-type DepartmentState = {
+export type PayrollState = {
   getPayrollIsLoading: boolean
   createPayrollIsLoading: boolean,
   isPayrollCreated:boolean
@@ -29,9 +29,9 @@ const initialState = {
 }
 
 const payroll = (
-  state: DepartmentState = initialState,
+  state: PayrollState = initialState,
   action: PayrollActions
-): DepartmentState => {
+): PayrollState => {
   switch (action.type) {
     case PAYROLL_GET_ALL_PAYROLL:
       return {

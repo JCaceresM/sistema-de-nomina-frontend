@@ -13,7 +13,7 @@ import {
   EMPLOYEE_MANAGER_REDUX_STATE_EMPLOYEE,
 } from "../../constants/employee/employee.constants"
 import { EmployeeState } from "../../reducers/employee/employee.reducer"
-import { PayrollNewsType } from "../payroll news/payroll-news.actions"
+import { PayrollNewsType } from "../payroll-news/payroll-news.actions"
 export type EmployeeType = {
   age: number
   blond_type: string
