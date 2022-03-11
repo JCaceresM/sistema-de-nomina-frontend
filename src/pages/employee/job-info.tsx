@@ -89,8 +89,7 @@ const JobInfo = ({
                     condition: `${value}`,
                   },
                 ]
-                // eslint-disable-next-line no-console
-                console.log(value,'v');
+          
                 
                 dispatch(getAllPayroll(condition))
                 dispatch(getPositionDepartment(parseInt(`${value}`)))

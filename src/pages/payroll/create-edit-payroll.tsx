@@ -58,8 +58,6 @@ const CreatEditPayroll = ({
   };
   const handleSubmit = async () => {
     const data = await form.validateFields().catch((e) => e);
-    console.log(data);
-
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
       dispatch(createPayroll({ ...data, company_id: getSessionInfo().businessId, status: "A", }));
     }

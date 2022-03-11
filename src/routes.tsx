@@ -25,7 +25,7 @@ import VerifyRegisterFixedPayroll from "./pages/fix-payroll/verify-register"
 import Payroll from "./pages/payroll/payroll"
 import ApproveFixedPayroll from "./pages/fix-payroll/fixed-payroll-approve"
 import FixedPayrollAuthorization from "./pages/fix-payroll/fixed-payroll-authorization"
-import FixPayrollNews from "./pages/fix-payroll/fixed-payroll-cash-discount"
+import FixPayrollNews from "./pages/fix-payroll/fixed-payroll-news"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>

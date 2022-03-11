@@ -20,14 +20,10 @@ import {
 const { getPosition, createPosition,getPositionsDepartment } = PositionsApiRequest
 function* getAllPositionSaga () {
   try {
-    // eslint-disable-next-line no-console
-    console.log("tfjghj")
 
     const response: ResponseGenerator = yield call(() => getPosition())
 
     const { data } = response
-    // eslint-disable-next-line no-console
-    console.log(data)
 
     yield put(
       getAllPositionSuccess(data, {

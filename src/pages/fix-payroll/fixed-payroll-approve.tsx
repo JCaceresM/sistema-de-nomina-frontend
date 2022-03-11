@@ -140,9 +140,12 @@ const ApproveFixedPayroll = (): ReactElement => {
                   type={"link"}
                   icon={<EyeTwoTone />}
                   onClick={() => {
+                    // eslint-disable-next-line no-console
+                    console.log(record.payroll_record_detail || []);
+                    
                     setVisible(true);
                     setDataView(record.payroll_record_detail || []);
-                    setPayrollSelected(record);
+                    setPayrollSelected(record||{});
                   }}
                 />
               </CustomTooltip>

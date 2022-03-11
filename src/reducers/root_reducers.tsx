@@ -30,8 +30,6 @@ const appReducer = combineReducers(state)
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const rootReducer = (state: any, action: any) => {
-// eslint-disable-next-line no-console
-console.log(state,"lls");
 
   if (action.type === "STATE_SET_STATE_STATE") {
     state = {user:state.user}

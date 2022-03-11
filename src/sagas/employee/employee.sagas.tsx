@@ -15,15 +15,11 @@ import { SelectConditionType } from "../../common/types/general.type"
 const { getEmployees,createEmployee } = EmployeeApiRequest
 function* getEmployeeSaga ({ pagination,searchConditions }: GetEmployeeAction) {
   try {
-    // eslint-disable-next-line no-console
-    console.log(searchConditions,"searchConditions");
     const response: ResponseGenerator = yield call(() =>
       getEmployees({pagination,searchConditions: searchConditions as unknown as SelectConditionType})
     )
 
     const { data, meta={} } = response.data
-    // eslint-disable-next-line no-console
-    console.log(response.data,"response.data");
     
     yield put(getEmployeeSuccess(data, meta.pagination||{}))
   } catch (error) {

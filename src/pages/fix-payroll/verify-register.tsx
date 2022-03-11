@@ -422,8 +422,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       </CustomRow>
     );
   };
-  // eslint-disable-next-line no-console
-  console.log(employeeToRegister);
+ 
   
   const MenuOptions = () => {
     return (
@@ -565,8 +564,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
             width={"40%"}
             onCancel={hidePayrollNewsModal}
             onOk={async () => {
-              // eslint-disable-next-line no-console
-              console.log(await form.validateFields());
+              
               const data = await form.validateFields();
               if (Object.keys(data).every((key) => data[key] !== undefined)) {
                 setEmployeeNews([...employeeNews, data]);

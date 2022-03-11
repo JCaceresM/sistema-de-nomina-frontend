@@ -15,48 +15,62 @@ import { getPayrollnewsCollection } from "../../actions/payroll-news/payroll-new
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../reducers/root_reducers";
 import { addPropertyKey } from "../../common/utils";
+import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
+import { getAllPayroll } from "../../actions/payroll/payroll.actions";
 
 const FixPayrollNews = (): ReactElement => {
   const dispatch = useDispatch();
   const [createEditIsVisible, setCreateEditIsVisible] = useState(false);
   const hideModal = () => setCreateEditIsVisible(false);
-  const { PayrollNews } = useSelector(
-    (state: RootState) => state.payrollNews
-  );
+  const { PayrollNews } = useSelector((state: RootState) => state.payrollNews);
+  const { payroll } = useSelector((state: RootState) => state.payroll);
   const columns = [
     {
       title: "código",
-      dataIndex: 'id'
+      dataIndex: "id",
     },
     {
       title: "Descripcion",
-      dataIndex: 'description'
-
+      dataIndex: "description",
     },
     {
       title: "Accion",
-      dataIndex: 'operation'
-
+      dataIndex: "operation",
     },
     {
       title: "Tipo",
-      dataIndex: 'description'
-
+      dataIndex: "description",
     },
     {
-      title: "Base",
+      title: "Monto",
+      dataIndex: "amount",
+      render: (value: number) => currencyLocale(value),
     },
     {
       title: "Activo",
-      dataIndex: 'status'
-
+      dataIndex: "status",
     },
     {
-      title: "Frecuencia",
+      title: "Nomina",
+      dataIndex: "payroll_id",
+      render: (value: number) => {
+        return payroll.find((item) => item.id == value)?.name || '--';
+      },
     },
   ];
   useEffect(() => {
     dispatch(getPayrollnewsCollection());
+  }, []);
+  useEffect(() => {
+    dispatch(
+      getAllPayroll([
+        {
+          field: "type",
+          operator: "=",
+          condition: "F",
+        },
+      ])
+    );
   }, []);
   const Title = () => {
     return (
@@ -76,7 +90,7 @@ const FixPayrollNews = (): ReactElement => {
         </CustomCol>
         <CustomCol xs={24}>
           <FixPayrollCreatEditNews
-            width={"30%"}
+            width={"50%"}
             hideModal={hideModal}
             visible={createEditIsVisible}
           />
@@ -91,7 +105,10 @@ const FixPayrollNews = (): ReactElement => {
           <Title />
         </CustomCol>
         <CustomCol xs={24}>
-          <CustomTable dataSource={addPropertyKey(PayrollNews)} columns={columns}></CustomTable>
+          <CustomTable
+            dataSource={addPropertyKey(PayrollNews)}
+            columns={columns}
+          ></CustomTable>
         </CustomCol>
       </CustomRow>
     </CustomLayoutBoxShadow>

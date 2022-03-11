@@ -8,10 +8,7 @@ type authenticateUserPayload = {
   
 const authenticateUser = (
     data: authenticateUserPayload
-  ): Promise<AxiosResponse<authenticateUserPayload>> => {
-    // eslint-disable-next-line no-console
-    console.log(WEB_SERVICE_API_LOGIN);
-    
+  ): Promise<AxiosResponse<authenticateUserPayload>> => {    
     return axiosHelper.unauthorizedPostRequest<authenticateUserPayload>(
       WEB_SERVICE_API_LOGIN,
       data

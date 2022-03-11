@@ -3,6 +3,7 @@ import React, { Form, Select } from "antd";
 import { ReactElement, useEffect, } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPayrollNews, payrollNewsManagerReduxState } from "../../actions/payroll-news/payroll-news.actions";
+import { getAllPayroll, PayrollType } from "../../actions/payroll/payroll.actions";
 import {
   CustomCol,
   CustomContent,
@@ -47,6 +48,9 @@ const FixPayrollCreatEditNews = ({
   const { createPayrollNewsIsLoading, isPayrollNewsCreated } = useSelector(
     (state: RootState) => state.payrollNews
   );
+  const { payroll, getPayrollIsLoading } = useSelector(
+    (state: RootState) => state.payroll
+  );
 
   const cancelPayment = () => {
     CustomModalConfirmation({
@@ -70,6 +74,7 @@ const FixPayrollCreatEditNews = ({
       dispatch(payrollNewsManagerReduxState({ isPayrollNewsCreated: false }));
     }
   }, [isPayrollNewsCreated]);
+ 
   return (
     <CustomModal
       title={"Modal"}
@@ -93,7 +98,7 @@ const FixPayrollCreatEditNews = ({
             form={form}
           >
             <CustomRow gutter={[5, 5]}>
-              <CustomCol xs={24}>
+              <CustomCol xs={12}>
                 <CustomFormItem
                   rules={[{ required: true }]}
                   name={"name"}
@@ -102,7 +107,7 @@ const FixPayrollCreatEditNews = ({
                   <CustomInput />
                 </CustomFormItem>
               </CustomCol>
-              <CustomCol xs={24}>
+              <CustomCol xs={12}>
                 <CustomFormItem
                   rules={[{ required: true }]}
                   name={"amount"}
@@ -111,7 +116,7 @@ const FixPayrollCreatEditNews = ({
                   <CustomInputNumber style={{ width: "100%" }} />
                 </CustomFormItem>
               </CustomCol>
-              <CustomCol xs={24}>
+              <CustomCol xs={12}>
                 <CustomFormItem
                   rules={[{ required: true }]}
                   name={"operation"}
@@ -123,10 +128,28 @@ const FixPayrollCreatEditNews = ({
                   </CustomSelect>
                 </CustomFormItem>
               </CustomCol>
+              <CustomCol xs={12}>
+                <CustomFormItem
+                  rules={[{ required: true }]}
+                  name={"payroll_id"}
+                  label={"Nomina"}
+                  
+                >
+                  <CustomSelect loading={getPayrollIsLoading}>
+                  {(payroll || []).map((province: PayrollType, ind) => (
+                <Option key={`${ind}`} value={province.id} data={province}>
+                  {province.name}
+                </Option>
+              ))}
+                  </CustomSelect>
+                </CustomFormItem>
+              </CustomCol>
               <CustomCol xs={24} />
 
               <CustomCol xs={24}>
                 <CustomFormItem
+                labelCol={{span:3}}
+                wrapperCol={{span:21}}
                   rules={[{ required: true }]}
                   name={"description"}
                   label={"Descripcion"}

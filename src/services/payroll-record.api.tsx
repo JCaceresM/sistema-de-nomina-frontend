@@ -9,10 +9,7 @@ import { PaginationType, SelectConditionType } from "../common/types/general.typ
 import { axiosHelper } from "./http-method.helper"
 const {  postRequest, patchRequest } = axiosHelper
 
-const getPayrollRecord = (searchConditions: SelectConditionType[]): Promise<AxiosResponse<PaginationType>> => {
-  // eslint-disable-next-line no-console
-  console.log(WEB_SERVICE_API_PAYROLL_GET_COLLECTION, 'hola klk');
-  
+const getPayrollRecord = (searchConditions: SelectConditionType[]): Promise<AxiosResponse<PaginationType>> => {  
   return postRequest(WEB_SERVICE_API_PAYROLL_GET_COLLECTION,{searchConditions})
 }
 const createPayrollRecord = (
