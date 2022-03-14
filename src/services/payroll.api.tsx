@@ -16,8 +16,15 @@ const createPayroll = (
 ): Promise<AxiosResponse<PayrollType>> => {
   return postRequest(WEB_SERVICE_API_PAYROLL_CREATE, creatData)
 }
+const addPayrollEmployees = (
+  id: number, 
+  patchData: Array<{employee_id: number}>
+): Promise<AxiosResponse<PayrollType>> => {
+  return postRequest(`${WEB_SERVICE_API_PAYROLL_CREATE}/employees`, {payroll_id : id,patchData})
+}
 
 export const PayrollApiRequest = {
   getPayroll,
   createPayroll,
+  addPayrollEmployees
 }

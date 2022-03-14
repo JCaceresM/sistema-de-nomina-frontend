@@ -14,7 +14,7 @@ export type MenuOption = {
 export type SelectConditionType = {
   field: string;
   operator: string;
-  condition: string | number;
+  condition: string | number | null;
 };
 export type Nullable<T> = T | null
 

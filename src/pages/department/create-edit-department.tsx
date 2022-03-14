@@ -58,6 +58,7 @@ const CreatEditEmployee = ({
       dispatch(departmentManagerReduxState({isCreated:false }))
     }
   },[isCreated])
+  
   return (
     <CustomModal
       title={"Modal"}

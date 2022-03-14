@@ -139,10 +139,7 @@ const ApproveFixedPayroll = (): ReactElement => {
                 <CustomButton
                   type={"link"}
                   icon={<EyeTwoTone />}
-                  onClick={() => {
-                    // eslint-disable-next-line no-console
-                    console.log(record.payroll_record_detail || []);
-                    
+                  onClick={() => {                    
                     setVisible(true);
                     setDataView(record.payroll_record_detail || []);
                     setPayrollSelected(record||{});

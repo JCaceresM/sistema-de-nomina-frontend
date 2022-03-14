@@ -8,11 +8,14 @@ import {
   GetEmployeeAction,
   getEmployeeFailure,
   getEmployeeSuccess,
+  UpdateEmployeeAction,
+  updateEmployeeFailure,
+  updateEmployeeSuccess,
 } from "../../actions/employee/employee.actions"
-import { EMPLOYEE_CREATE_EMPLOYEE, EMPLOYEE_GET_EMPLOYEE } from "../../constants/employee/employee.constants"
+import { EMPLOYEE_CREATE_EMPLOYEE, EMPLOYEE_GET_EMPLOYEE, EMPLOYEE_UPDATE_EMPLOYEE } from "../../constants/employee/employee.constants"
 import { SelectConditionType } from "../../common/types/general.type"
 
-const { getEmployees,createEmployee } = EmployeeApiRequest
+const { getEmployees,createEmployee, updateEmployee } = EmployeeApiRequest
 function* getEmployeeSaga ({ pagination,searchConditions }: GetEmployeeAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
@@ -46,5 +49,21 @@ function* createEmployeeSaga ({ create }: CreateEmployeeAction) {
 function* watchCreateEmployee (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(EMPLOYEE_CREATE_EMPLOYEE, createEmployeeSaga)
 }
+function* updateEmployeeSaga ({ patchEmployee, id }: UpdateEmployeeAction) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+    updateEmployee(id, patchEmployee)
+    )
 
-export { watchGetEmployee,watchCreateEmployee }
+    const { data, } = response
+    yield put(updateEmployeeSuccess(data,))
+  } catch (error) {
+    yield put(updateEmployeeFailure())
+  }
+}
+
+function* watchUpdateEmployee (): Generator<ForkEffect<never>, void, unknown> {
+  yield takeLatest(EMPLOYEE_UPDATE_EMPLOYEE, updateEmployeeSaga)
+}
+
+export { watchGetEmployee,watchCreateEmployee , watchUpdateEmployee}
