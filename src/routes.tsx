@@ -6,6 +6,7 @@ import {
   PATH_CONFIG_EMPLOYEE_CONSULTING,
   PATH_CONFIG_POSITIONS_CONSULTING,
   PATH_FIXED_CONSULTING,
+  PATH_FIXED_DISCOUNT,
   PATH_FIXED_PAYROLL,
   PATH_FIXED_PAYROLL_APPROVE,
   PATH_FIXED_PAYROLL_AUTHORIZATION,
@@ -26,6 +27,7 @@ import Payroll from "./pages/payroll/payroll"
 import ApproveFixedPayroll from "./pages/fix-payroll/fixed-payroll-approve"
 import FixedPayrollAuthorization from "./pages/fix-payroll/fixed-payroll-authorization"
 import FixPayrollNews from "./pages/fix-payroll/fixed-payroll-news"
+import FixPayrollDiscount from "./pages/fix-payroll/fix-payroll-discount"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>
@@ -45,6 +47,14 @@ const WebSiteRoutes = (): ReactElement => {
             element={
               <ProtectedRoutesWrapper>
                 <Consulting />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_DISCOUNT}
+            element={
+              <ProtectedRoutesWrapper>
+                <FixPayrollDiscount />
               </ProtectedRoutesWrapper>
             }
           />

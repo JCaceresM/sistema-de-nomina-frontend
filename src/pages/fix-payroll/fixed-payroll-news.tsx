@@ -164,15 +164,15 @@ const ViewEmployeePayrollNews = ({
       dataIndex: "id",
     },
     {
-      title: "Descripcion",
-      dataIndex: "description",
+      title: "Nombre",
+      dataIndex: "Name",
     },
     {
       title: "Accion",
       dataIndex: "operation",
     },
     {
-      title: "Tipo",
+      title: "Descripcion",
       dataIndex: "description",
     },
     {
