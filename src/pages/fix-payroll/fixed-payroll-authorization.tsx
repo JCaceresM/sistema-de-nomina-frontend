@@ -6,7 +6,7 @@ import { getPayrollRecordCollection, updatePayrollRecord } from "../../actions/p
 import { CustomButton, CustomCol, CustomRow, CustomTable, CustomTitle, CustomTooltip } from "../../common/components"
 import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow"
 import CustomPopConfirm from "../../common/components/CustomPopConfirm"
-import { addPropertyKey } from "../../common/utils"
+import { addPropertyKey, getSessionInfo } from "../../common/utils"
 import { getDateAsSpanishShortDate } from "../../common/utils/date/date.helpers"
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils"
 import { RootState } from "../../reducers/root_reducers"
@@ -74,7 +74,8 @@ const FixedPayrollAuthorization = (): ReactElement => {
             <CustomPopConfirm
                 title={"¿Declinar nomina?"}
                 onConfirm={() => {
-                  dispatch(updatePayrollRecord(record.id, { status: "D" }));
+                  dispatch(updatePayrollRecord(record.id, { status: "D" , company_id: getSessionInfo().businessId,
+                  user_update: getSessionInfo().username }));
                 }}
               >
               <CustomTooltip placement={"bottom"} title={"Declinar"}>
@@ -94,7 +95,8 @@ const FixedPayrollAuthorization = (): ReactElement => {
               <CustomPopConfirm
                 title={"¿Aprobar nomina?"}
                 onConfirm={() => {
-                  dispatch(updatePayrollRecord(record.id, { status: "A" }));
+                  dispatch(updatePayrollRecord(record.id, { status: "A" , company_id: getSessionInfo().businessId,
+                  user_update: getSessionInfo().username }));
                 }}
               >
                 <CustomTooltip placement={"bottom"} title={"Aprobar"}>

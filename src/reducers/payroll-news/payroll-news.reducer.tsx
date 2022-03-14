@@ -1,10 +1,16 @@
 import {
   PAYROLL_NEWS_CREATE_PAYROLL_NEWS,
+  PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE,
+  PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE_FAILURE,
+  PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE_SUCCESS,
   PAYROLL_NEWS_CREATE_PAYROLL_NEWS_FAILURE,
   PAYROLL_NEWS_CREATE_PAYROLL_NEWS_SUCCESS,
   PAYROLL_NEWS_GET_COLLECTION,
   PAYROLL_NEWS_GET_COLLECTION_FAILURE,
   PAYROLL_NEWS_GET_COLLECTION_SUCCESS,
+  PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE,
+  PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_FAILURE,
+  PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_SUCCESS,
   PAYROLL_NEWS_MANAGER_REDUX_STATE_PAYROLL_NEWS,
 } from "../../constants/payroll-news/payroll-news.constants";
 import { ResponseMetadata } from "../../common/types/response.type";
@@ -14,19 +20,27 @@ import {
 } from "../../actions/payroll-news/payroll-news.actions";
 
 export type PayrollNewsState = {
+  getPayrollNewsEmployeeIsLoading: boolean;
   getPayrollNewsIsLoading: boolean;
   createPayrollNewsIsLoading: boolean;
+  createPayrollNewsEmployeeIsLoading: boolean;
+  isPayrollNewsEmployeeCreated: boolean;
   isPayrollNewsCreated: boolean;
-  PayrollNews: PayrollNewsType[];
-  PayrollNewsMetadata: ResponseMetadata;
+  payrollNews: PayrollNewsType[];
+  payrollNewsEmployee: PayrollNewsType[];
+  payrollNewsMetadata: ResponseMetadata;
 };
 
 const initialState = {
   getPayrollNewsIsLoading: false,
   createPayrollNewsIsLoading: false,
+  getPayrollNewsEmployeeIsLoading: false,
+  createPayrollNewsEmployeeIsLoading: false,
+  isPayrollNewsEmployeeCreated: false,
   isPayrollNewsCreated: false,
-  PayrollNews: new Array<PayrollNewsType>(),
-  PayrollNewsMetadata: {} as ResponseMetadata,
+  payrollNews: new Array<PayrollNewsType>(),
+  payrollNewsEmployee: new Array<PayrollNewsType>(),
+  payrollNewsMetadata: {} as ResponseMetadata,
 };
 
 const payrollNews = (
@@ -47,7 +61,7 @@ const payrollNews = (
     case PAYROLL_NEWS_GET_COLLECTION_SUCCESS:
       return {
         ...state,
-        PayrollNews: action.payrollNewsCollection,
+        payrollNews: action.payrollNewsCollection,
         getPayrollNewsIsLoading: false,
       };
     case PAYROLL_NEWS_CREATE_PAYROLL_NEWS:
@@ -63,9 +77,44 @@ const payrollNews = (
     case PAYROLL_NEWS_CREATE_PAYROLL_NEWS_SUCCESS:
       return {
         ...state,
-        PayrollNews: [...state.PayrollNews, action.createPayrollNews],
+        payrollNews: [...state.payrollNews, action.createPayrollNews],
         createPayrollNewsIsLoading: false,
         isPayrollNewsCreated: true,
+      };
+    case PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE:
+      return {
+        ...state,
+        createPayrollNewsEmployeeIsLoading: true,
+        isPayrollNewsEmployeeCreated: true,
+      };
+    case PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        createPayrollNewsEmployeeIsLoading: false,
+        isPayrollNewsEmployeeCreated: true,
+      };
+    case PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE_FAILURE:
+      return {
+        ...state,
+        createPayrollNewsEmployeeIsLoading: false,
+        isPayrollNewsEmployeeCreated: true,
+      };
+    case PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE:
+      return {
+        ...state,
+        getPayrollNewsEmployeeIsLoading: true,
+        
+      };
+    case PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_SUCCESS:
+      return {
+        ...state,
+        getPayrollNewsEmployeeIsLoading: false,
+        payrollNewsEmployee: action.payrollNewsEmployee
+      };
+    case PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_FAILURE:
+      return {
+        ...state,
+        getPayrollNewsEmployeeIsLoading: false,
       };
     case PAYROLL_NEWS_MANAGER_REDUX_STATE_PAYROLL_NEWS:
       return {

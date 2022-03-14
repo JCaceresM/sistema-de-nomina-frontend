@@ -20,7 +20,7 @@ import {
 } from "../../common/components";
 import { CustomModalConfirmation } from "../../common/components/ConfirmModalMethod";
 import { PropsType } from "../../common/types/modal.type";
-import { addPropertyKey } from "../../common/utils";
+import { addPropertyKey, getSessionInfo } from "../../common/utils";
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
 import { RootState } from "../../reducers/root_reducers";
 
@@ -86,7 +86,11 @@ const AddEmployee = ({
       dispatch(
         updatePayrollEmployees(
           payrollSelected.id,
-          employeesSelected.map((item) => ({ employee_id: item.id }))
+          employeesSelected.map((item) => ({
+            id: item.id,
+            company_id: getSessionInfo().businessId,
+            user_insert: getSessionInfo().username,
+          }))
         )
       );
     }

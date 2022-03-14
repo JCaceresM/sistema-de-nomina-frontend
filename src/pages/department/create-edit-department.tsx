@@ -19,6 +19,7 @@ import {
 import { CustomModalConfirmation  } from "../../common/components/ConfirmModalMethod"
 import CustomSpin from "../../common/components/CustomSpin"
 import { PropsType } from "../../common/types/modal.type"
+import { getSessionInfo } from "../../common/utils"
 import {
   formItemLayout,
   validateMessages,
@@ -48,7 +49,8 @@ const CreatEditEmployee = ({
   const handleSubmit = async () => {
     const data = await form.validateFields().catch((e) => e)    
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
-      dispatch(createDepartment({ ...data,  }))
+      dispatch(createDepartment({ ...data, company_id: getSessionInfo().businessId,
+        user_insert: getSessionInfo().username }))
     }
   }
   useEffect(() => {

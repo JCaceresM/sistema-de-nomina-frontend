@@ -12,6 +12,7 @@ import {
   PAYROLL_UPDATE_PAYROLL_EMPLOYEE_SUCCESS,
 } from "../../constants/payroll/payroll.constants";
 import { PayrollState } from "../../reducers/payroll/payroll.reducer";
+import { EmployeeType } from "../employee/employee.actions";
 import { PayrollNewsType } from "../payroll-news/payroll-news.actions";
 
 export type PayrollType = {
@@ -121,13 +122,13 @@ export const createPayrollFailure = (): CreatePayrollFailureAction => {
 //-------------add-employees-------------------//
 export type UpdatePayrollEmployeesAction = {
   type: typeof PAYROLL_UPDATE_PAYROLL_EMPLOYEE;
-  patchEmployee: Array<{ employee_id: number }>;
+  patchEmployee: Array<Partial<EmployeeType>>
   id: number;
 };
 
 export const updatePayrollEmployees = (
   id: number,
-  patchEmployee: Array<{ employee_id: number }>
+  patchEmployee: Array<Partial<EmployeeType>>
 ): UpdatePayrollEmployeesAction => {
   return { id, patchEmployee, type: PAYROLL_UPDATE_PAYROLL_EMPLOYEE };
 };

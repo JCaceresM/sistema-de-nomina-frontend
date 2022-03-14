@@ -11,7 +11,9 @@ import {
 import { watchLocalState } from "./local/localState.sagas";
 import { watchGetMunicipalities } from "./municipality/municipality.saga";
 import {
+  watchCreatePayrollEmployeeNews,
   watchCreatePayrollNews,
+  watchGetPayrollEmployeeNews,
   watchGetPayrollNews,
 } from "./payroll-news/payroll-news.sagas";
 import {
@@ -59,6 +61,7 @@ export default function* rootSaga (): Generator {
     watchGetPayrollNews(),
     watchCreatePayrollNews(),
     watchUpdateEmployee(),
-    watchUpdatePayrollEmployees()
+    watchUpdatePayrollEmployees(),
+    watchCreatePayrollEmployeeNews(), watchGetPayrollEmployeeNews()
   ]);
 }

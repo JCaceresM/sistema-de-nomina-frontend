@@ -86,7 +86,8 @@ const CreatEditEmployee = ({
       if (stepState === 2) {
         const data: Record<string, unknown> = getFromLocalState("dataEmployee")
         delete data.ageStored
-        dispatch(createEmployee({ ...data, company_id: getSessionInfo().businessId, }))
+        dispatch(createEmployee({ ...data, company_id: getSessionInfo().businessId,
+          user_insert: getSessionInfo().username }))
       }
       stepState < 2 && stepChanger(stepState + 1)
     }

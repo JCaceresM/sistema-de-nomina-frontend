@@ -288,6 +288,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         registered_at: dataFields.registered_at,
         user_id: getSessionInfo().userId,
         company_id: getSessionInfo().businessId,
+        user_insert: getSessionInfo().username,
         employees: employeeToRegister.map((employee) => {
           const payrollNewsCurrentEmployee = employee?.payroll_news || [];
           return {
@@ -295,6 +296,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
 
             employee_id: employee.id,
             company_id: getSessionInfo().businessId,
+            user_insert: getSessionInfo().username,
 
             payroll_news: [
               ...payrollNewsPayrollSelected.map((item) => ({
@@ -303,6 +305,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                 type: item.type,
                 name: item.name,
                 operation: item.operation,
+                user_insert: getSessionInfo().username,
               })),
               ...payrollNewsCurrentEmployee.map((item) => ({
                 amount: item.amount,
@@ -310,6 +313,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                 type: item.type,
                 name: item.name,
                 operation: item.operation,
+                user_insert: getSessionInfo().username,
               })),
             ],
           };
@@ -422,13 +426,15 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       </CustomRow>
     );
   };
- 
-  
+
   const MenuOptions = () => {
     return (
       <CustomRow gutter={[16, 16]}>
         <CustomCol xs={6}>
-          <CustomButton disabled={!payrollSelected.id || !employeeToRegister.length} onClick={() => setRegisterIsVisible(true)}>
+          <CustomButton
+            disabled={!payrollSelected.id || !employeeToRegister.length}
+            onClick={() => setRegisterIsVisible(true)}
+          >
             Registrar
           </CustomButton>
         </CustomCol>
@@ -564,7 +570,6 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
             width={"40%"}
             onCancel={hidePayrollNewsModal}
             onOk={async () => {
-              
               const data = await form.validateFields();
               if (Object.keys(data).every((key) => data[key] !== undefined)) {
                 setEmployeeNews([...employeeNews, data]);

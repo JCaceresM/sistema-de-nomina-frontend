@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios"
+import { EmployeeType } from "../actions/employee/employee.actions"
 import { PayrollType } from "../actions/payroll/payroll.actions"
 import {
   WEB_SERVICE_API_PAYROLL_CREATE,
@@ -18,7 +19,7 @@ const createPayroll = (
 }
 const addPayrollEmployees = (
   id: number, 
-  patchData: Array<{employee_id: number}>
+  patchData: Array<Partial<EmployeeType>>
 ): Promise<AxiosResponse<PayrollType>> => {
   return postRequest(`${WEB_SERVICE_API_PAYROLL_CREATE}/employees`, {payroll_id : id,patchData})
 }

@@ -1,22 +1,30 @@
 import { call, ForkEffect, put, takeLatest } from "redux-saga/effects";
 import {
   CreatePayrollNews,
+  CreatePayrollNewsEmployee,
+  createPayrollNewsEmployeeFailure,
+  createPayrollNewsEmployeeSuccess,
   createPayrollNewsFailure,
   createPayrollNewsSuccess,
   GetPayrollNewsCollectionAction,
   getPayrollNewsCollectionFailure,
   getPayrollNewsCollectionSuccess,
+  GetPayrollNewsEmployee,
+  getPayrollNewsEmployeeSuccess,
 } from "../../actions/payroll-news/payroll-news.actions";
 
 import { SelectConditionType } from "../../common/types/general.type";
 import { ResponseGenerator } from "../../common/types/response.type";
 import {
   PAYROLL_NEWS_CREATE_PAYROLL_NEWS,
+  PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE,
   PAYROLL_NEWS_GET_COLLECTION,
+  PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE,
 } from "../../constants/payroll-news/payroll-news.constants";
 import { PayrollNewsApiRequest } from "../../services/payroll-news.api";
 
-const { getPayrollNews, createPayrollNews } = PayrollNewsApiRequest;
+const { getPayrollNews, createPayrollNews, createPayrollNewsEmployee, getPayrollNewsEmployee } =
+  PayrollNewsApiRequest;
 function* getPayrollNewsSaga ({
   searchConditions,
 }: GetPayrollNewsCollectionAction) {
@@ -57,4 +65,53 @@ function* watchCreatePayrollNews (): Generator<
   yield takeLatest(PAYROLL_NEWS_CREATE_PAYROLL_NEWS, createPayrollNewsSaga);
 }
 
-export { watchGetPayrollNews, watchCreatePayrollNews };
+function* createPayrollNewsEmployeeSaga (body: CreatePayrollNewsEmployee) {
+  try {
+     yield call(() =>
+      createPayrollNewsEmployee(body.employee_id, body.payrollNews)
+    );
+
+    yield put(createPayrollNewsEmployeeSuccess());
+  } catch (error) {
+    yield put(createPayrollNewsEmployeeFailure());
+  }
+}
+
+function* watchCreatePayrollEmployeeNews (): Generator<
+  ForkEffect<never>,
+  void,
+  unknown
+> {
+  yield takeLatest(
+    PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE,
+    createPayrollNewsEmployeeSaga
+  );
+}
+function* getPayrollNewsEmployeeSaga (body: GetPayrollNewsEmployee) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+    getPayrollNewsEmployee(body.employee_id)
+    );
+    const { data } = response;
+
+    yield put(getPayrollNewsEmployeeSuccess(data));
+  } catch (error) {
+    yield put(createPayrollNewsEmployeeFailure());
+  }
+}
+
+function* watchGetPayrollEmployeeNews (): Generator<
+  ForkEffect<never>,
+  void,
+  unknown
+> {
+  yield takeLatest(
+    PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE,
+    getPayrollNewsEmployeeSaga
+  );
+}
+export {
+  watchGetPayrollNews,
+  watchCreatePayrollNews,
+  watchCreatePayrollEmployeeNews,watchGetPayrollEmployeeNews
+};

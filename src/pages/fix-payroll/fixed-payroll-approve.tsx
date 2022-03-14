@@ -35,7 +35,7 @@ import {
 import CustomDateFormatFunction from "../../common/components/CustomDateFormatFunction";
 import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow";
 import CustomPopConfirm from "../../common/components/CustomPopConfirm";
-import { addPropertyKey } from "../../common/utils";
+import { addPropertyKey, getSessionInfo } from "../../common/utils";
 import { getDateAsSpanishShortDate } from "../../common/utils/date/date.helpers";
 import {
   formItemLayout,
@@ -119,7 +119,8 @@ const ApproveFixedPayroll = (): ReactElement => {
             <CustomPopConfirm
                 title={"¿Declinar nomina?"}
                 onConfirm={() => {
-                  dispatch(updatePayrollRecord(record.id, { status: "D" }));
+                  dispatch(updatePayrollRecord(record.id, { status: "D", company_id: getSessionInfo().businessId,
+                  user_update: getSessionInfo().username }));
                 }}
               >
               <CustomTooltip placement={"bottom"} title={"Declinar"}>
@@ -151,7 +152,8 @@ const ApproveFixedPayroll = (): ReactElement => {
               <CustomPopConfirm
                 title={"¿Aprobar nomina?"}
                 onConfirm={() => {
-                  dispatch(updatePayrollRecord(record.id, { status: "A" }));
+                  dispatch(updatePayrollRecord(record.id, { status: "A" , company_id: getSessionInfo().businessId,
+                  user_update: getSessionInfo().username }));
                 }}
               >
                 <CustomTooltip placement={"bottom"} title={"Aprobar"}>
