@@ -41,6 +41,8 @@ const departments = (
     case DEPARTMENT_GET_ALL_DEPARTMENT_FAILURE:
       return {
         ...state,
+        departments: [],
+        departmentMetadata: {} as ResponseMetadata,
         getDepartmentsIsLoading: false,
       }
     case DEPARTMENT_GET_ALL_DEPARTMENT_SUCCESS:

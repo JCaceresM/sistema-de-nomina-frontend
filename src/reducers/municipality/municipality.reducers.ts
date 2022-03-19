@@ -25,6 +25,7 @@ const municipality = (
     case MUNICIPALITY_GET_MUNICIPALITY_FAILURE:
       return {
         ...state,
+        municipalities: [],
 
         getMunicipalitiesIsLoading: false,
       }

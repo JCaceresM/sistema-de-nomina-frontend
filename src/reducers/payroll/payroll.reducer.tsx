@@ -49,6 +49,7 @@ const payroll = (
     case PAYROLL_GET_ALL_PAYROLL_FAILURE:
       return {
         ...state,
+        payroll: [],
         getPayrollIsLoading: false,
       };
     case PAYROLL_GET_ALL_PAYROLL_SUCCESS:

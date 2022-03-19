@@ -7,11 +7,13 @@ import {
   PATH_CONFIG_POSITIONS_CONSULTING,
   PATH_FIXED_CONSULTING,
   PATH_FIXED_DISCOUNT,
+  PATH_FIXED_EMPLOYEES,
   PATH_FIXED_PAYROLL,
   PATH_FIXED_PAYROLL_APPROVE,
   PATH_FIXED_PAYROLL_AUTHORIZATION,
   PATH_FIXED_PAYROLL_CHECK_REGISTER,
   PATH_FIXED_PAYROLL_NEWS,
+  PATH_FIXED_REVERT,
   PATH_LOGIN,
   PATH_MAIN,
 } from "./common/constants/web-site-route.constants"
@@ -28,6 +30,8 @@ import ApproveFixedPayroll from "./pages/fix-payroll/fixed-payroll-approve"
 import FixedPayrollAuthorization from "./pages/fix-payroll/fixed-payroll-authorization"
 import FixPayrollNews from "./pages/fix-payroll/fixed-payroll-news"
 import FixPayrollDiscount from "./pages/fix-payroll/fix-payroll-discount"
+import FixedPayrollRevert from "./pages/fix-payroll/fixed-payroll-revert"
+import FixPayrollEmployeeConsulting from "./pages/fix-payroll/employee-consult"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>
@@ -55,6 +59,22 @@ const WebSiteRoutes = (): ReactElement => {
             element={
               <ProtectedRoutesWrapper>
                 <FixPayrollDiscount />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_REVERT}
+            element={
+              <ProtectedRoutesWrapper>
+                <FixedPayrollRevert />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_EMPLOYEES}
+            element={
+              <ProtectedRoutesWrapper>
+                <FixPayrollEmployeeConsulting />
               </ProtectedRoutesWrapper>
             }
           />

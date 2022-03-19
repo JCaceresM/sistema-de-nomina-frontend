@@ -2,7 +2,7 @@
 import { CheckCircleTwoTone, DeleteTwoTone, EyeTwoTone } from "@ant-design/icons"
 import React, { ReactElement, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getPayrollRecordCollection, updatePayrollRecord } from "../../actions/payroll record/payroll-record.actions"
+import { getPayrollRecordCollection, payrollRecordManagerReduxState, updatePayrollRecord } from "../../actions/payroll record/payroll-record.actions"
 import { CustomButton, CustomCol, CustomRow, CustomTable, CustomTitle, CustomTooltip } from "../../common/components"
 import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow"
 import CustomPopConfirm from "../../common/components/CustomPopConfirm"
@@ -114,13 +114,24 @@ const FixedPayrollAuthorization = (): ReactElement => {
     },
   ];
   useEffect(() => {
-    !isPayrollRecordUpdated &&
+    if (isPayrollRecordUpdated) {
       dispatch(
         getPayrollRecordCollection([
           { field: "status", operator: "=", condition: "A" },
         ])
       );
+      dispatch(
+        payrollRecordManagerReduxState({ isPayrollRecordUpdated: false })
+      );
+    }
   }, [isPayrollRecordUpdated]);
+  useEffect(() => {
+    dispatch(
+      getPayrollRecordCollection([
+        { field: "status", operator: "=", condition: "R" },
+      ])
+    );
+  }, []);
   return (
     <CustomLayoutBoxShadow>
         <CustomRow>

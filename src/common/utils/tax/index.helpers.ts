@@ -65,3 +65,10 @@ export const othersIncome = (employee: any, payrollNews: any) => {
 export const netEarnings = (employee: any, payrollNews: any) => {
   return (othersIncome(employee, payrollNews) + employee.salary) - totalDiscount(employee, payrollNews)
 }
+export const sumNews = (arr = [], operation = "RESTA") => {
+  return arr.reduce(
+    (acc, item: Record<string, any>) =>
+      operation === item.operation ? acc + item.amount : acc + 0,
+    0
+  );
+};

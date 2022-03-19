@@ -46,6 +46,8 @@ const positions = (
     case POSITIONS_GET_ALL_POSITIONS_FAILURE:
       return {
         ...state,
+        positions: [],
+
         getPositionsIsLoading: false,
       }
     case POSITIONS_GET_ALL_POSITIONS_SUCCESS:

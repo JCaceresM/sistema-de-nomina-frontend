@@ -22,6 +22,7 @@ import { CustomModalConfirmation } from "../../common/components/ConfirmModalMet
 import { PropsType } from "../../common/types/modal.type";
 import { addPropertyKey, getSessionInfo } from "../../common/utils";
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
+import { state } from "../../common/utils/table/transform.utils";
 import { RootState } from "../../reducers/root_reducers";
 
 const AddEmployee = ({
@@ -50,7 +51,8 @@ const AddEmployee = ({
     },
     {
       title: "Estado",
-      dataIndex: "status",
+      dataIndex: "status",      render: (value: string) => state[value],
+
     },
     {
       title: "Salario",

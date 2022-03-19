@@ -13,6 +13,7 @@ import {
   PAYROLL_RECORD_UPDATE_PAYROLL_RECORD_FAILURE,
   PAYROLL_RECORD_UPDATE_PAYROLL_RECORD_SUCCESS,
 } from "../../constants/payroll-record/payroll-record.constants";
+import { PayrollRecordState } from "../../reducers/payroll-record/payroll-record.reducer";
 
 import { PayrollNewsType } from "../payroll-news/payroll-news.actions";
 
@@ -40,7 +41,7 @@ export type PayrollRecordManagerReduxStateAction = {
 };
 
 export const payrollRecordManagerReduxState = (
-  state: any
+  state: Partial<PayrollRecordState>
 ): PayrollRecordManagerReduxStateAction => {
   return {
     type: PAYROLL_RECORD_MANAGER_REDUX_STATE_PAYROLL_RECORD,

@@ -17,7 +17,7 @@ import {
   PayrollRecordType,
 } from "../../actions/payroll record/payroll-record.actions";
 
-type PayrollRecordState = {
+export type PayrollRecordState = {
   getPayrollRecordIsLoading: boolean;
   createPayrollRecordIsLoading: boolean;
   isPayrollRecordCreated: boolean;
@@ -83,7 +83,7 @@ const payrollRecord = (
     case PAYROLL_RECORD_UPDATE_PAYROLL_RECORD:
       return {
         ...state,
-        isPayrollRecordUpdated: true,
+        isPayrollRecordUpdated: false,
       };
     case PAYROLL_RECORD_UPDATE_PAYROLL_RECORD_SUCCESS:
       return {
@@ -94,7 +94,7 @@ const payrollRecord = (
     case PAYROLL_RECORD_UPDATE_PAYROLL_RECORD_FAILURE:
       return {
         ...state,
-        isPayrollRecordUpdated: true,
+        isPayrollRecordUpdated: false,
       };
     default:
       return state;

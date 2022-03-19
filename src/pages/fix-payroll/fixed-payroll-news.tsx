@@ -23,6 +23,7 @@ import {
 } from "../../actions/employee/employee.actions";
 import { getPayrollNewsEmployee } from "../../actions/payroll-news/payroll-news.actions";
 import { PropsType } from "../../common/types/modal.type";
+import { state } from "../../common/utils/table/transform.utils";
 
 const FixPayrollNews = (): ReactElement => {
   const dispatch = useDispatch();
@@ -53,7 +54,8 @@ const FixPayrollNews = (): ReactElement => {
     },
     {
       title: "Estado",
-      dataIndex: "status",
+      dataIndex: "status",      render: (value: string) => state[value],
+
     },
     {
       title: "Estado",
@@ -182,7 +184,8 @@ const ViewEmployeePayrollNews = ({
     },
     {
       title: "Activo",
-      dataIndex: "status",
+      dataIndex: "status",      render: (value: string) => state[value],
+
     },
    
   ];

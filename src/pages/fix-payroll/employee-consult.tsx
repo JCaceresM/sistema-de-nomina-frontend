@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons"
 import React, { ReactElement, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { EmployeeType, getEmployee } from "../../actions/employee/employee.actions"
+import { getAllPayroll } from "../../actions/payroll/payroll.actions"
 import {
   CustomButton,
   CustomCol,
@@ -16,14 +18,15 @@ import { addPropertyKey } from "../../common/utils/json/mutate-json"
 import { getTablePagination } from "../../common/utils/table/paginate"
 import { state } from "../../common/utils/table/transform.utils"
 import { RootState } from "../../reducers/root_reducers"
-import CreatEditEmployee from "./create-edit-employee"
 
-const EmployeeConsulting = (): ReactElement => {
+const FixPayrollEmployeeConsulting = (): ReactElement => {
   const dispatch = useDispatch()
   const [createEditIsVisible, setCreateEditIsVisible] = useState(false)
   const { employees, employeesMetadata, getEmployeesIsLoading: isLoading } = useSelector(
     (state: RootState) => state.employee
-  )
+  )  
+  const { payroll } = useSelector((state: RootState) => state.payroll);
+
   const columns = [
     {
       key: 4,
@@ -87,15 +90,31 @@ const EmployeeConsulting = (): ReactElement => {
     },
   ]
   useEffect(() => {
-  const   searchConditions= [
-      {
-          "field": "user_name",
-          "operator": "=",
-          "condition": "admin"
+
+      
+      if (payroll.length) {
+        const   searchConditions= [
+            {
+                "field": "payroll_id",
+                "operator": "IN",
+                "condition": payroll.map((item)=> item.id).join()
+            }
+        ]
+          dispatch(getEmployee({searchConditions,pagination:{ skip: 0, take: 15 }}))
       }
-  ]
-    dispatch(getEmployee({searchConditions,pagination:{ skip: 0, take: 15 }}))
-  }, [])
+ 
+  }, [payroll])
+  useEffect(() => {
+    dispatch(
+      getAllPayroll([
+        {
+          field: "type",
+          operator: "=",
+          condition: "F",
+        },
+      ])
+    );
+  }, []);
   const hideCreateEditModal = () => {
     setCreateEditIsVisible(false)
   }
@@ -137,16 +156,10 @@ const EmployeeConsulting = (): ReactElement => {
             }}
           ></CustomTable>
         </CustomCol>
-        <CustomCol xs ={24}>
-        <CreatEditEmployee
-        hideModal={hideCreateEditModal}
-        visible={createEditIsVisible}
-        width={'50%'}
-      />
-        </CustomCol>
+        
       </CustomRow>
       
     </CustomLayoutBoxShadow>
   )
 }
-export default EmployeeConsulting
+export default FixPayrollEmployeeConsulting

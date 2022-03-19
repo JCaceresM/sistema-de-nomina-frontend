@@ -13,6 +13,7 @@ import {  validateMessages } from "../../common/utils/forms/validations";
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
 import { RootState } from "../../reducers/root_reducers";
 import {PlusOutlined} from "@ant-design/icons";
+import { state } from "../../common/utils/table/transform.utils";
 const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -51,7 +52,7 @@ const FixPayrollDiscount = (): ReactElement => {
       {
         title: "Descripcion",
         dataIndex: "description",
-        elipsis: true
+        ellipsis: true
       },
       {
         title: "Monto",
@@ -60,7 +61,8 @@ const FixPayrollDiscount = (): ReactElement => {
       },
       {
         title: "Activo",
-        dataIndex: "status",
+        dataIndex: "status",      render: (value: string) => state[value],
+
       },
       {
         title: "Nomina",

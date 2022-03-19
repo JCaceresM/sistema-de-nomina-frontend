@@ -34,6 +34,7 @@ import { addPropertyKey, getTablePagination } from "../../common/utils";
 import { RootState } from "../../reducers/root_reducers";
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
 import { ColumnsType } from "antd/lib/table";
+import { state } from "../../common/utils/table/transform.utils";
 
 const ViewPayrollEmployee = ({
   visible,
@@ -70,7 +71,8 @@ const ViewPayrollEmployee = ({
     },
     {
       title: "Estado",
-      dataIndex: "status",
+      dataIndex: "status",      render: (value: string) => state[value],
+
     },
     {
       title: "Salario",

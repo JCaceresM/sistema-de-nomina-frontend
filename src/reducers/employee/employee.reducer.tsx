@@ -48,6 +48,8 @@ const Employee = (
     case EMPLOYEE_GET_EMPLOYEE_FAILURE:
       return {
         ...state,
+        employees: [],
+        employeesMetadata: {} as ResponseMetadata,
         getEmployeesIsLoading: false,
       }
     case EMPLOYEE_GET_EMPLOYEE_SUCCESS:

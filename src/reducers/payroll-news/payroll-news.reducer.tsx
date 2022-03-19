@@ -56,6 +56,8 @@ const payrollNews = (
     case PAYROLL_NEWS_GET_COLLECTION_FAILURE:
       return {
         ...state,
+        payrollNews: [],
+
         getPayrollNewsIsLoading: false,
       };
     case PAYROLL_NEWS_GET_COLLECTION_SUCCESS:
