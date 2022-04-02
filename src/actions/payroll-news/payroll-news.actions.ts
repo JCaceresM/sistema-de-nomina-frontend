@@ -13,6 +13,9 @@ import {
   PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_FAILURE,
   PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_SUCCESS,
   PAYROLL_NEWS_MANAGER_REDUX_STATE_PAYROLL_NEWS,
+  PAYROLL_NEWS_UPDATE_PAYROLL_NEWS,
+  PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_FAILURE,
+  PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_SUCCESS,
 } from "../../constants/payroll-news/payroll-news.constants";
 import { PayrollNewsState } from "../../reducers/payroll-news/payroll-news.reducer";
 
@@ -164,13 +167,16 @@ export const createPayrollNewsEmployeeFailure =
 export type GetPayrollNewsEmployee = {
   type: typeof PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE;
   employee_id: number;
+  searchConditions: SelectConditionType[];
 };
 
 export const getPayrollNewsEmployee = (
   employee_id: number,
+  searchConditions: SelectConditionType[] = []
 ): GetPayrollNewsEmployee => {
   return {
     employee_id,
+    searchConditions,
     type: PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE,
   };
 };
@@ -199,8 +205,52 @@ export const getPayrollNewsEmployeeFailure =
       type: PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_FAILURE,
     };
   };
+// ---------------------------UPDATE-PAYROLL- NEWS---------------------------------
+export type UpdatePayrollNews = {
+  type: typeof PAYROLL_NEWS_UPDATE_PAYROLL_NEWS;
+  id: number;
+  patchRecord: Partial<PayrollNewsType>;
+};
+
+export const updatePayrollNews = (
+  employee_id: number,
+  patchRecord: Partial<PayrollNewsType>
+): UpdatePayrollNews => {
+  return {
+    id: employee_id,
+    patchRecord,
+    type: PAYROLL_NEWS_UPDATE_PAYROLL_NEWS,
+  };
+};
+
+type UpdatePayrollNewsSuccessAction = {
+  type: typeof PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_SUCCESS;
+  payrollNewsEmployee: PayrollNewsType;
+};
+
+export const updatePayrollNewsSuccess = (
+  payrollNewsEmployee: PayrollNewsType
+): UpdatePayrollNewsSuccessAction => {
+  return {
+    type: PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_SUCCESS,
+    payrollNewsEmployee,
+  };
+};
+
+type UpdatePayrollNewsFailureAction = {
+  type: typeof PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_FAILURE;
+};
+
+export const updatePayrollNewsFailure = (): UpdatePayrollNewsFailureAction => {
+  return {
+    type: PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_FAILURE,
+  };
+};
 
 export type PayrollNews =
+  | UpdatePayrollNews
+  | UpdatePayrollNewsSuccessAction
+  | UpdatePayrollNewsFailureAction
   | GetPayrollNewsCollectionAction
   | GetPayrollNewsCollectionSuccessAction
   | GetPayrollNewsCollectionFailureAction

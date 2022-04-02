@@ -10,7 +10,7 @@ import {
   SelectConditionType,
 } from "../common/types/general.type";
 import { axiosHelper } from "./http-method.helper";
-const { postRequest , getRequest} = axiosHelper;
+const { postRequest, patchRequest } = axiosHelper;
 
 const getPayrollNews = (
   searchConditions: SelectConditionType[]
@@ -28,16 +28,33 @@ const createPayrollNewsEmployee = (
   employee_id: number,
   data: PayrollNewsType
 ): Promise<AxiosResponse<PayrollNewsType>> => {
-  return postRequest(`${WEB_SERVICE_API_PAYROLL_NEWS_CREATE}/employees-payrollnews`, {employee_id, payrollNewsDto: data});
+  return postRequest(
+    `${WEB_SERVICE_API_PAYROLL_NEWS_CREATE}/employees-payrollnews`,
+    { employee_id, payrollNewsDto: data }
+  );
 };
 const getPayrollNewsEmployee = (
-  employee_id: number,
+  id: number,
+  searchConditions: SelectConditionType[]
 ): Promise<AxiosResponse<PayrollNewsType>> => {
-  return getRequest(`${WEB_SERVICE_API_PAYROLL_NEWS_CREATE}/employees-payrollnews/${employee_id}`, );
+  return postRequest(
+    `${WEB_SERVICE_API_PAYROLL_NEWS_CREATE}/employees-payrollnews/collection`,
+    { id, searchConditions }
+  );
+};
+const updatePayrollNews = (
+  id: number,
+  patchRecord: Partial<PayrollNewsType>
+): Promise<AxiosResponse<PayrollNewsType>> => {
+  return patchRequest(`${WEB_SERVICE_API_PAYROLL_NEWS_CREATE}/${id}`, {
+    ...patchRecord,
+  });
 };
 
 export const PayrollNewsApiRequest = {
   getPayrollNews,
   createPayrollNews,
-  createPayrollNewsEmployee, getPayrollNewsEmployee
+  createPayrollNewsEmployee,
+  getPayrollNewsEmployee,
+  updatePayrollNews,
 };

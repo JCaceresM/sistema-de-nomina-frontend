@@ -11,6 +11,9 @@ import {
   getPayrollNewsCollectionSuccess,
   GetPayrollNewsEmployee,
   getPayrollNewsEmployeeSuccess,
+  UpdatePayrollNews,
+  updatePayrollNewsFailure,
+  updatePayrollNewsSuccess,
 } from "../../actions/payroll-news/payroll-news.actions";
 
 import { SelectConditionType } from "../../common/types/general.type";
@@ -20,11 +23,16 @@ import {
   PAYROLL_NEWS_CREATE_PAYROLL_NEWS_EMPLOYEE,
   PAYROLL_NEWS_GET_COLLECTION,
   PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE,
+  PAYROLL_NEWS_UPDATE_PAYROLL_NEWS,
 } from "../../constants/payroll-news/payroll-news.constants";
 import { PayrollNewsApiRequest } from "../../services/payroll-news.api";
 
-const { getPayrollNews, createPayrollNews, createPayrollNewsEmployee, getPayrollNewsEmployee } =
-  PayrollNewsApiRequest;
+const {
+  getPayrollNews,
+  createPayrollNews,
+  createPayrollNewsEmployee,
+  getPayrollNewsEmployee,updatePayrollNews
+} = PayrollNewsApiRequest;
 function* getPayrollNewsSaga ({
   searchConditions,
 }: GetPayrollNewsCollectionAction) {
@@ -67,7 +75,7 @@ function* watchCreatePayrollNews (): Generator<
 
 function* createPayrollNewsEmployeeSaga (body: CreatePayrollNewsEmployee) {
   try {
-     yield call(() =>
+    yield call(() =>
       createPayrollNewsEmployee(body.employee_id, body.payrollNews)
     );
 
@@ -90,7 +98,7 @@ function* watchCreatePayrollEmployeeNews (): Generator<
 function* getPayrollNewsEmployeeSaga (body: GetPayrollNewsEmployee) {
   try {
     const response: ResponseGenerator = yield call(() =>
-    getPayrollNewsEmployee(body.employee_id)
+      getPayrollNewsEmployee(body.employee_id, body.searchConditions)
     );
     const { data } = response;
 
@@ -110,8 +118,33 @@ function* watchGetPayrollEmployeeNews (): Generator<
     getPayrollNewsEmployeeSaga
   );
 }
+function* updatePayrollNewsEmployeeSaga (body: UpdatePayrollNews) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+    updatePayrollNews(body.id, body.patchRecord)
+    );
+    const { data } = response;
+
+    yield put(updatePayrollNewsSuccess(data));
+  } catch (error) {
+    yield put(updatePayrollNewsFailure());
+  }
+}
+
+function* watchUpdatePayrollEmployeeNews (): Generator<
+  ForkEffect<never>,
+  void,
+  unknown
+> {
+  yield takeLatest(
+    PAYROLL_NEWS_UPDATE_PAYROLL_NEWS,
+    updatePayrollNewsEmployeeSaga
+  );
+}
 export {
   watchGetPayrollNews,
   watchCreatePayrollNews,
-  watchCreatePayrollEmployeeNews,watchGetPayrollEmployeeNews
+  watchUpdatePayrollEmployeeNews,
+  watchCreatePayrollEmployeeNews,
+  watchGetPayrollEmployeeNews,
 };

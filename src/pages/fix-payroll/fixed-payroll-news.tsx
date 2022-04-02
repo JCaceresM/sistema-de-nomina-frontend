@@ -1,5 +1,9 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { EyeTwoTone, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  DeleteTwoTone,
+  EyeTwoTone,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 
 import {
   CustomButton,
@@ -21,9 +25,13 @@ import {
   EmployeeType,
   getEmployee,
 } from "../../actions/employee/employee.actions";
-import { getPayrollNewsEmployee } from "../../actions/payroll-news/payroll-news.actions";
+import {
+  getPayrollNewsEmployee,
+  updatePayrollNews,
+} from "../../actions/payroll-news/payroll-news.actions";
 import { PropsType } from "../../common/types/modal.type";
 import { state } from "../../common/utils/table/transform.utils";
+import CustomPopConfirm from "../../common/components/CustomPopConfirm";
 
 const FixPayrollNews = (): ReactElement => {
   const dispatch = useDispatch();
@@ -54,8 +62,8 @@ const FixPayrollNews = (): ReactElement => {
     },
     {
       title: "Estado",
-      dataIndex: "status",      render: (value: string) => state[value],
-
+      dataIndex: "status",
+      render: (value: string) => state[value],
     },
     {
       title: "Estado",
@@ -75,7 +83,7 @@ const FixPayrollNews = (): ReactElement => {
                   onClick={() => {
                     setCreateEditIsVisible(true);
                     setEmployeeSelected(record);
-                    getPayrollNewsEmployee;
+                    // getPayrollNewsEmployee;
                   }}
                   type={"link"}
                   icon={<PlusCircleOutlined />}
@@ -138,6 +146,7 @@ const FixPayrollNews = (): ReactElement => {
         <CustomCol xs={24}>
           <FixPayrollCreatEditNews
             width={"50%"}
+            type={"Novedad"}
             hideModal={hideModal}
             visible={createEditIsVisible}
             employeeSelected={employeeSelected}
@@ -158,8 +167,12 @@ const FixPayrollNews = (): ReactElement => {
 const ViewEmployeePayrollNews = ({
   visible,
   hideModal,
-}: PropsType ): ReactElement => {
-  const { payrollNewsEmployee } = useSelector((state: RootState) => state.payrollNews);
+}: PropsType): ReactElement => {
+  const { payrollNewsEmployee } = useSelector(
+    (state: RootState) => state.payrollNews
+  );
+  const dispatch = useDispatch();
+
   const columns = [
     {
       title: "código",
@@ -167,12 +180,9 @@ const ViewEmployeePayrollNews = ({
     },
     {
       title: "Nombre",
-      dataIndex: "Name",
+      dataIndex: "name",
     },
-    {
-      title: "Accion",
-      dataIndex: "operation",
-    },
+
     {
       title: "Descripcion",
       dataIndex: "description",
@@ -184,19 +194,37 @@ const ViewEmployeePayrollNews = ({
     },
     {
       title: "Activo",
-      dataIndex: "status",      render: (value: string) => state[value],
-
+      dataIndex: "status",
+      render: (value: string) => state[value],
     },
-   
+    {
+      title: "Operaciones",
+      render: (record: EmployeeType) => {
+        return (
+          <CustomRow justify={"center"}>
+            <CustomCol xs={8}>
+              <CustomPopConfirm
+                title={"Editar"}
+                onConfirm={() => {
+                  dispatch(updatePayrollNews(record.id, { status: "I" }));
+                }}
+              >
+                <CustomTooltip placement={"bottom"} title={"Eliminar"}>
+                  <CustomButton type={"link"} icon={<DeleteTwoTone />} />
+                </CustomTooltip>
+              </CustomPopConfirm>
+            </CustomCol>
+          </CustomRow>
+        );
+      },
+    },
   ];
   const onCancel = () => {
-   
-        hideModal();
-   
+    hideModal();
   };
   return (
     <CustomModal
-      title={"Modal"}
+      title={"Novedades"}
       visible={visible}
       width={"60%"}
       cancelText
@@ -207,7 +235,12 @@ const ViewEmployeePayrollNews = ({
       <CustomContent>
         <CustomRow>
           <CustomCol xs={24}>
-            <CustomTable columns={columns} dataSource={addPropertyKey(payrollNewsEmployee)}/>
+            <CustomTable
+              columns={columns}
+              dataSource={addPropertyKey(
+                payrollNewsEmployee.filter((item) => item.operation === "SUMA")
+              )}
+            />
           </CustomCol>
         </CustomRow>
       </CustomContent>

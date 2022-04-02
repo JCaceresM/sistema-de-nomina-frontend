@@ -246,6 +246,8 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       setDiscounts(discounts);
       setAddPersonalDiscount(true);
       setEmployeeNews(record.payroll_news);
+      // eslint-disable-next-line no-console
+      console.log(record.payroll_news, "ddd");
     },
 
     type: "radio",
@@ -573,6 +575,17 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
               const data = await form.validateFields();
               if (Object.keys(data).every((key) => data[key] !== undefined)) {
                 setEmployeeNews([...employeeNews, data]);
+                employeeToRegister.forEach((elem) => {
+                  if (elem.id === employeeNews[0]?.employee_id) {
+                    elem.payroll_news.push({
+                      ...data,
+                      company_id: getSessionInfo().businessId,
+                      employee_id: elem.id,
+                      type: "F",
+                      user_insert: getSessionInfo().username,status: "A"
+                    });
+                  }
+                });
                 form.resetFields();
                 hidePayrollNewsModal();
               }
@@ -610,7 +623,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                     label={"Operacion"}
                   >
                     <CustomSelect>
-                      <Option value={"RESTA"}>Suma</Option>
+                      <Option value={"SUMA"}>Suma</Option>
                       <Option value={"RESTA"}>Resta</Option>
                     </CustomSelect>
                   </CustomFormItem>

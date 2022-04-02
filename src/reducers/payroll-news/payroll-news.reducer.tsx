@@ -12,6 +12,9 @@ import {
   PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_FAILURE,
   PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_SUCCESS,
   PAYROLL_NEWS_MANAGER_REDUX_STATE_PAYROLL_NEWS,
+  PAYROLL_NEWS_UPDATE_PAYROLL_NEWS,
+  PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_FAILURE,
+  PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_SUCCESS,
 } from "../../constants/payroll-news/payroll-news.constants";
 import { ResponseMetadata } from "../../common/types/response.type";
 import {
@@ -23,8 +26,10 @@ export type PayrollNewsState = {
   getPayrollNewsEmployeeIsLoading: boolean;
   getPayrollNewsIsLoading: boolean;
   createPayrollNewsIsLoading: boolean;
+  updatePayrollNewsIsLoading: boolean;
   createPayrollNewsEmployeeIsLoading: boolean;
   isPayrollNewsEmployeeCreated: boolean;
+  isPayrollNewsEmployeeUpdated: boolean;
   isPayrollNewsCreated: boolean;
   payrollNews: PayrollNewsType[];
   payrollNewsEmployee: PayrollNewsType[];
@@ -34,9 +39,11 @@ export type PayrollNewsState = {
 const initialState = {
   getPayrollNewsIsLoading: false,
   createPayrollNewsIsLoading: false,
+  isPayrollNewsEmployeeUpdated: false,
   getPayrollNewsEmployeeIsLoading: false,
   createPayrollNewsEmployeeIsLoading: false,
   isPayrollNewsEmployeeCreated: false,
+  updatePayrollNewsIsLoading: false,
   isPayrollNewsCreated: false,
   payrollNews: new Array<PayrollNewsType>(),
   payrollNewsEmployee: new Array<PayrollNewsType>(),
@@ -79,7 +86,7 @@ const payrollNews = (
     case PAYROLL_NEWS_CREATE_PAYROLL_NEWS_SUCCESS:
       return {
         ...state,
-        payrollNews: [...state.payrollNews, action.createPayrollNews],
+        payrollNews: [...state.payrollNews, action?.createPayrollNews],
         createPayrollNewsIsLoading: false,
         isPayrollNewsCreated: true,
       };
@@ -105,13 +112,12 @@ const payrollNews = (
       return {
         ...state,
         getPayrollNewsEmployeeIsLoading: true,
-        
       };
     case PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_SUCCESS:
       return {
         ...state,
         getPayrollNewsEmployeeIsLoading: false,
-        payrollNewsEmployee: action.payrollNewsEmployee
+        payrollNewsEmployee: action.payrollNewsEmployee || [],
       };
     case PAYROLL_NEWS_GET_PAYROLL_NEWS_EMPLOYEE_FAILURE:
       return {
@@ -121,7 +127,26 @@ const payrollNews = (
     case PAYROLL_NEWS_MANAGER_REDUX_STATE_PAYROLL_NEWS:
       return {
         ...state,
-        ...action.state,
+        isPayrollNewsEmployeeUpdated: true,
+      };
+    case PAYROLL_NEWS_UPDATE_PAYROLL_NEWS:
+      return {
+        ...state,
+        isPayrollNewsEmployeeUpdated: false,
+        updatePayrollNewsIsLoading: true,
+      };
+    case PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_SUCCESS:
+      return {
+        ...state,
+
+        isPayrollNewsEmployeeUpdated: true,
+        updatePayrollNewsIsLoading: false,
+      };
+    case PAYROLL_NEWS_UPDATE_PAYROLL_NEWS_FAILURE:
+      return {
+        ...state,
+        isPayrollNewsEmployeeUpdated: false,
+        updatePayrollNewsIsLoading: false,
       };
     default:
       return state;

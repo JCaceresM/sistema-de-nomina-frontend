@@ -128,7 +128,7 @@ const FixedPayrollAuthorization = (): ReactElement => {
   useEffect(() => {
     dispatch(
       getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "R" },
+        { field: "status", operator: "=", condition: "A" },
       ])
     );
   }, []);

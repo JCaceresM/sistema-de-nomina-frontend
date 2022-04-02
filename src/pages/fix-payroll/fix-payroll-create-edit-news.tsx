@@ -50,16 +50,21 @@ const FixPayrollCreatEditNews = ({
   visible,
   width,
   hideModal,
-  employeeSelected
-}: PropsType & { employeeSelected: EmployeeType | undefined}): ReactElement => {
+  type,
+  employeeSelected,
+}: PropsType & {
+  employeeSelected: EmployeeType | undefined;
+  type: string;
+}): ReactElement => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const { Option } = Select;
-  const [news, setNews] = useState("");
-  const {  createPayrollNewsEmployeeIsLoading,
-    isPayrollNewsEmployeeCreated, isPayrollNewsCreated } = useSelector(
-    (state: RootState) => state.payrollNews
-  );
+  const [newsName, setNewsName] = useState("");
+  const {
+    createPayrollNewsEmployeeIsLoading,
+    isPayrollNewsEmployeeCreated,
+    isPayrollNewsCreated,
+  } = useSelector((state: RootState) => state.payrollNews);
   const { payroll, getPayrollIsLoading } = useSelector(
     (state: RootState) => state.payroll
   );
@@ -75,29 +80,23 @@ const FixPayrollCreatEditNews = ({
   };
   const handleSubmit = async () => {
     const data = await form.validateFields().catch((e) => e);
-    const news ={H:'Horas extras' , I: 'Incentivos',S:'Sanaciones' }
     // eslint-disable-next-line no-console
     console.log(data);
-    
+
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
-      const payrollNews ={
+      const payrollNews = {
         type: "F",
         description: data.description,
-        name: !Object.getOwnPropertyDescriptor(news, data.name)?.value,
-        operation: data.name === 'S'? 'RESTA':'SUMA',
-        status:'A',
+        name: data.name,
+        operation: type === "Descuentos" ? "RESTA" : "SUMA",
+        status: "A",
         amount: data.amount,
         company_id: getSessionInfo().businessId,
-        user_insert: getSessionInfo().username
-      } as unknown as Partial<PayrollNewsType>
-      if (data.name === 'H') {
-        payrollNews.amount = (data.amount || 1 )* (data.hours||1)
-      }
+        user_insert: getSessionInfo().username,
+      } as unknown as Partial<PayrollNewsType>;
+     
       dispatch(
-        createPayrollNewsEmployee(
-          employeeSelected?.id as number,
-          payrollNews
-        )
+        createPayrollNewsEmployee(employeeSelected?.id as number, payrollNews)
       );
     }
   };
@@ -105,13 +104,15 @@ const FixPayrollCreatEditNews = ({
     if (isPayrollNewsEmployeeCreated) {
       form.resetFields();
       isPayrollNewsEmployeeCreated && hideModal();
-      dispatch(payrollNewsManagerReduxState({ isPayrollNewsEmployeeCreated: false }));
+      dispatch(
+        payrollNewsManagerReduxState({ isPayrollNewsEmployeeCreated: false })
+      );
     }
-  }, [isPayrollNewsCreated]);
- 
+  }, [isPayrollNewsEmployeeCreated]);
+
   return (
     <CustomModal
-      title={"Crear Novedad"}
+      title={`Crear ${type}`}
       onCancel={cancelPayment}
       visible={visible}
       width={width}
@@ -134,21 +135,45 @@ const FixPayrollCreatEditNews = ({
               <CustomCol xs={12}>
                 <CustomFormItem
                   rules={[{ required: true }]}
-                  name={"name"}
-                  label={"Novedad"}
+                  name={newsName !== "" ? "name" : undefined}
+                  label={`${type}`}
                 >
                   <CustomSelect
                     onChange={(value) => {
-                      setNews(`${value}`);
+                      setNewsName(`${value}`);
                     }}
-                    placeholder={"Seleccione el tipo de novedad"}
+                    placeholder={`Seleccione el tipo de ${type}`}
                   >
-                    <Option value={"H"}>Horas extras</Option>
-                    <Option value={"I"}>Incentivos</Option>
-                    <Option value={"S"}>Sanaciones</Option>
+                    <Option
+                      value={type == "Descuentos" ? "Prestamos" : "Incentivos"}
+                    >
+                      {type == "Descuentos" ? "Prestamos" : "Incentivos"}
+                    </Option>
+                    <Option
+                      value={type == "Descuentos" ? "Sanciones" : "Bonos"}
+                    >
+                      {type == "Descuentos" ? "Sanciones" : "Bonos"}
+                    </Option>
+                    <Option value={`Escriba ${type}`}>Otros</Option>
                   </CustomSelect>
                 </CustomFormItem>
               </CustomCol>
+
+              {newsName === `Escriba ${type}` ? (
+                <CustomCol xs={12}>
+                  <CustomFormItem
+                    rules={[{ required: true }]}
+                    name={"name"}
+                    label={`${type}`}
+                    initialValue={""}
+                  >
+                    <CustomInput></CustomInput>
+                  </CustomFormItem>
+                </CustomCol>
+              ) : (
+                <p />
+              )}
+
               <CustomCol xs={12}>
                 <CustomFormItem
                   rules={[{ required: true }]}
@@ -162,7 +187,7 @@ const FixPayrollCreatEditNews = ({
                   />
                 </CustomFormItem>
               </CustomCol>
-              <CustomCol xs={12}>
+              {/* <CustomCol xs={12}>
                 {news === "H" ? (
                   <CustomFormItem
                     rules={[{ required: true }]}
@@ -174,7 +199,7 @@ const FixPayrollCreatEditNews = ({
                 ) : (
                   <p />
                 )}
-              </CustomCol>
+              </CustomCol> */}
               <CustomCol xs={12}>
                 {/* <CustomFormItem
                   rules={[{ required: true }]}
@@ -204,7 +229,9 @@ const FixPayrollCreatEditNews = ({
                   name={"description"}
                   label={"Descripcion"}
                 >
-                  <CustomTextArea placeholder="Escriba una descripcion de la novedad" />
+                  <CustomTextArea
+                    placeholder={`Escriba una descripcion de la ${type}`}
+                  />
                 </CustomFormItem>
               </CustomCol>
             </CustomRow>

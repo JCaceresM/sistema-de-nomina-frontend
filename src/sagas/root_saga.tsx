@@ -15,6 +15,7 @@ import {
   watchCreatePayrollNews,
   watchGetPayrollEmployeeNews,
   watchGetPayrollNews,
+  watchUpdatePayrollEmployeeNews,
 } from "./payroll-news/payroll-news.sagas";
 import {
   watchCreatePayrollRecord,
@@ -62,6 +63,8 @@ export default function* rootSaga (): Generator {
     watchCreatePayrollNews(),
     watchUpdateEmployee(),
     watchUpdatePayrollEmployees(),
-    watchCreatePayrollEmployeeNews(), watchGetPayrollEmployeeNews()
+    watchCreatePayrollEmployeeNews(),
+    watchGetPayrollEmployeeNews(),
+    watchUpdatePayrollEmployeeNews(),
   ]);
 }
