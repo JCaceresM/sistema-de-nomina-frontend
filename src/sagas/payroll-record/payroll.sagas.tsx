@@ -1,12 +1,13 @@
 import { call, ForkEffect, put, takeLatest } from "redux-saga/effects"
-import { CreatePayrollRecordAction, createPayrollRecordFailure, createPayrollRecordSuccess, GetPayrollRecordCollectionAction, getPayrollRecordCollectionFailure, getPayrollRecordCollectionSuccess, UpdatePayrollRecordAction, updatePayrollRecordFailure, updatePayrollRecordSuccess } from "../../actions/payroll record/payroll-record.actions"
+import { CreatePayrollRecordAction, createPayrollRecordFailure, createPayrollRecordSuccess, GetPayrollRecordCollectionAction, getPayrollRecordCollectionFailure, getPayrollRecordCollectionSuccess, PayrollRecordAuthorizedAction, payrollRecordAuthorizedFailure, payrollRecordAuthorizedSuccess, UpdatePayrollRecordAction, updatePayrollRecordFailure, updatePayrollRecordSuccess } from "../../actions/payroll record/payroll-record.actions"
 import { SelectConditionType } from "../../common/types/general.type"
 import { ResponseGenerator } from "../../common/types/response.type"
-import { PAYROLL_RECORD_CREATE_PAYROLL_RECORD, PAYROLL_RECORD_GET_COLLECTION_PAYROLL_RECORD, PAYROLL_RECORD_UPDATE_PAYROLL_RECORD,  } from "../../constants/payroll-record/payroll-record.constants"
+import { showNotification } from "../../common/utils/notification"
+import { PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD, PAYROLL_RECORD_CREATE_PAYROLL_RECORD, PAYROLL_RECORD_GET_COLLECTION_PAYROLL_RECORD, PAYROLL_RECORD_UPDATE_PAYROLL_RECORD,  } from "../../constants/payroll-record/payroll-record.constants"
 import { PayrollRecordApiRequest } from "../../services/payroll-record.api"
 
 
-const { getPayrollRecord, createPayrollRecord , updatePayrollRecord} = PayrollRecordApiRequest
+const { getPayrollRecord, createPayrollRecord , updatePayrollRecord, payrollRecordAuthorize} = PayrollRecordApiRequest
 function* getAllPayrollRecordSaga ({ searchConditions }: GetPayrollRecordCollectionAction) {
   try {
     const response: ResponseGenerator = yield call(() =>
@@ -57,5 +58,30 @@ function* updatePayrollRecordSaga (body: UpdatePayrollRecordAction) {
 function* watchUpdatePayrollRecord (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(PAYROLL_RECORD_UPDATE_PAYROLL_RECORD, updatePayrollRecordSaga)
 }
+function* PayrollRecordAuthorizedSaga (body: PayrollRecordAuthorizedAction) {
+  try {
+     yield call(() =>
+     payrollRecordAuthorize(body.payroll_record_id, body.bank_account_id, body.transaction_type)
+    )
+    showNotification({
+      title: 'Pago',
+      description: 'Pago ha sido Realizado',
+      type: 'success'
+    })
 
-export { watchGetAllPayrollRecord, watchCreatePayrollRecord , watchUpdatePayrollRecord}
+    yield put(payrollRecordAuthorizedSuccess())
+  } catch (error) {
+    showNotification({
+      title: 'Pago',
+      description: 'Error al ralizar el pago',
+      type: 'error'
+    })
+    yield put(payrollRecordAuthorizedFailure())
+  }
+}
+
+function* watchPayrollRecordAuthorized (): Generator<ForkEffect<never>, void, unknown> {
+  yield takeLatest(PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD, PayrollRecordAuthorizedSaga)
+}
+
+export {watchPayrollRecordAuthorized, watchGetAllPayrollRecord, watchCreatePayrollRecord , watchUpdatePayrollRecord}

@@ -1,4 +1,5 @@
 import { combineReducers } from "redux"
+import accounts from "./accounts/accounts.reducer"
 import departments from "./department/department.reducer"
 import Employee from "./employee/employee.reducer"
 import dynamicLocalState from "./local/localState.reducers"
@@ -24,7 +25,8 @@ const state = {
   payroll,
   payrollRecord,
   InitialState,
-  payrollNews
+  payrollNews,
+  accounts
 }
 const appReducer = combineReducers(state)
 

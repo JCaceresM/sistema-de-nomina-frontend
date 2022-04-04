@@ -55,8 +55,6 @@ const Consulting = (): ReactElement => {
     {
       title: "Descripcion",
       render: (record: Record<string, any>) => {
-        // eslint-disable-next-line no-console
-        console.log(record.payroll_record_detail);
 
         return record?.description;
       },

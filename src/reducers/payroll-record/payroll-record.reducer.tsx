@@ -1,4 +1,7 @@
 import {
+  PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD,
+  PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE,
+  PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_SUCCESS,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_FAILURE,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_SUCCESS,
@@ -22,6 +25,7 @@ export type PayrollRecordState = {
   createPayrollRecordIsLoading: boolean;
   isPayrollRecordCreated: boolean;
   isPayrollRecordUpdated: boolean;
+  paymentIsLoading: boolean;
   payrollRecord: PayrollRecordType[];
   payrollRecordUpdated: PayrollRecordType[];
   payrollRecordMetadata: ResponseMetadata;
@@ -29,6 +33,7 @@ export type PayrollRecordState = {
 
 const initialState = {
   getPayrollRecordIsLoading: false,
+  paymentIsLoading: false,
   isPayrollRecordCreated: false,
   createPayrollRecordIsLoading: false,
   isPayrollRecordUpdated: false,
@@ -95,6 +100,21 @@ const payrollRecord = (
       return {
         ...state,
         isPayrollRecordUpdated: false,
+      };
+    case PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD:
+      return {
+        ...state,
+        paymentIsLoading: true,
+      };
+    case PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_SUCCESS:
+      return {
+        ...state,
+        paymentIsLoading: false,
+      };
+    case PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE:
+      return {
+        ...state,
+        paymentIsLoading: false,
       };
     default:
       return state;

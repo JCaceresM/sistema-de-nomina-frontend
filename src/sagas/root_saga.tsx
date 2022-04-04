@@ -1,5 +1,10 @@
 import { all } from "redux-saga/effects";
 import {
+  watchCreateAccount,
+  watchGetAccounts,
+  watchUpdateAccount,
+} from "./accounts/accounts.sagas";
+import {
   watchCreateDepartment,
   watchGetAllDepartment,
 } from "./department/department.sagas";
@@ -20,6 +25,7 @@ import {
 import {
   watchCreatePayrollRecord,
   watchGetAllPayrollRecord,
+  watchPayrollRecordAuthorized,
   watchUpdatePayrollRecord,
 } from "./payroll-record/payroll.sagas";
 import {
@@ -66,5 +72,9 @@ export default function* rootSaga (): Generator {
     watchCreatePayrollEmployeeNews(),
     watchGetPayrollEmployeeNews(),
     watchUpdatePayrollEmployeeNews(),
+    watchGetAccounts(),
+    watchCreateAccount(),
+    watchUpdateAccount(),
+    watchPayrollRecordAuthorized(),
   ]);
 }

@@ -2,6 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectConditionType } from "../../common/types/general.type";
 import {
+  PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD,
+  PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE,
+  PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_SUCCESS,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_FAILURE,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_SUCCESS,
@@ -134,7 +137,7 @@ export type UpdatePayrollRecordAction = {
 
 export const updatePayrollRecord = (
   id: number,
-  PayrollRecord: any,
+  PayrollRecord: any
 ): UpdatePayrollRecordAction => {
   return { id, PayrollRecord, type: PAYROLL_RECORD_UPDATE_PAYROLL_RECORD };
 };
@@ -163,8 +166,53 @@ export const updatePayrollRecordFailure =
       type: PAYROLL_RECORD_UPDATE_PAYROLL_RECORD_FAILURE,
     };
   };
+// ---------------------------Payroll Record Authorized-------------------------------------
+export type PayrollRecordAuthorizedAction = {
+  type: typeof PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD;
+  payroll_record_id: number;
+  bank_account_id: number;
+  transaction_type: string
+};
+
+export const payrollRecordAuthorized = (
+  bank_account_id: number,
+  payroll_record_id: number,
+  transaction_type: string
+
+): PayrollRecordAuthorizedAction => {
+  return {
+    bank_account_id,
+    payroll_record_id,transaction_type,
+    type: PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD,
+  };
+};
+
+type PayrollRecordAuthorizedSuccessAction = {
+  type: typeof PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_SUCCESS;
+};
+
+export const payrollRecordAuthorizedSuccess =
+  (): PayrollRecordAuthorizedSuccessAction => {
+    return {
+      type: PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_SUCCESS,
+    };
+  };
+
+type PayrollRecordAuthorizedFailureAction = {
+  type: typeof PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE;
+};
+
+export const payrollRecordAuthorizedFailure =
+  (): PayrollRecordAuthorizedFailureAction => {
+    return {
+      type: PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE,
+    };
+  };
 
 export type PayrollRecordActions =
+  | PayrollRecordAuthorizedAction
+  | PayrollRecordAuthorizedSuccessAction
+  | PayrollRecordAuthorizedFailureAction
   | GetPayrollRecordCollectionAction
   | GetPayrollRecordCollectionSuccessAction
   | GetPayrollRecordCollectionFailureAction

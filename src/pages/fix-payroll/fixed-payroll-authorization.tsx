@@ -1,21 +1,63 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { CheckCircleTwoTone, DeleteTwoTone, EyeTwoTone } from "@ant-design/icons"
-import React, { ReactElement, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { getPayrollRecordCollection, payrollRecordManagerReduxState, updatePayrollRecord } from "../../actions/payroll record/payroll-record.actions"
-import { CustomButton, CustomCol, CustomRow, CustomTable, CustomTitle, CustomTooltip } from "../../common/components"
-import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow"
-import CustomPopConfirm from "../../common/components/CustomPopConfirm"
-import { addPropertyKey, getSessionInfo } from "../../common/utils"
-import { getDateAsSpanishShortDate } from "../../common/utils/date/date.helpers"
-import { currencyLocale } from "../../common/utils/locale/locale.format.utils"
-import { RootState } from "../../reducers/root_reducers"
+import {
+  CheckCircleTwoTone,
+  DeleteTwoTone,
+  EyeTwoTone,
+} from "@ant-design/icons";
+import { Form, Select } from "antd";
+import React, { ReactElement, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  AccountType,
+  getAccounts,
+} from "../../actions/accounts/accounts.actions";
+import {
+  getPayrollRecordCollection,
+  payrollRecordAuthorized,
+  payrollRecordManagerReduxState,
+  PayrollRecordType,
+  updatePayrollRecord,
+} from "../../actions/payroll record/payroll-record.actions";
+import {
+  CustomButton,
+  CustomCol,
+  CustomForm,
+  CustomFormItem,
+  CustomModal,
+  CustomRow,
+  CustomSelect,
+  CustomTable,
+  CustomTitle,
+  CustomTooltip,
+} from "../../common/components";
+import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow";
+import CustomPopConfirm from "../../common/components/CustomPopConfirm";
+import CustomSpin from "../../common/components/CustomSpin";
+import { addPropertyKey, getSessionInfo } from "../../common/utils";
+import { getDateAsSpanishShortDate } from "../../common/utils/date/date.helpers";
+import {
+  formItemLayout,
+  validateMessages,
+} from "../../common/utils/forms/validations";
+import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
+import { sumNews } from "../../common/utils/tax/index.helpers";
+import { RootState } from "../../reducers/root_reducers";
 
 const FixedPayrollAuthorization = (): ReactElement => {
   const dispatch = useDispatch();
-  const { payrollRecord , isPayrollRecordUpdated} = useSelector(
+  const { payrollRecord, isPayrollRecordUpdated } = useSelector(
     (state: RootState) => state.payrollRecord
   );
+  const { accounts, getAccountsIsLoading } = useSelector(
+    (state: RootState) => state.accounts
+  );
+  const [form] = Form.useForm();
+  const { Option } = Select;
+
+  const [visible, setVisible] = useState(false);
+  const [payrollRecordSelected, setPayrollRecordSelected] = useState<
+    Record<string, any>
+  >({});
   const columns = [
     {
       title: "Año",
@@ -53,7 +95,10 @@ const FixedPayrollAuthorization = (): ReactElement => {
       render: (record: Record<string, any>) => {
         return currencyLocale(
           record.payroll_record_detail.reduce(
-            (prev: number, next: Record<string, number>) => prev + next.salary,
+            (prev: number, next: Record<string, number>) =>
+              prev +
+              next?.salary +
+              sumNews(record.payroll_record_detail.payroll_news_record, "SUMA"),
             0
           )
         );
@@ -62,57 +107,66 @@ const FixedPayrollAuthorization = (): ReactElement => {
     {
       title: "Cant. Emp",
       render: (record: Record<string, any>) => {
-        return record.payroll_record_detail.length;
+        return record?.payroll_record_detail?.length || 0;
       },
     },
     {
       title: "Operaciones",
-      render: (record: any) => {
+      render: (record: PayrollRecordType) => {
         return (
           <CustomRow justify={"center"}>
             <CustomCol style={{ textAlign: "center" }} xs={12}>
-            <CustomPopConfirm
+              <CustomPopConfirm
                 title={"¿Declinar nomina?"}
                 onConfirm={() => {
-                  dispatch(updatePayrollRecord(record.id, { status: "D" , company_id: getSessionInfo().businessId,
-                  user_update: getSessionInfo().username }));
+                  dispatch(
+                    updatePayrollRecord(record.id, {
+                      status: "D",
+                      company_id: getSessionInfo().businessId,
+                      user_update: getSessionInfo().username,
+                    })
+                  );
                 }}
               >
-              <CustomTooltip placement={"bottom"} title={"Declinar"}>
-                <CustomButton
-                  type={"link"}
-                  icon={<DeleteTwoTone  twoToneColor={"red"}/>}
-                  // onClick={() => {
-                  //   setVisible(true);
-                  //   setDataView(record.payroll_record_detail || []);
-                  //   setPayrollSelected(record);
-                  // }}
-                />
-              </CustomTooltip>
-              </CustomPopConfirm>
-            </CustomCol>
-            <CustomCol style={{ textAlign: "left" }} xs={12}>
-              <CustomPopConfirm
-                title={"¿Aprobar nomina?"}
-                onConfirm={() => {
-                  dispatch(updatePayrollRecord(record.id, { status: "A" , company_id: getSessionInfo().businessId,
-                  user_update: getSessionInfo().username }));
-                }}
-              >
-                <CustomTooltip placement={"bottom"} title={"Aprobar"}>
+                <CustomTooltip placement={"bottom"} title={"Declinar"}>
                   <CustomButton
                     type={"link"}
-                    icon={<CheckCircleTwoTone />}
-                    // onClick={() => {}}
+                    icon={<DeleteTwoTone twoToneColor={"red"} />}
+                    onClick={() => {
+                      setPayrollRecordSelected(record);
+                      setVisible(true);
+                    }}
+                    //   setVisible(true);
+                    //   setDataView(record.payroll_record_detail || []);
+                    //   setPayrollSelected(record);
+                    // }}
                   />
                 </CustomTooltip>
               </CustomPopConfirm>
+            </CustomCol>
+            <CustomCol style={{ textAlign: "left" }} xs={12}>
+              {/* <CustomPopConfirm
+                title={"¿Aprobar nomina?"}
+                onConfirm={() => {
+                  dispatch(payrollRecordAuthorized(record.id, { status: "AU" , company_id: getSessionInfo().businessId,
+                  user_update: getSessionInfo().username }));
+                }}
+              > */}
+              <CustomTooltip placement={"bottom"} title={"Aprobar"}>
+                <CustomButton
+                  type={"link"}
+                  icon={<CheckCircleTwoTone />}
+                  // onClick={() => {}}
+                />
+              </CustomTooltip>
+              {/* </CustomPopConfirm> */}
             </CustomCol>
           </CustomRow>
         );
       },
     },
   ];
+  const hideModal = () => setVisible(false);
   useEffect(() => {
     if (isPayrollRecordUpdated) {
       dispatch(
@@ -131,15 +185,92 @@ const FixedPayrollAuthorization = (): ReactElement => {
         { field: "status", operator: "=", condition: "A" },
       ])
     );
+    dispatch(
+      getAccounts({
+        searchConditions: [{ field: "status", operator: "=", condition: "A" }],
+        pagination: { take: 10, skip: 0 },
+      })
+    );
   }, []);
   return (
     <CustomLayoutBoxShadow>
-        <CustomRow>
-            <CustomCol xs={24}><CustomTitle level={3}>Consulta</CustomTitle></CustomCol>
-            <CustomCol xs={24}><CustomTable columns={columns} dataSource={addPropertyKey(payrollRecord)}></CustomTable></CustomCol>
-        </CustomRow>
-      
+      <CustomRow>
+        <CustomCol xs={24}>
+          <CustomTitle level={3}>Consulta</CustomTitle>
+        </CustomCol>
+        <CustomCol xs={24}>
+          <CustomTable
+            columns={columns}
+            dataSource={addPropertyKey(payrollRecord)}
+          ></CustomTable>
+        </CustomCol>
+        <CustomCol xs={24}>
+          <CustomModal
+            title={"Pago"}
+            onCancel={hideModal}
+            visible={visible}
+            width={"50%"}
+            // confirmLoading={createEmployeesIsLoading}
+            // closable={!createEmployeesIsLoading}
+            // maskClosable={!createEmployeesIsLoading}
+            // okButtonProps={{ disabled: createEmployeesIsLoading }}
+            // cancelText={stepState > 0 ? "Atrás" : "Cancelar"}
+            // okText={stepState < 2 ? "Siguiente" : "Finalizar"}
+            cancelButtonProps={{
+              // disabled: createEmployeesIsLoading,
+              onClick: () => hideModal(),
+            }}
+            onOk={async () => {
+              const data = await form.validateFields().catch((e) => e);
+              if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
+                if (
+                  Object.prototype.hasOwnProperty.call(
+                    payrollRecordSelected,
+                    "id"
+                  )
+                ) {
+                  dispatch(
+                    payrollRecordAuthorized(
+                      data.bank_account_id,
+                      payrollRecordSelected.id,
+                      "DV"
+                    )
+                  );
+                }
+              }
+            }}
+          >
+            <CustomSpin /*spinning={createEmployeesIsLoading}*/>
+              <CustomForm
+                {...formItemLayout}
+                name={"payroll_news"}
+                validateMessages={validateMessages}
+                form={form}
+              >
+                <CustomRow>
+                  <CustomCol xs={24}>
+                    <CustomFormItem>
+                      <CustomSelect
+                        defaultValue={payrollRecordSelected.bank_account_id}
+                        loading={getAccountsIsLoading}
+                      >
+                        {(accounts || []).map((item: AccountType, ind) => (
+                          <Option key={`${ind}`} value={item.id} data={item}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </CustomSelect>
+                    </CustomFormItem>
+                  </CustomCol>
+                  <CustomCol xs={24}></CustomCol>
+                  <CustomCol xs={24}></CustomCol>
+                </CustomRow>
+              </CustomForm>
+            </CustomSpin>
+          </CustomModal>
+        </CustomCol>
+      </CustomRow>
     </CustomLayoutBoxShadow>
-  )
-}
-export default FixedPayrollAuthorization
+  );
+};
+export default FixedPayrollAuthorization;
