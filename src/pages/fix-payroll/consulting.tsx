@@ -72,7 +72,7 @@ const Consulting = (): ReactElement => {
     },
     {
       title: "Cuenta",
-      dataIndex: "acc",
+      dataIndex: "bank_account_name",
     },
     {
       title: "Operaciones",

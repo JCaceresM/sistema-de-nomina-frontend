@@ -26,6 +26,7 @@ export type PayrollRecordState = {
   isPayrollRecordCreated: boolean;
   isPayrollRecordUpdated: boolean;
   paymentIsLoading: boolean;
+  paymentIsComplete: boolean;
   payrollRecord: PayrollRecordType[];
   payrollRecordUpdated: PayrollRecordType[];
   payrollRecordMetadata: ResponseMetadata;
@@ -33,6 +34,7 @@ export type PayrollRecordState = {
 
 const initialState = {
   getPayrollRecordIsLoading: false,
+  paymentIsComplete: false,
   paymentIsLoading: false,
   isPayrollRecordCreated: false,
   createPayrollRecordIsLoading: false,
@@ -110,6 +112,7 @@ const payrollRecord = (
       return {
         ...state,
         paymentIsLoading: false,
+        paymentIsComplete: true,
       };
     case PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE:
       return {

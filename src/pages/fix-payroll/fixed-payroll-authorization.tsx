@@ -45,7 +45,7 @@ import { RootState } from "../../reducers/root_reducers";
 
 const FixedPayrollAuthorization = (): ReactElement => {
   const dispatch = useDispatch();
-  const { payrollRecord, isPayrollRecordUpdated } = useSelector(
+  const { payrollRecord, isPayrollRecordUpdated, paymentIsComplete, paymentIsLoading } = useSelector(
     (state: RootState) => state.payrollRecord
   );
   const { accounts, getAccountsIsLoading } = useSelector(
@@ -132,10 +132,10 @@ const FixedPayrollAuthorization = (): ReactElement => {
                   <CustomButton
                     type={"link"}
                     icon={<DeleteTwoTone twoToneColor={"red"} />}
-                    onClick={() => {
-                      setPayrollRecordSelected(record);
-                      setVisible(true);
-                    }}
+                    // onClick={() => {
+                    //   setPayrollRecordSelected(record);
+                    //   setVisible(true);
+                    // }}
                     //   setVisible(true);
                     //   setDataView(record.payroll_record_detail || []);
                     //   setPayrollSelected(record);
@@ -156,7 +156,10 @@ const FixedPayrollAuthorization = (): ReactElement => {
                 <CustomButton
                   type={"link"}
                   icon={<CheckCircleTwoTone />}
-                  // onClick={() => {}}
+                  onClick={() => {
+                    setPayrollRecordSelected(record);
+                    setVisible(true);
+                  }}
                 />
               </CustomTooltip>
               {/* </CustomPopConfirm> */}
@@ -192,6 +195,12 @@ const FixedPayrollAuthorization = (): ReactElement => {
       })
     );
   }, []);
+  useEffect(() => {
+   if (paymentIsComplete) {
+    hideModal()
+    dispatch(payrollRecordManagerReduxState({paymentIsComplete: false}))
+   }
+  }, [paymentIsComplete]);
   return (
     <CustomLayoutBoxShadow>
       <CustomRow>
@@ -210,18 +219,21 @@ const FixedPayrollAuthorization = (): ReactElement => {
             onCancel={hideModal}
             visible={visible}
             width={"50%"}
-            // confirmLoading={createEmployeesIsLoading}
-            // closable={!createEmployeesIsLoading}
-            // maskClosable={!createEmployeesIsLoading}
-            // okButtonProps={{ disabled: createEmployeesIsLoading }}
+            confirmLoading={paymentIsLoading}
+            closable={!paymentIsLoading}
+            maskClosable={!paymentIsLoading}
+            okButtonProps={{ disabled: paymentIsLoading }}
             // cancelText={stepState > 0 ? "Atrás" : "Cancelar"}
             // okText={stepState < 2 ? "Siguiente" : "Finalizar"}
             cancelButtonProps={{
-              // disabled: createEmployeesIsLoading,
+              disabled: paymentIsLoading,
               onClick: () => hideModal(),
             }}
             onOk={async () => {
               const data = await form.validateFields().catch((e) => e);
+              // eslint-disable-next-line no-console
+              console.log(data);
+
               if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
                 if (
                   Object.prototype.hasOwnProperty.call(
@@ -240,7 +252,7 @@ const FixedPayrollAuthorization = (): ReactElement => {
               }
             }}
           >
-            <CustomSpin /*spinning={createEmployeesIsLoading}*/>
+            <CustomSpin spinning={paymentIsLoading}>
               <CustomForm
                 {...formItemLayout}
                 name={"payroll_news"}
@@ -249,7 +261,11 @@ const FixedPayrollAuthorization = (): ReactElement => {
               >
                 <CustomRow>
                   <CustomCol xs={24}>
-                    <CustomFormItem>
+                    <CustomFormItem
+                      name={"bank_account_id"}
+                      required
+                      rules={[{ required: true }]}
+                    >
                       <CustomSelect
                         defaultValue={payrollRecordSelected.bank_account_id}
                         loading={getAccountsIsLoading}

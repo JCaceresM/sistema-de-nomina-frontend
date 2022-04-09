@@ -38,7 +38,7 @@ const payrollRecordAuthorize = (
   bank_account_id: number,
   transaction_type: string
 ): Promise<AxiosResponse<PayrollType>> => {
-  return patchRequest(`${WEB_SERVICE_API_PAYROLL_RECORD_CREATE}/done`, {
+  return postRequest(`${WEB_SERVICE_API_PAYROLL_RECORD_CREATE}/done`, {
     payroll_record_id,
     bank_account_id,
     transaction_type,
