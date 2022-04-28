@@ -87,14 +87,8 @@ const EmployeeConsulting = (): ReactElement => {
     },
   ]
   useEffect(() => {
-  const   searchConditions= [
-      {
-          "field": "user_name",
-          "operator": "=",
-          "condition": "admin"
-      }
-  ]
-    dispatch(getEmployee({searchConditions,pagination:{ skip: 0, take: 15 }}))
+ 
+    dispatch(getEmployee({pagination:{ skip: 0, take: 15 }}))
   }, [])
   const hideCreateEditModal = () => {
     setCreateEditIsVisible(false)

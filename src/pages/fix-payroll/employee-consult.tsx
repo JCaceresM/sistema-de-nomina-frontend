@@ -121,19 +121,10 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
   const Title = () => {
     return (
       <CustomRow>
-        <CustomCol xs={18}>
+        <CustomCol xs={24}>
           <CustomTitle level={3}>Consulta</CustomTitle>
         </CustomCol>
-        <CustomCol xs={6}>
-          <CustomRow justify={"end"}>
-            <CustomTooltip title={"Registrar"}>
-              <CustomButton
-                icon={<PlusOutlined />}
-                onClick={() => setCreateEditIsVisible(true)}
-              ></CustomButton>
-            </CustomTooltip>
-          </CustomRow>
-        </CustomCol>
+       
       </CustomRow>
     )
   }
