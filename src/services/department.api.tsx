@@ -1,12 +1,12 @@
 import { AxiosResponse } from "axios"
 import { DepartmentType } from "../actions/department/department.actions"
 import {
+  WEB_SERVICE_API_DEPARTMENT,
   WEB_SERVICE_API_DEPARTMENT_ALL,
-  WEB_SERVICE_API_DEPARTMENT_CREATE,
 } from "../common/constants/external-route.constants"
-import { PaginationType } from "../common/types/general.type"
+import { PaginationType, SelectConditionType } from "../common/types/general.type"
 import { axiosHelper } from "./http-method.helper"
-const { getRequest, postRequest } = axiosHelper
+const { getRequest, postRequest,getPaginatedUrl } = axiosHelper
 
 const getDepartments = (): Promise<AxiosResponse<PaginationType>> => {
   return getRequest(WEB_SERVICE_API_DEPARTMENT_ALL)
@@ -14,10 +14,22 @@ const getDepartments = (): Promise<AxiosResponse<PaginationType>> => {
 const createDepartment = (
   creatData: DepartmentType
 ): Promise<AxiosResponse<DepartmentType>> => {
-  return postRequest(WEB_SERVICE_API_DEPARTMENT_CREATE, creatData)
+  return postRequest(WEB_SERVICE_API_DEPARTMENT, creatData)
 }
-
+const getDepartmentEmployees = (
+  pagination: PaginationType,
+  searchConditions?: SelectConditionType[],
+): Promise<AxiosResponse<DepartmentType>> => {
+  return    postRequest(
+    getPaginatedUrl(
+      `${WEB_SERVICE_API_DEPARTMENT}/employees`,
+      pagination.take,
+      pagination.skip
+    ),
+    { searchConditions }
+  )
+}
 export const DepartmentApiRequest = {
   getDepartments,
-  createDepartment,
+  createDepartment,getDepartmentEmployees
 }

@@ -231,8 +231,7 @@ const FixedPayrollAuthorization = (): ReactElement => {
             }}
             onOk={async () => {
               const data = await form.validateFields().catch((e) => e);
-              // eslint-disable-next-line no-console
-              console.log(data);
+        
 
               if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
                 if (

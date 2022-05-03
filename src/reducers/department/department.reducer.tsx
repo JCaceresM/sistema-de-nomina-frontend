@@ -6,13 +6,19 @@ import {
    DEPARTMENT_GET_ALL_DEPARTMENT,
    DEPARTMENT_GET_ALL_DEPARTMENT_FAILURE,
   DEPARTMENT_GET_ALL_DEPARTMENT_SUCCESS,
+  DEPARTMENT_GET_EMPLOYEES_DEPARTMENT,
+  DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_FAILURE,
+  DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_SUCCESS,
   DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT,
 } from "../../constants/department/department.constants"
 import { DepartmentActions,DepartmentType } from "../../actions/department/department.actions"
 import { ResponseMetadata } from "../../common/types/response.type"
+import { EmployeeType } from "../../actions/employee/employee.actions"
 
 export type DepartmentState = {
   getDepartmentsIsLoading: boolean
+  getDepartmentEmployeesIsLoading: boolean
+  deparmentEmployees:  Array<DepartmentType & { employees: EmployeeType[] }>
   createDepartmentsIsLoading: boolean,
   isCreated:boolean
   departments: DepartmentType[],
@@ -26,6 +32,8 @@ const initialState = {
   createDepartmentsIsLoading: false,
   departments: new Array<DepartmentType>(),
   departmentMetadata:{} as ResponseMetadata,
+  getDepartmentEmployeesIsLoading: false,
+  deparmentEmployees: new Array<DepartmentType & { employees: EmployeeType[] }>()
 }
 
 const departments = (
@@ -69,6 +77,22 @@ const departments = (
         departments: [...state.departments,action.createDepartment],
         createDepartmentsIsLoading: false,
         isCreated: true,
+      }
+    case DEPARTMENT_GET_EMPLOYEES_DEPARTMENT:
+      return {
+        ...state,
+        getDepartmentEmployeesIsLoading: true,
+      }
+    case DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_SUCCESS:      
+      return {
+        ...state,
+        getDepartmentEmployeesIsLoading: false,
+        deparmentEmployees: action.data
+      }
+    case DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_FAILURE:  
+      return {
+        ...state,
+        getDepartmentEmployeesIsLoading: false,
       }
     case DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT:  
       return {

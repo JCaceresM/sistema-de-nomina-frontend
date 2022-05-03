@@ -6,11 +6,14 @@ import {
   createDepartmentSuccess,
   getAllDepartmentFailure,
   getAllDepartmentSuccess,
+  GetDepartmentEmployeesAction,
+  getDepartmentEmployeesFailure,
+  getDepartmentEmployeesSuccess,
 } from "../../actions/department/department.actions"
-import { DEPARTMENT_CREATE_DEPARTMENT, DEPARTMENT_GET_ALL_DEPARTMENT } from "../../constants/department/department.constants"
+import { DEPARTMENT_CREATE_DEPARTMENT, DEPARTMENT_GET_ALL_DEPARTMENT, DEPARTMENT_GET_EMPLOYEES_DEPARTMENT } from "../../constants/department/department.constants"
 import { DepartmentApiRequest } from "../../services/department.api"
 
-const {getDepartments,createDepartment } = DepartmentApiRequest
+const {getDepartments,createDepartment , getDepartmentEmployees} = DepartmentApiRequest
 function* getAllDepartmentSaga ( ) {
   try {
     const response: ResponseGenerator = yield call(() =>
@@ -46,5 +49,20 @@ function* createDepartmentSaga ( body:CreateDepartmentAction) {
 function* watchCreateDepartment (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(DEPARTMENT_CREATE_DEPARTMENT, createDepartmentSaga)
 }
+function* getDepartmentEmployeesSaga ( body:GetDepartmentEmployeesAction) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+    getDepartmentEmployees( body.pagination,body.searchConditions,)
+    )
+    const { data, meta={} } = response.data
+    
+    yield put(getDepartmentEmployeesSuccess(data, meta))
+  } catch (error) {
+    yield put(getDepartmentEmployeesFailure())
+  }
+}
 
-export { watchGetAllDepartment,watchCreateDepartment }
+function* watchGetDepartmentEmployees (): Generator<ForkEffect<never>, void, unknown> {
+  yield takeLatest(DEPARTMENT_GET_EMPLOYEES_DEPARTMENT, getDepartmentEmployeesSaga)
+}
+export { watchGetAllDepartment,watchCreateDepartment, watchGetDepartmentEmployees }

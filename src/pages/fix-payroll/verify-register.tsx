@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   employeeManagerReduxState,
   EmployeeType,
-  getEmployee,
+  // getEmployee,
 } from "../../actions/employee/employee.actions";
 import { PayrollNewsType } from "../../actions/payroll-news/payroll-news.actions";
 import {
@@ -48,6 +48,9 @@ import {
   totalDiscount,
 } from "../../common/utils/tax/index.helpers";
 import { RootState } from "../../reducers/root_reducers";
+import {  getDepartmentEmployees } from "../../actions/department/department.actions";
+import moment from "moment";
+import CustomDateFormatFunction, { getDateAsSpanishLongDate, getDateAsSpanishShortDate } from "../../common/components/CustomDateFormatFunction";
 
 const formItemLayout = {
   labelCol: {
@@ -97,9 +100,10 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
   const [addPersonalDiscount, setAddPersonalDiscount] = useState(false);
   const [visible, setVisible] = useState(false);
   const [isPayrollSelected, setIsPayrollSelected] = useState(true);
-  const [employeeToRegister, setEmployeeToRegister] = useState<EmployeeType[]>(
+  const [employeeToRegister, setEmployeeToRegister] = useState<(EmployeeType&{departmentName: string})[]>(
     []
   );
+
   const [payrollDiscounts, setPayrollDiscounts] = useState<PayrollNewsType[]>(
     []
   );
@@ -110,9 +114,11 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
     payroll: payrollState,
     employee: employeeState,
     payrollRecord: payrollRecordState,
+    departments
   } = useSelector((state: RootState) => state);
   const { getPayrollIsLoading, payroll } = payrollState;
   const { getEmployeesIsLoading, employees } = employeeState;
+  const { deparmentEmployees, getDepartmentEmployeesIsLoading } = departments;
   const { isPayrollRecordCreated } = payrollRecordState;
   const columns: ColumnsType<EmployeeType> = [
     {
@@ -131,6 +137,11 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
     {
       title: "Doc Identidad",
       dataIndex: "document_id",
+      ellipsis: true,
+    },
+    {
+      title: "Departamento",
+      dataIndex: "departmentName",
       ellipsis: true,
     },
     {
@@ -165,14 +176,15 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       align: "right",
     },
     {
+      ellipsis: true,
       title: (
         <CustomRow>
-          <CustomCol xs={12}>Monto</CustomCol>
-          <CustomCol style={{ textAlign: "end" }} xs={12}>
+          <CustomCol xs={24}>Operaciones</CustomCol>
+          {/* <CustomCol style={{ textAlign: "end" }} xs={12}>
             <CustomTooltip title={"Agregar"}>
               <CustomButton icon={<PlusOutlined />} />
             </CustomTooltip>
-          </CustomCol>
+          </CustomCol> */}
         </CustomRow>
       ),
       render: (record) => {
@@ -246,8 +258,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       setDiscounts(discounts);
       setAddPersonalDiscount(true);
       setEmployeeNews(record.payroll_news);
-      // eslint-disable-next-line no-console
-      console.log(record.payroll_news, "ddd");
+   
     },
 
     type: "radio",
@@ -258,20 +269,20 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
   const hidePayrollNewsModal = () => {
     setVisible(false);
   };
-  const searchEmployee = (record: PayrollType) => {
+  const searchEmployee = (record: PayrollType &{ deparments_ids:  {payrollId: number, departmentId: number}[]}) => {
     setPayrollSelected(record);
-    setPayrollDiscounts(record.payroll_news);
-    setDiscounts(record.payroll_news);
+    // setPayrollDiscounts(record.payroll_news);
+    // setDiscounts(record.payroll_news);
 
     const condition = [
       {
-        field: "payroll_id",
-        operator: "=",
-        condition: record.id,
+        field: "id",
+        operator: "IN",
+        condition: record.deparments_ids.map((item,)=> item.departmentId).join(),
       },
     ];
     dispatch(
-      getEmployee({
+      getDepartmentEmployees({
         searchConditions: condition,
         pagination: { skip: 0, take: 155 },
       })
@@ -336,6 +347,15 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
     dispatch(getAllPayroll(condition));
   }, []);
   useEffect(() => {
+    if (!getDepartmentEmployeesIsLoading&&deparmentEmployees.length) {
+      for (let index = 0; index < deparmentEmployees.length; index++) {
+        const data: any = deparmentEmployees[index].employees.map((item)=>({...item,departmentName:deparmentEmployees[index].name }))
+        setEmployeeToRegister(data);
+      }
+      setIsPayrollSelected(false);
+    }
+  }, [getDepartmentEmployeesIsLoading]);
+  useEffect(() => {
     const salaries = employeeToRegister.reduce(
       (acc, employee) => acc + employee.salary,
       0
@@ -354,10 +374,10 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
     );
     setTotals({ salaries, discounts, income, earnings });
   }, [employeeToRegister]);
-  useEffect(() => {
-    setEmployeeToRegister(employees);
-    employees.length && setIsPayrollSelected(false);
-  }, [employees]);
+  // useEffect(() => {
+  //   setEmployeeToRegister(employees);
+  //   employees.length && setIsPayrollSelected(false);
+  // }, [employees]);
   useEffect(() => {
     if (isPayrollRecordCreated) {
       form.resetFields();
@@ -382,7 +402,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
           <CustomFormItem label={"Nomina"}>
             <CustomSelect
               onChange={(_, e) =>
-                searchEmployee((e as unknown as { data: PayrollType }).data)
+                searchEmployee((e as unknown as { data: PayrollType &{ deparments_ids:  {payrollId: number, departmentId: number}[]} }).data)                
               }
               loading={getPayrollIsLoading}
               showSearch
@@ -404,7 +424,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                 onChange={(_, e) =>
                   setEmployeeToRegister([
                     ...employeeToRegister,
-                    (e as unknown as { data: EmployeeType }).data,
+                    (e as unknown as { data: EmployeeType&{departmentName: string} }).data,
                   ])
                 }
                 showSearch
@@ -556,10 +576,12 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
                 name={"registered_at"}
                 label={"Mes de nomina a registrar"}
               >
-                <CustomDatePicker
+                <CustomInput
                   style={{ width: "100%" }}
-                  picker="month"
-                  format={"DD-MM-YYYY"}
+                  // picker="month"
+                  defaultValue={getDateAsSpanishLongDate({})}
+                  // format={"ddd-MMMM-YYYY"}
+                  disabled
                 />
               </CustomFormItem>
             </CustomForm>

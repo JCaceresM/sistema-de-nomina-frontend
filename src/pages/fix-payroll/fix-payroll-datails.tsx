@@ -55,8 +55,7 @@ const FixPayrollModalDetail = ({
           align: "right",
           title: "Descuentos",
           render: (record: Record<string, any>) => {
-              // eslint-disable-next-line no-console
-              console.log(record.payroll_news_record);
+             
               
             return currencyLocale(
                 sumNews(record.payroll_news_record)

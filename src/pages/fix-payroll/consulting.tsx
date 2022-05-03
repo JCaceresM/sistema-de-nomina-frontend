@@ -64,7 +64,6 @@ const Consulting = (): ReactElement => {
       title: "Departamento",
       render: (record: Record<string, any>) => {
         // eslint-disable-next-line no-console
-        console.log(record.payroll_record_detail);
 
         return record?.department_name;
       },
