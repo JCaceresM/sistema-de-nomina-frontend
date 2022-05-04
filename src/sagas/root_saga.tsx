@@ -8,6 +8,7 @@ import {
   watchCreateDepartment,
   watchGetAllDepartment,
   watchGetDepartmentEmployees,
+  watchGetDepartmentsNotInPayroll,
 } from "./department/department.sagas";
 import {
   watchCreateEmployee,
@@ -76,6 +77,7 @@ export default function* rootSaga (): Generator {
     watchGetAccounts(),
     watchCreateAccount(),
     watchUpdateAccount(),
-    watchPayrollRecordAuthorized(),watchGetDepartmentEmployees()
+    watchPayrollRecordAuthorized(),watchGetDepartmentEmployees(),watchGetDepartmentsNotInPayroll()
+    
   ]);
 }

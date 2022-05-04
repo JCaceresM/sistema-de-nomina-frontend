@@ -6,14 +6,17 @@ import {
   createDepartmentSuccess,
   getAllDepartmentFailure,
   getAllDepartmentSuccess,
+  GetDeparmentNotInPayrollAction,
+  getDeparmentNotInPayrollFailure,
+  getDeparmentNotInPayrollSuccess,
   GetDepartmentEmployeesAction,
   getDepartmentEmployeesFailure,
   getDepartmentEmployeesSuccess,
 } from "../../actions/department/department.actions"
-import { DEPARTMENT_CREATE_DEPARTMENT, DEPARTMENT_GET_ALL_DEPARTMENT, DEPARTMENT_GET_EMPLOYEES_DEPARTMENT } from "../../constants/department/department.constants"
+import { DEPARTMENT_CREATE_DEPARTMENT, DEPARTMENT_GET_ALL_DEPARTMENT, DEPARTMENT_GET_EMPLOYEES_DEPARTMENT, DEPARTMENT_GET_NOT_IN_PAYROLL } from "../../constants/department/department.constants"
 import { DepartmentApiRequest } from "../../services/department.api"
 
-const {getDepartments,createDepartment , getDepartmentEmployees} = DepartmentApiRequest
+const {getDepartments,createDepartment ,getDepartmentsNotInPayroll, getDepartmentEmployees} = DepartmentApiRequest
 function* getAllDepartmentSaga ( ) {
   try {
     const response: ResponseGenerator = yield call(() =>
@@ -65,4 +68,20 @@ function* getDepartmentEmployeesSaga ( body:GetDepartmentEmployeesAction) {
 function* watchGetDepartmentEmployees (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(DEPARTMENT_GET_EMPLOYEES_DEPARTMENT, getDepartmentEmployeesSaga)
 }
-export { watchGetAllDepartment,watchCreateDepartment, watchGetDepartmentEmployees }
+function* getDepartmensNotInPayrollSaga ( body:GetDeparmentNotInPayrollAction) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+    getDepartmentsNotInPayroll( body.pagination,body.searchConditions,)
+    )
+    const { data, } = response.data
+    
+    yield put(getDeparmentNotInPayrollSuccess(data))
+  } catch (error) {
+    yield put(getDeparmentNotInPayrollFailure())
+  }
+}
+
+function* watchGetDepartmentsNotInPayroll (): Generator<ForkEffect<never>, void, unknown> {
+  yield takeLatest(DEPARTMENT_GET_NOT_IN_PAYROLL, getDepartmensNotInPayrollSaga)
+}
+export { watchGetAllDepartment,watchCreateDepartment,watchGetDepartmentsNotInPayroll, watchGetDepartmentEmployees }

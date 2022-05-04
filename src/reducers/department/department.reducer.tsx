@@ -9,6 +9,9 @@ import {
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_FAILURE,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_SUCCESS,
+  DEPARTMENT_GET_NOT_IN_PAYROLL,
+  DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE,
+  DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS,
   DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT,
 } from "../../constants/department/department.constants"
 import { DepartmentActions,DepartmentType } from "../../actions/department/department.actions"
@@ -18,10 +21,12 @@ import { EmployeeType } from "../../actions/employee/employee.actions"
 export type DepartmentState = {
   getDepartmentsIsLoading: boolean
   getDepartmentEmployeesIsLoading: boolean
+  getDepartmentNotInPayrollIsLoading: boolean
   deparmentEmployees:  Array<DepartmentType & { employees: EmployeeType[] }>
   createDepartmentsIsLoading: boolean,
   isCreated:boolean
   departments: DepartmentType[],
+  departmentsNotInPayroll: DepartmentType[],
   departmentMetadata:ResponseMetadata
 
 }
@@ -30,7 +35,9 @@ const initialState = {
   getDepartmentsIsLoading: false,
   isCreated: false,
   createDepartmentsIsLoading: false,
+  getDepartmentNotInPayrollIsLoading: false,
   departments: new Array<DepartmentType>(),
+  departmentsNotInPayroll: new Array<DepartmentType>(),
   departmentMetadata:{} as ResponseMetadata,
   getDepartmentEmployeesIsLoading: false,
   deparmentEmployees: new Array<DepartmentType & { employees: EmployeeType[] }>()
@@ -93,6 +100,23 @@ const departments = (
       return {
         ...state,
         getDepartmentEmployeesIsLoading: false,
+      }
+    case DEPARTMENT_GET_NOT_IN_PAYROLL:  
+      return {
+        ...state,
+        getDepartmentNotInPayrollIsLoading: true,
+      }
+    case DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS:  
+      return {
+        ...state,
+        departmentsNotInPayroll: action.data
+,
+        getDepartmentNotInPayrollIsLoading: false,
+      }
+    case DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE:  
+      return {
+        ...state,
+        getDepartmentNotInPayrollIsLoading: false,
       }
     case DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT:  
       return {

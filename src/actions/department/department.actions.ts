@@ -13,6 +13,9 @@ import {
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_FAILURE,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_SUCCESS,
+  DEPARTMENT_GET_NOT_IN_PAYROLL,
+  DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE,
+  DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS,
   DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT,
 } from "../../constants/department/department.constants";
 import { DepartmentState } from "../../reducers/department/department.reducer";
@@ -163,7 +166,47 @@ export const createDepartmentFailure = (): CreateDepartmentFailureAction => {
     type: DEPARTMENT_CREATE_DEPARTMENT_FAILURE,
   };
 };
+// ----------------------------------------------
+// -------------------------------------------------------------
+export type GetDeparmentNotInPayrollAction = {
+  type: typeof DEPARTMENT_GET_NOT_IN_PAYROLL;
+  pagination?: PaginationType;
+  searchConditions?: SelectConditionType[];
+};
+export const getDeparmentNotInPayroll = (
+  pagination?:PaginationType,
+  searchConditions?: SelectConditionType[],
+): GetDeparmentNotInPayrollAction => {
+  return {
+    type: DEPARTMENT_GET_NOT_IN_PAYROLL,
+    searchConditions,pagination
+  };
+};
 
+type GetDeparmentNotInPayrollSuccessAction = {
+  type: typeof DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS;
+  data: any[];
+};
+
+export const getDeparmentNotInPayrollSuccess = (
+  data: any[]
+): GetDeparmentNotInPayrollSuccessAction => {
+  return {
+    type: DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS,
+    data,
+  };
+};
+
+type GetDeparmentNotInPayrollFailureAction = {
+  type: typeof DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE;
+};
+
+export const getDeparmentNotInPayrollFailure = (): GetDeparmentNotInPayrollFailureAction => {
+  return {
+    type: DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE,
+  };
+};
+// -------------------------------------------------------
 export type DepartmentActions =
   | GetAllDepartmentAction
   | GetAllDepartmentSuccessAction
@@ -174,4 +217,6 @@ export type DepartmentActions =
   | DepartmentManagerReduxStateAction
   | GetDepartmentEmployeesAction
   | GetDepartmentEmployeesSuccessAction
-  | GetDepartmentEmployeesFailureAction;
+  | GetDepartmentEmployeesFailureAction|GetDeparmentNotInPayrollAction
+  |GetDeparmentNotInPayrollSuccessAction|
+  GetDeparmentNotInPayrollFailureAction

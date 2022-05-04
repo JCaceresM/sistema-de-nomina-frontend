@@ -29,7 +29,23 @@ const getDepartmentEmployees = (
     { searchConditions }
   )
 }
+const getDepartmentsNotInPayroll = (
+  pagination={
+    take: 15,
+    skip:0
+  },
+  searchConditions?: SelectConditionType[],
+): Promise<AxiosResponse<DepartmentType>> => {
+  return    postRequest(
+    getPaginatedUrl(
+      `${WEB_SERVICE_API_DEPARTMENT}/not-in-payrrol`,
+      pagination.take,
+      pagination.skip
+    ),
+    { searchConditions }
+  )
+}
 export const DepartmentApiRequest = {
   getDepartments,
-  createDepartment,getDepartmentEmployees
+  createDepartment,getDepartmentEmployees,getDepartmentsNotInPayroll
 }

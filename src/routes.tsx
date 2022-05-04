@@ -12,6 +12,7 @@ import {
   PATH_FIXED_PAYROLL_APPROVE,
   PATH_FIXED_PAYROLL_AUTHORIZATION,
   PATH_FIXED_PAYROLL_CHECK_REGISTER,
+  PATH_FIXED_PAYROLL_CREATE,
   PATH_FIXED_PAYROLL_NEWS,
   PATH_FIXED_REVERT,
   PATH_LOGIN,
@@ -139,6 +140,14 @@ const WebSiteRoutes = (): ReactElement => {
             element={
               <ProtectedRoutesWrapper>
                 <FixedPayrollAuthorization />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_FIXED_PAYROLL_CREATE}
+            element={
+              <ProtectedRoutesWrapper>
+                <Payroll />
               </ProtectedRoutesWrapper>
             }
           />

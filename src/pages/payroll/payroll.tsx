@@ -11,6 +11,7 @@ import {
 import { Select } from "antd";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getDeparmentNotInPayroll } from "../../actions/department/department.actions";
 import {
   EmployeeType,
   getEmployee,
@@ -64,11 +65,6 @@ const Payroll = (): ReactElement => {
     {
       title: "Name",
       dataIndex: "name",
-    },
-    {
-      title: "Presupuesto",
-      dataIndex: "budget",
-      render: (value: number) => currencyLocale(value),
     },
     {
       title: "Estado",
@@ -172,9 +168,11 @@ const Payroll = (): ReactElement => {
   function hideViewEmployeeModal() {
     setViewEmployeeIsVisible(false);
   }
-
   useEffect(() => {
     dispatch(getAllPayroll());
+  }, []);
+  useEffect(() => {
+    dispatch(getDeparmentNotInPayroll());
   }, []);
   const hideCreateEditModal = () => {
     setCreateEditIsVisible(false);

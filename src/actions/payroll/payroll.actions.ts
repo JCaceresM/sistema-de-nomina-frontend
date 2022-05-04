@@ -43,11 +43,11 @@ export const payrollManagerReduxState = (
     state,
   };
 };
+// ---------------------------------------------
 export type GetAllPayrollAction = {
   type: typeof PAYROLL_GET_ALL_PAYROLL;
   searchConditions?: SelectConditionType[];
 };
-
 export const getAllPayroll = (
   searchConditions?: SelectConditionType[]
 ): GetAllPayrollAction => {
@@ -80,6 +80,7 @@ export const getAllPayrollFailure = (): GetAllPayrollFailureAction => {
     type: PAYROLL_GET_ALL_PAYROLL_FAILURE,
   };
 };
+
 // ---------------------------create-------------------------------------
 export type CreatePayrollAction = {
   type: typeof PAYROLL_CREATE_PAYROLL;

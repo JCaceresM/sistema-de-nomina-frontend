@@ -20,7 +20,6 @@ import {
 import {
   CustomButton,
   CustomCol,
-  CustomDatePicker,
   CustomForm,
   CustomFormItem,
   CustomInput,
@@ -49,8 +48,7 @@ import {
 } from "../../common/utils/tax/index.helpers";
 import { RootState } from "../../reducers/root_reducers";
 import {  getDepartmentEmployees } from "../../actions/department/department.actions";
-import moment from "moment";
-import CustomDateFormatFunction, { getDateAsSpanishLongDate, getDateAsSpanishShortDate } from "../../common/components/CustomDateFormatFunction";
+import  { getDateAsSpanishLongDate } from "../../common/components/CustomDateFormatFunction";
 
 const formItemLayout = {
   labelCol: {
@@ -421,6 +419,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
           <CustomRow justify={"end"}>
             <CustomFormItem style={{ width: "80%" }} label={"Empleados"}>
               <CustomSelect
+              style={{ width: "80%" }}
                 onChange={(_, e) =>
                   setEmployeeToRegister([
                     ...employeeToRegister,
@@ -468,7 +467,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
   };
   const summaryPaymentHistory = () => (
     <Table.Summary.Row>
-      <Table.Summary.Cell colSpan={4} index={1} align={"right"}>
+      <Table.Summary.Cell colSpan={5} index={1} align={"right"}>
         <CustomText strong>Totales:</CustomText>
       </Table.Summary.Cell>
       <Table.Summary.Cell index={2} align={"right"}>
