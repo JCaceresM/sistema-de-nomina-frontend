@@ -3,12 +3,18 @@ import {
   DEPARTMENT_CREATE_DEPARTMENT,
   DEPARTMENT_CREATE_DEPARTMENT_FAILURE,
   DEPARTMENT_CREATE_DEPARTMENT_SUCCESS,
+   DEPARTMENT_DELETE_PAYROLL,
+   DEPARTMENT_DELETE_PAYROLL_FAILURE,
+   DEPARTMENT_DELETE_PAYROLL_SUCCESS,
    DEPARTMENT_GET_ALL_DEPARTMENT,
    DEPARTMENT_GET_ALL_DEPARTMENT_FAILURE,
   DEPARTMENT_GET_ALL_DEPARTMENT_SUCCESS,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_FAILURE,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_SUCCESS,
+  DEPARTMENT_GET_IN_PAYROLL,
+  DEPARTMENT_GET_IN_PAYROLL_FAILURE,
+  DEPARTMENT_GET_IN_PAYROLL_SUCCESS,
   DEPARTMENT_GET_NOT_IN_PAYROLL,
   DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE,
   DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS,
@@ -21,13 +27,16 @@ import { EmployeeType } from "../../actions/employee/employee.actions"
 export type DepartmentState = {
   getDepartmentsIsLoading: boolean
   getDepartmentEmployeesIsLoading: boolean
+  getDepartmentInPayrollIsLoading: boolean
   getDepartmentNotInPayrollIsLoading: boolean
   deparmentEmployees:  Array<DepartmentType & { employees: EmployeeType[] }>
   createDepartmentsIsLoading: boolean,
   isCreated:boolean
   departments: DepartmentType[],
   departmentsNotInPayroll: DepartmentType[],
-  departmentMetadata:ResponseMetadata
+  departmentsInPayroll: DepartmentType[],
+  departmentMetadata:ResponseMetadata,isDeparmentPayrollDeleted: boolean ,       deleteDeparmentPayrollIsLoading: boolean,
+
 
 }
 
@@ -35,9 +44,11 @@ const initialState = {
   getDepartmentsIsLoading: false,
   isCreated: false,
   createDepartmentsIsLoading: false,
+  isDeparmentPayrollDeleted: false ,       deleteDeparmentPayrollIsLoading: false,  getDepartmentInPayrollIsLoading: false,
   getDepartmentNotInPayrollIsLoading: false,
   departments: new Array<DepartmentType>(),
   departmentsNotInPayroll: new Array<DepartmentType>(),
+  departmentsInPayroll: new Array<DepartmentType>(),
   departmentMetadata:{} as ResponseMetadata,
   getDepartmentEmployeesIsLoading: false,
   deparmentEmployees: new Array<DepartmentType & { employees: EmployeeType[] }>()
@@ -85,6 +96,23 @@ const departments = (
         createDepartmentsIsLoading: false,
         isCreated: true,
       }
+    case DEPARTMENT_DELETE_PAYROLL:
+      return {
+        ...state,
+        deleteDeparmentPayrollIsLoading: true,
+      }
+    case DEPARTMENT_DELETE_PAYROLL_FAILURE:
+      return {
+        ...state,
+        deleteDeparmentPayrollIsLoading: false,
+      }
+    case DEPARTMENT_DELETE_PAYROLL_SUCCESS:  
+      return {
+        ...state,
+        deleteDeparmentPayrollIsLoading: false,
+        isDeparmentPayrollDeleted: true,
+
+      }
     case DEPARTMENT_GET_EMPLOYEES_DEPARTMENT:
       return {
         ...state,
@@ -107,16 +135,33 @@ const departments = (
         getDepartmentNotInPayrollIsLoading: true,
       }
     case DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS:  
+    
       return {
         ...state,
-        departmentsNotInPayroll: action.data
-,
+        departmentsNotInPayroll:action.data,
         getDepartmentNotInPayrollIsLoading: false,
       }
     case DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE:  
       return {
         ...state,
         getDepartmentNotInPayrollIsLoading: false,
+      }
+    case DEPARTMENT_GET_IN_PAYROLL:  
+      return {
+        ...state,
+        getDepartmentInPayrollIsLoading: true,
+      }
+    case DEPARTMENT_GET_IN_PAYROLL_SUCCESS:  
+    
+      return {
+        ...state,
+        departmentsInPayroll:action.data,
+        getDepartmentInPayrollIsLoading: false,
+      }
+    case DEPARTMENT_GET_IN_PAYROLL_FAILURE:  
+      return {
+        ...state,
+        getDepartmentInPayrollIsLoading: false,
       }
     case DEPARTMENT_MANAGER_REDUX_STATE_DEPARTMENT:  
       return {

@@ -4,8 +4,14 @@ import {
   CreateDepartmentAction,
   createDepartmentFailure,
   createDepartmentSuccess,
+  DeleteDeparmentPayrollAction,
+  deleteDeparmentPayrollFailure,
+  deleteDeparmentPayrollSuccess,
   getAllDepartmentFailure,
   getAllDepartmentSuccess,
+  GetDeparmentInPayrollAction,
+  getDeparmentInPayrollFailure,
+  getDeparmentInPayrollSuccess,
   GetDeparmentNotInPayrollAction,
   getDeparmentNotInPayrollFailure,
   getDeparmentNotInPayrollSuccess,
@@ -13,10 +19,10 @@ import {
   getDepartmentEmployeesFailure,
   getDepartmentEmployeesSuccess,
 } from "../../actions/department/department.actions"
-import { DEPARTMENT_CREATE_DEPARTMENT, DEPARTMENT_GET_ALL_DEPARTMENT, DEPARTMENT_GET_EMPLOYEES_DEPARTMENT, DEPARTMENT_GET_NOT_IN_PAYROLL } from "../../constants/department/department.constants"
+import { DEPARTMENT_CREATE_DEPARTMENT, DEPARTMENT_DELETE_PAYROLL, DEPARTMENT_GET_ALL_DEPARTMENT, DEPARTMENT_GET_EMPLOYEES_DEPARTMENT, DEPARTMENT_GET_IN_PAYROLL, DEPARTMENT_GET_NOT_IN_PAYROLL } from "../../constants/department/department.constants"
 import { DepartmentApiRequest } from "../../services/department.api"
 
-const {getDepartments,createDepartment ,getDepartmentsNotInPayroll, getDepartmentEmployees} = DepartmentApiRequest
+const {getDepartments,createDepartment,deleteDepartmentPayroll ,getDepartmentsNotInPayroll,getDepartmentsInPayroll, getDepartmentEmployees} = DepartmentApiRequest
 function* getAllDepartmentSaga ( ) {
   try {
     const response: ResponseGenerator = yield call(() =>
@@ -73,9 +79,9 @@ function* getDepartmensNotInPayrollSaga ( body:GetDeparmentNotInPayrollAction) {
     const response: ResponseGenerator = yield call(() =>
     getDepartmentsNotInPayroll( body.pagination,body.searchConditions,)
     )
-    const { data, } = response.data
+    const { data, subSelectCondition} = response.data
     
-    yield put(getDeparmentNotInPayrollSuccess(data))
+    yield put(getDeparmentNotInPayrollSuccess(data,subSelectCondition))
   } catch (error) {
     yield put(getDeparmentNotInPayrollFailure())
   }
@@ -84,4 +90,36 @@ function* getDepartmensNotInPayrollSaga ( body:GetDeparmentNotInPayrollAction) {
 function* watchGetDepartmentsNotInPayroll (): Generator<ForkEffect<never>, void, unknown> {
   yield takeLatest(DEPARTMENT_GET_NOT_IN_PAYROLL, getDepartmensNotInPayrollSaga)
 }
-export { watchGetAllDepartment,watchCreateDepartment,watchGetDepartmentsNotInPayroll, watchGetDepartmentEmployees }
+function* getDepartmensInPayrollSaga ( body:GetDeparmentInPayrollAction) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+    getDepartmentsInPayroll( body.pagination,body.searchConditions,)
+    )
+    const { data, subSelectCondition} = response.data
+    
+    yield put(getDeparmentInPayrollSuccess(data,subSelectCondition))
+  } catch (error) {
+    yield put(getDeparmentInPayrollFailure())
+  }
+}
+
+function* watchGetDepartmentsInPayroll (): Generator<ForkEffect<never>, void, unknown> {
+  yield takeLatest(DEPARTMENT_GET_IN_PAYROLL, getDepartmensInPayrollSaga)
+}
+function* deleteDepartmensPayrollSaga ( body :DeleteDeparmentPayrollAction) {
+  try {
+    const response: ResponseGenerator = yield call(() =>
+    deleteDepartmentPayroll( body.payrollId,body.departmentId,)
+    )
+    const { data,} = response.data
+    
+    yield put(deleteDeparmentPayrollSuccess(data))
+  } catch (error) {
+    yield put(deleteDeparmentPayrollFailure())
+  }
+}
+
+function* watchDeleteDepartmentsInPayroll (): Generator<ForkEffect<never>, void, unknown> {
+  yield takeLatest(DEPARTMENT_DELETE_PAYROLL, deleteDepartmensPayrollSaga)
+}
+export {watchDeleteDepartmentsInPayroll, watchGetAllDepartment,watchCreateDepartment,watchGetDepartmentsNotInPayroll, watchGetDepartmentEmployees, watchGetDepartmentsInPayroll }

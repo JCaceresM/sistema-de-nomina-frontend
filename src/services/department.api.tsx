@@ -38,14 +38,40 @@ const getDepartmentsNotInPayroll = (
 ): Promise<AxiosResponse<DepartmentType>> => {
   return    postRequest(
     getPaginatedUrl(
-      `${WEB_SERVICE_API_DEPARTMENT}/not-in-payrrol`,
+      `${WEB_SERVICE_API_DEPARTMENT}/not-in-payroll`,
       pagination.take,
       pagination.skip
     ),
     { searchConditions }
   )
 }
+const getDepartmentsInPayroll = (
+  pagination={
+    take: 15,
+    skip:0
+  },
+  searchConditions?: SelectConditionType[],
+): Promise<AxiosResponse<DepartmentType>> => {
+  return    postRequest(
+    getPaginatedUrl(
+      `${WEB_SERVICE_API_DEPARTMENT}/in-payroll`,
+      pagination.take,
+      pagination.skip
+    ),
+    { searchConditions }
+  )
+}
+const deleteDepartmentPayroll = (
+  payrollId: number,departmentId: number
+): Promise<AxiosResponse<DepartmentType>> => {
+  return    postRequest(
+ 
+      `${WEB_SERVICE_API_DEPARTMENT}/delete/payroll-department`,
+   
+    { payrollId,departmentId }
+  )
+}
 export const DepartmentApiRequest = {
   getDepartments,
-  createDepartment,getDepartmentEmployees,getDepartmentsNotInPayroll
+  createDepartment,getDepartmentEmployees,getDepartmentsNotInPayroll,getDepartmentsInPayroll,deleteDepartmentPayroll
 }

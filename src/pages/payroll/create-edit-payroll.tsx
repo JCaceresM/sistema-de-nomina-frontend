@@ -14,6 +14,7 @@ import {
   departmentManagerReduxState,
   DepartmentType,
   getAllDepartment,
+  getDeparmentNotInPayroll,
 } from "../../actions/department/department.actions";
 import { setLocalState } from "../../actions/local/localState.actions";
 import { createPayroll, payrollManagerReduxState } from "../../actions/payroll/payroll.actions";
@@ -139,9 +140,12 @@ const CreatEditPayroll = ({
   const handleSubmit = async () => {
     const data = await form.validateFields().catch((e) => e);
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
-      dispatch(createPayroll({ ...data, company_id: getSessionInfo().businessId, status: "A",     user_insert: getSessionInfo().username,}));
+      dispatch(createPayroll({ ...data, company_id: getSessionInfo().businessId, status: "A",  type: "F",   user_insert: getSessionInfo().username, deparments: deparmentsSelected}));
     }
   };
+  useEffect(() => {
+    visible&&dispatch(getDeparmentNotInPayroll({}));
+  }, [visible]);
   useEffect(() => {
     if (isPayrollCreated) {
       form.resetFields();

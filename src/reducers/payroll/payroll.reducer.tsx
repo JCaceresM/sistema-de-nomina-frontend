@@ -71,7 +71,7 @@ const payroll = (
     case PAYROLL_CREATE_PAYROLL_SUCCESS:
       return {
         ...state,
-        payroll: [...state.payroll, action.createPayroll],
+
         createPayrollIsLoading: false,
         isPayrollCreated: true,
       };

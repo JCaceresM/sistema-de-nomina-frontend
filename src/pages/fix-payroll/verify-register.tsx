@@ -289,7 +289,6 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
   const handleSubmit = async () => {
     const dataFields = await form.validateFields().catch((e) => e);
     if (!Object.getOwnPropertyDescriptor(dataFields, "errorFields")) {
-      const payrollNewsPayrollSelected = payrollSelected?.payroll_news || [];
       const data = {
         description: payrollSelected.description,
         type: payrollSelected.type,
@@ -310,14 +309,6 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
             user_insert: getSessionInfo().username,
 
             payroll_news: [
-              ...payrollNewsPayrollSelected.map((item) => ({
-                amount: item.amount,
-                description: item.description,
-                type: item.type,
-                name: item.name,
-                operation: item.operation,
-                user_insert: getSessionInfo().username,
-              })),
               ...payrollNewsCurrentEmployee.map((item) => ({
                 amount: item.amount,
                 description: item.description,

@@ -12,8 +12,8 @@ import {
   PAYROLL_UPDATE_PAYROLL_EMPLOYEE_SUCCESS,
 } from "../../constants/payroll/payroll.constants";
 import { PayrollState } from "../../reducers/payroll/payroll.reducer";
+import { DepartmentType } from "../department/department.actions";
 import { EmployeeType } from "../employee/employee.actions";
-import { PayrollNewsType } from "../payroll-news/payroll-news.actions";
 
 export type PayrollType = {
   id: number;
@@ -28,7 +28,7 @@ export type PayrollType = {
   user_insert: string;
   bank_account_id: number;
   department_id: number;
-  payroll_news: PayrollNewsType[];
+  deparments: Partial<DepartmentType[]>
 };
 export type PayrollManagerReduxStateAction = {
   state: Partial<PayrollState>;

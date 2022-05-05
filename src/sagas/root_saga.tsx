@@ -6,8 +6,10 @@ import {
 } from "./accounts/accounts.sagas";
 import {
   watchCreateDepartment,
+  watchDeleteDepartmentsInPayroll,
   watchGetAllDepartment,
   watchGetDepartmentEmployees,
+  watchGetDepartmentsInPayroll,
   watchGetDepartmentsNotInPayroll,
 } from "./department/department.sagas";
 import {
@@ -77,7 +79,10 @@ export default function* rootSaga (): Generator {
     watchGetAccounts(),
     watchCreateAccount(),
     watchUpdateAccount(),
-    watchPayrollRecordAuthorized(),watchGetDepartmentEmployees(),watchGetDepartmentsNotInPayroll()
-    
+    watchPayrollRecordAuthorized(),
+    watchGetDepartmentEmployees(),
+    watchGetDepartmentsNotInPayroll(),
+    watchGetDepartmentsInPayroll(),
+    watchDeleteDepartmentsInPayroll(),
   ]);
 }

@@ -7,12 +7,18 @@ import {
   DEPARTMENT_CREATE_DEPARTMENT,
   DEPARTMENT_CREATE_DEPARTMENT_FAILURE,
   DEPARTMENT_CREATE_DEPARTMENT_SUCCESS,
+  DEPARTMENT_DELETE_PAYROLL,
+  DEPARTMENT_DELETE_PAYROLL_FAILURE,
+  DEPARTMENT_DELETE_PAYROLL_SUCCESS,
   DEPARTMENT_GET_ALL_DEPARTMENT,
   DEPARTMENT_GET_ALL_DEPARTMENT_FAILURE,
   DEPARTMENT_GET_ALL_DEPARTMENT_SUCCESS,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_FAILURE,
   DEPARTMENT_GET_EMPLOYEES_DEPARTMENT_SUCCESS,
+  DEPARTMENT_GET_IN_PAYROLL,
+  DEPARTMENT_GET_IN_PAYROLL_FAILURE,
+  DEPARTMENT_GET_IN_PAYROLL_SUCCESS,
   DEPARTMENT_GET_NOT_IN_PAYROLL,
   DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE,
   DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS,
@@ -173,27 +179,34 @@ export type GetDeparmentNotInPayrollAction = {
   pagination?: PaginationType;
   searchConditions?: SelectConditionType[];
 };
-export const getDeparmentNotInPayroll = (
-  pagination?:PaginationType,
-  searchConditions?: SelectConditionType[],
-): GetDeparmentNotInPayrollAction => {
+export const getDeparmentNotInPayroll = ({
+  searchConditions,
+  pagination,
+}: {
+  pagination?: PaginationType;
+  searchConditions?: SelectConditionType[];
+}): GetDeparmentNotInPayrollAction => {
   return {
     type: DEPARTMENT_GET_NOT_IN_PAYROLL,
-    searchConditions,pagination
+    searchConditions,
+    pagination,
   };
 };
 
 type GetDeparmentNotInPayrollSuccessAction = {
   type: typeof DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS;
   data: any[];
+  subSelectCondition: string;
 };
 
 export const getDeparmentNotInPayrollSuccess = (
-  data: any[]
+  data: any[],
+  subSelectCondition: string
 ): GetDeparmentNotInPayrollSuccessAction => {
   return {
     type: DEPARTMENT_GET_NOT_IN_PAYROLL_SUCCESS,
     data,
+    subSelectCondition,
   };
 };
 
@@ -201,11 +214,104 @@ type GetDeparmentNotInPayrollFailureAction = {
   type: typeof DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE;
 };
 
-export const getDeparmentNotInPayrollFailure = (): GetDeparmentNotInPayrollFailureAction => {
+export const getDeparmentNotInPayrollFailure =
+  (): GetDeparmentNotInPayrollFailureAction => {
+    return {
+      type: DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE,
+    };
+  };
+// -------------------------------------------------------------
+export type GetDeparmentInPayrollAction = {
+  type: typeof DEPARTMENT_GET_IN_PAYROLL;
+  pagination?: PaginationType;
+  searchConditions?: SelectConditionType[];
+};
+export const getDeparmentInPayroll = ({
+  searchConditions,
+  pagination,
+}: {
+  pagination?: PaginationType;
+  searchConditions?: SelectConditionType[];
+}): GetDeparmentInPayrollAction => {
   return {
-    type: DEPARTMENT_GET_NOT_IN_PAYROLL_FAILURE,
+    type: DEPARTMENT_GET_IN_PAYROLL,
+    searchConditions,
+    pagination,
   };
 };
+
+type GetDeparmentInPayrollSuccessAction = {
+  type: typeof DEPARTMENT_GET_IN_PAYROLL_SUCCESS;
+  data: any[];
+  subSelectCondition: string;
+};
+
+export const getDeparmentInPayrollSuccess = (
+  data: any[],
+  subSelectCondition: string
+): GetDeparmentInPayrollSuccessAction => {
+  return {
+    type: DEPARTMENT_GET_IN_PAYROLL_SUCCESS,
+    data,
+    subSelectCondition,
+  };
+};
+
+type GetDeparmentInPayrollFailureAction = {
+  type: typeof DEPARTMENT_GET_IN_PAYROLL_FAILURE;
+};
+
+export const getDeparmentInPayrollFailure =
+  (): GetDeparmentInPayrollFailureAction => {
+    return {
+      type: DEPARTMENT_GET_IN_PAYROLL_FAILURE,
+    };
+  };
+// -------------------------------------------------------
+// -------------------------------------------------------------
+export type DeleteDeparmentPayrollAction = {
+  type: typeof DEPARTMENT_DELETE_PAYROLL;
+  payrollId: number;
+  departmentId: number;
+};
+export const deleteDeparmentPayroll = ({
+  payrollId,
+  departmentId,
+}: {
+  payrollId: number;
+  departmentId: number;
+}): DeleteDeparmentPayrollAction => {
+  return {
+    type: DEPARTMENT_DELETE_PAYROLL,
+    payrollId,
+    departmentId,
+  };
+};
+
+type DeleteDeparmentPayrollSuccessAction = {
+  type: typeof DEPARTMENT_DELETE_PAYROLL_SUCCESS;
+  data: any[];
+};
+
+export const deleteDeparmentPayrollSuccess = (
+  data: any[]
+): DeleteDeparmentPayrollSuccessAction => {
+  return {
+    type: DEPARTMENT_DELETE_PAYROLL_SUCCESS,
+    data,
+  };
+};
+
+type DeleteDeparmentPayrollFailureAction = {
+  type: typeof DEPARTMENT_DELETE_PAYROLL_FAILURE;
+};
+
+export const deleteDeparmentPayrollFailure =
+  (): DeleteDeparmentPayrollFailureAction => {
+    return {
+      type: DEPARTMENT_DELETE_PAYROLL_FAILURE,
+    };
+  };
 // -------------------------------------------------------
 export type DepartmentActions =
   | GetAllDepartmentAction
@@ -217,6 +323,13 @@ export type DepartmentActions =
   | DepartmentManagerReduxStateAction
   | GetDepartmentEmployeesAction
   | GetDepartmentEmployeesSuccessAction
-  | GetDepartmentEmployeesFailureAction|GetDeparmentNotInPayrollAction
-  |GetDeparmentNotInPayrollSuccessAction|
-  GetDeparmentNotInPayrollFailureAction
+  | GetDepartmentEmployeesFailureAction
+  | GetDeparmentNotInPayrollAction
+  | GetDeparmentNotInPayrollSuccessAction
+  | GetDeparmentNotInPayrollFailureAction
+  | GetDeparmentInPayrollAction
+  | GetDeparmentInPayrollSuccessAction
+  | GetDeparmentInPayrollFailureAction
+  | DeleteDeparmentPayrollSuccessAction
+  | DeleteDeparmentPayrollFailureAction
+  | DeleteDeparmentPayrollAction;

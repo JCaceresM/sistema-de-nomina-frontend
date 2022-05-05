@@ -8,14 +8,10 @@ import {
   PlusOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
-import { Select } from "antd";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeparmentNotInPayroll } from "../../actions/department/department.actions";
-import {
-  EmployeeType,
-  getEmployee,
-} from "../../actions/employee/employee.actions";
+
 import {
   getAllPayroll,
   PayrollType,
@@ -23,10 +19,6 @@ import {
 import {
   CustomButton,
   CustomCol,
-  CustomContent,
-  CustomForm,
-  CustomFormItem,
-  CustomModal,
   CustomRow,
   CustomTable,
   CustomText,
@@ -36,11 +28,8 @@ import {
 import { CustomModalConfirmation } from "../../common/components/ConfirmModalMethod";
 import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow";
 import CustomPopConfirm from "../../common/components/CustomPopConfirm";
-import { PropsType } from "../../common/types/modal.type";
 import { getDateAsSpanishShortDate } from "../../common/utils/date/date.helpers";
 import { addPropertyKey } from "../../common/utils/json/mutate-json";
-import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
-import { getTablePagination } from "../../common/utils/table/paginate";
 import { state } from "../../common/utils/table/transform.utils";
 import { RootState } from "../../reducers/root_reducers";
 import AddEmployee from "./add-employee";
@@ -111,35 +100,7 @@ const Payroll = (): ReactElement => {
                 />
               </CustomTooltip>
             </CustomCol>
-            <CustomCol xs={4}>
-              {" "}
-              <CustomTooltip
-                placement={"bottom"}
-                title={"ver empleados de la nomina"}
-              >
-                <CustomButton
-                  onClick={() => {
-                    setViewEmployeeIsVisible(true);
-                    setPayrollSelected(record);
-                  }}
-                  type={"link"}
-                  icon={<EyeTwoTone />}
-                />
-              </CustomTooltip>
-            </CustomCol>
-            <CustomCol xs={4}>
-              {" "}
-              <CustomPopConfirm
-                title={"Editar"}
-                onConfirm={() => {
-                  // dispatch(disableShift(record.IDAPERTURATURNO))
-                }}
-              >
-                <CustomTooltip placement={"bottom"} title={"Editar"}>
-                  <CustomButton type={"link"} icon={<EditTwoTone />} />
-                </CustomTooltip>
-              </CustomPopConfirm>
-            </CustomCol>
+     
             <CustomCol xs={4}>
               {" "}
               <CustomPopConfirm
@@ -171,9 +132,7 @@ const Payroll = (): ReactElement => {
   useEffect(() => {
     dispatch(getAllPayroll());
   }, []);
-  useEffect(() => {
-    dispatch(getDeparmentNotInPayroll());
-  }, []);
+ 
   const hideCreateEditModal = () => {
     setCreateEditIsVisible(false);
   };
@@ -207,12 +166,7 @@ const Payroll = (): ReactElement => {
             dataSource={addPropertyKey(payroll)}
             columns={columns}
             loading={isLoading}
-            // pagination={{
-            //   ...getTablePagination(employeesMetadata),
-            //   defaultPageSize: 10,
-            //   showSizeChanger: true,
-            //   showQuickJumper: true,
-            // }}
+            pagination={false}
           ></CustomTable>
         </CustomCol>
         <CustomCol xs={24}>
