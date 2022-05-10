@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllPayroll,
-  payrollManagerReduxState,
-} from "../../actions/payroll/payroll.actions";
+import { getAllPayroll, payrollManagerReduxState } from "../../actions/payroll/payroll.actions";
 import {
   CustomButton,
   CustomCol,
   CustomModal,
   CustomRow,
   CustomTable,
-  CustomText,
   CustomTitle,
   CustomTooltip,
 } from "../../common/components";
@@ -19,24 +15,15 @@ import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow
 import { addPropertyKey } from "../../common/utils";
 import { state } from "../../common/utils/table/transform.utils";
 import { RootState } from "../../reducers/root_reducers";
-import { EyeTwoTone , PrinterTwoTone} from "@ant-design/icons";
+import { EyeTwoTone } from "@ant-design/icons";
 import { PropsType } from "../../common/types/modal.type";
 import {
   employeeManagerReduxState,
   EmployeeType,
   getEmployee,
 } from "../../actions/employee/employee.actions";
-import {
-  getPayrollnewsCollection,
-  payrollNewsManagerReduxState,
-} from "../../actions/payroll-news/payroll-news.actions";
+import { getPayrollnewsCollection, payrollNewsManagerReduxState } from "../../actions/payroll-news/payroll-news.actions";
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
-import { getPayrollRecordCollection } from "../../actions/payroll record/payroll-record.actions";
-import { Table } from "antd";
-import { netEarnings, sumNews } from "../../common/utils/tax/index.helpers";
-import { ColumnsType } from "antd/lib/table";
-import PrintComponentGeneral from "../../common/components/PrintComponentGeneral";
-import HtmlToPrint from "../../common/components/HtmlToPrint";
 const Consulting = (): ReactElement => {
   const dispatch = useDispatch();
   const { payroll } = useSelector((state: RootState) => state.payroll);
@@ -44,17 +31,9 @@ const Consulting = (): ReactElement => {
   const [payrollSelected, setPayrollSelected] = useState<Record<string, any>>(
     {}
   );
-
-  const {
-    payrollRecord,
-    isPayrollRecordUpdated,
-    paymentIsComplete,
-    paymentIsLoading,
-  } = useSelector((state: RootState) => state.payrollRecord);
   const hideModal = () => {
     setVisible(false);
   };
-
   const columns = [
     {
       title: "código",
@@ -76,6 +55,7 @@ const Consulting = (): ReactElement => {
     {
       title: "Descripcion",
       render: (record: Record<string, any>) => {
+
         return record?.description;
       },
       ellipsis: true,
@@ -117,12 +97,15 @@ const Consulting = (): ReactElement => {
   ];
   useEffect(() => {
     dispatch(
-      getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "AU" },
+      getAllPayroll([
+        {
+          field: "type",
+          operator: "=",
+          condition: "F",
+        },
       ])
     );
   }, []);
-
   return (
     <CustomLayoutBoxShadow>
       <CustomRow>
@@ -131,7 +114,7 @@ const Consulting = (): ReactElement => {
         </CustomCol>
         <CustomCol xs={24}>
           <CustomTable
-            dataSource={addPropertyKey(payrollRecord)}
+            dataSource={addPropertyKey(payroll)}
             columns={columns}
           ></CustomTable>
         </CustomCol>
@@ -140,7 +123,6 @@ const Consulting = (): ReactElement => {
             visible={visible}
             hideModal={hideModal}
             payrollSelected={payrollSelected}
-            dataView={[]}
           />
         </CustomCol>
       </CustomRow>
@@ -150,82 +132,100 @@ const Consulting = (): ReactElement => {
 const ViewModal = ({
   visible,
   hideModal,
-  payrollSelected, dataView,
-}: PropsType & { payrollSelected: Record<string, any>, dataView:  Record<string, any> }): ReactElement => {
+  payrollSelected,
+}: PropsType & { payrollSelected: Record<string, any> }): ReactElement => {
   const dispatch = useDispatch();
-  const [printIsVisible, setPrintiIsVisible] = useState(false);
-  const [employeeSelected, setEmployee] = useState<Record<string, any>>({});
-  const viewColumns: ColumnsType<any> = [
+  const { employees } = useSelector((state: RootState) => state.employee);
+  const { payrollNews } = useSelector((state: RootState) => state.payrollNews);
+  const payrollNewsColumns = [
     {
-      title: "ID",
+      title: "código",
       dataIndex: "id",
     },
     {
-      title: "nombre",
-      render: (record: Record<string, any>) => {
-        return record.first_name || "-" + record.last_name || "-";
+      title: "Nombre",
+      dataIndex: "name",
+    },
+    {
+      title: "Accion",
+      dataIndex: "operation",
+    },
+    {
+      title: "Descripcion",
+      dataIndex: "description",
+      ellipsis: true,
+    },
+    {
+      title: "Monto",
+      dataIndex: "amount",
+      render: (value: number) => currencyLocale(value),
+    },
+    {
+      title: "Activo",
+      dataIndex: "status",
+      render: (value: string) => state[value],
+
+    },
+  ];
+  const employeeColumns = [
+    {
+      key: 4,
+      title: "código",
+      dataIndex: "id",
+    },
+    {
+      title: "Name",
+      render: (record: EmployeeType) => {
+        const name = `${record.first_name ? record.first_name : "-"} ${
+          record.last_name ? record.last_name : "-"
+        }`;
+        return name;
       },
     },
     {
-      title: "Operaciones",
-      width: "15%",
-      render: (record) => {
-        return (
-          <CustomRow justify={"center"}>
-    
-            <CustomCol xs={4}>
-           
-                <CustomTooltip placement={"bottom"} title={"Editar"}>
-                  <CustomButton
-                    type={"link"}
-                    icon={<PrinterTwoTone />}
-                    onClick={()=> {
-                      setEmployee(record)
-                      setPrintiIsVisible(true)}}
-                  />
-                </CustomTooltip>
-            </CustomCol>
-          </CustomRow>
-        );
-      },
+      title: "Doc Id",
+      dataIndex: "document_id",
     },
-
+    {
+      title: "Salario",
+      dataIndex: "salary",
+    },
   ];
-  
-  const beforeHideModal = () => {
-    hideModal();
-    dispatch(employeeManagerReduxState({ employees: [] }));
-    dispatch(payrollNewsManagerReduxState({ payrollNews: [] }));
-  };
+  const beforeHideModal=()=>{
+    hideModal()
+    dispatch(employeeManagerReduxState({employees:[]}))
+    dispatch(payrollNewsManagerReduxState({payrollNews:[]}))
+  }
   useEffect(() => {
     if (payrollSelected.id && visible) {
-      dispatch(
-        getPayrollnewsCollection([
+      
+    
+    dispatch(
+      getPayrollnewsCollection([
+        {
+          field: "payroll_id",
+          operator: "=",
+          condition: payrollSelected.id,
+        },
+      ])
+    );
+    dispatch(
+      getEmployee({
+        pagination: { take: 10, skip: 0 },
+        searchConditions: [
+          {
+            field: "type",
+            operator: "=",
+            condition: "F",
+          },
           {
             field: "payroll_id",
             operator: "=",
             condition: payrollSelected.id,
           },
-        ])
-      );
-      dispatch(
-        getEmployee({
-          pagination: { take: 10, skip: 0 },
-          searchConditions: [
-            {
-              field: "type",
-              operator: "=",
-              condition: "F",
-            },
-            {
-              field: "payroll_id",
-              operator: "=",
-              condition: payrollSelected.id,
-            },
-          ],
-        })
-      );
-    }
+        ],
+      })
+    );}
   }, [visible]);
   return (
     <CustomModal
@@ -237,29 +237,13 @@ const ViewModal = ({
       onOk={beforeHideModal}
     >
       <CustomRow gutter={[5, 5]}>
-        <CustomCol xs={24}>
-          <CustomTable
-            dataSource={addPropertyKey(payrollSelected.payroll_record_detail||[])}
-            columns={viewColumns}
-            pagination={false}
-            scroll={{ y: 400 }}
-          />
+      <CustomCol xs={24}>
+          <CustomTable title={()=>'Empleados'} pagination={false} scroll={{y:400}}  columns={employeeColumns} dataSource={employees} />
         </CustomCol>
         <CustomCol xs={24}>
-        <CustomModal
-      title={"Visualizacion de recibo"}
-      visible={printIsVisible}
-      width={"40%"}
-      onCancel={()=>setPrintiIsVisible(false)}
-      cancelText
-      onOk={()=>setPrintiIsVisible(false)}
-    >
-      <CustomRow gutter={[5, 5]}>
-        <CustomCol xs={24}>          <HtmlToPrint data={employeeSelected}/>
-</CustomCol>
-      </CustomRow>
-    </CustomModal>
+          <CustomTable title={()=>'Descuentos'} pagination={false} scroll={{y:400}} columns={payrollNewsColumns} dataSource={payrollNews} />
         </CustomCol>
+       
       </CustomRow>
     </CustomModal>
   );

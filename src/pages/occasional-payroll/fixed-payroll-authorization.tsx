@@ -198,11 +198,6 @@ const FixedPayrollAuthorization = (): ReactElement => {
   useEffect(() => {
    if (paymentIsComplete) {
     hideModal()
-    dispatch(
-      getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "A" },
-      ])
-    );
     dispatch(payrollRecordManagerReduxState({paymentIsComplete: false}))
    }
   }, [paymentIsComplete]);
@@ -267,14 +262,12 @@ const FixedPayrollAuthorization = (): ReactElement => {
                   <CustomCol xs={24}>
                     <CustomFormItem
                       name={"bank_account_id"}
-                      label={"Cuenta de banco"}
                       required
                       rules={[{ required: true }]}
                     >
                       <CustomSelect
                         defaultValue={payrollRecordSelected.bank_account_id}
                         loading={getAccountsIsLoading}
-                        style={{width:'100%'}}
                       >
                         {(accounts || []).map((item: AccountType, ind) => (
                           <Option key={`${ind}`} value={item.id} data={item}>

@@ -1,34 +1,111 @@
-import React from 'react'
-import PrintComponentGeneral from './PrintComponentGeneral'
+import React from "react";
+import { currencyLocale } from "../utils/locale/locale.format.utils";
+import { netEarnings, sumNews } from "../utils/tax/index.helpers";
+import PrintComponentGeneral from "./PrintComponentGeneral";
 
-const content = `<h2 style="text-align: center; margin-top: 200px;">Recibo</h2>
-<table style="width: 55.3977%; border-collapse: collapse; height: 72px;" border="0">
+const HtmlToPrint = ({ data }: { data: any }): React.ReactElement => {
+  const content = `<h3 style="text-align: center;"><strong>Recibo de pago</strong></h3>
+<table style="height: 141px; width: 100%; border-collapse: collapse;" border="0">
+<tbody>
+<tr style="height: 183px;">
+<td style="width: 50%; height: 141px; text-align: justify; vertical-align: top;">
+<table style="height: 108px; width: 100%; border-collapse: collapse;" border="0">
 <tbody>
 <tr style="height: 18px;">
-<td style="width: 18.5024%; height: 18px;">No. Recibo:</td>
-<td style="width: 36.8953%; height: 18px;">00001</td>
+<td style="width: 50%; height: 18px;"><strong>Codigo:&nbsp;</strong></td>
+<td style="width: 50%; height: 18px;">${data.employee_id}</td>
 </tr>
 <tr style="height: 18px;">
-<td style="width: 18.5024%; height: 18px;">Cliente:&nbsp;</td>
-<td style="width: 36.8953%; height: 18px;">Juan Perez</td>
-</tr> 
+<td style="width: 50%; height: 18px;"><strong>Nombre:&nbsp;</strong></td>
+<td style="width: 50%; height: 18px;">${
+    data.first_name + " " + data.last_name
+  }</td>
+</tr>
 <tr style="height: 18px;">
-<td style="width: 18.5024%; height: 18px;">Referencia:</td>
-<td style="width: 36.8953%; height: 18px;">ALKS0565S</td>
+<td style="width: 50%; height: 18px;"><strong>Cedula:</strong></td>
+<td style="width: 50%; height: 18px;">${data.document_id}</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;"><strong>Depto:</strong></td>
+<td style="width: 50%; height: 18px;">${data.id}</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;"><strong>Cargo:</strong></td>
+<td style="width: 50%; height: 18px;">${data.position_name || "--"}</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;"><strong>Nomina:</strong></td>
+<td style="width: 50%; height: 18px;">${data.id}</td>
 </tr>
 </tbody>
 </table>
-<p>&nbsp;</p>`
+<p>&nbsp;</p>
+<p style="text-align: center;">______________________________________</p>
+<p style="text-align: center;">Recibido por:</p>
+</td>
+<td style="width: 50%; height: 141px; text-align: justify; vertical-align: top;">
+<table style="width: 100%; border-collapse: collapse; height: 144px;" border="0">
+<tbody>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;">Sueldo:&nbsp;</td>
+<td style="width: 50%; height: 18px;">${currencyLocale(data.salary)}</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;">Otros Ingresos</td>
+<td style="width: 50%; height: 18px;">${currencyLocale(
+    sumNews(data.payroll_news_record, "SUMA")
+  )}</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;">Totales</td>
+<td style="width: 50%; height: 18px;">${currencyLocale(
+    sumNews(data.payroll_news_record, "SUMA") + data.salary || 0
+  )}</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;">&nbsp;</td>
+<td style="width: 50%; height: 18px;">&nbsp;</td>
+</tr>
+<tr style="height: 18px;">
+<td style="width: 50%; height: 18px;"><strong>Descuentos</strong></td>
+<td style="width: 50%; height: 18px;">&nbsp;</td>
+${data.payroll_news_record.reduce(
+  (prev: string, next: Record<string, string>) => {
+    const item = `
+  </tr>
+<tr style="height: 18px; "  >
+<td style="width: 50%; height: 18px;   border-right: 1px solid gray; border-bottom: 1px solid gray;padding-rigth: 5px;  text-align: left">${
+      next.name
+    }</td>
+<td style="width: 50%; height: 18px ;border-bottom: 1px solid gray; text-align: center">${currencyLocale(
+      +next.amount || 0
+    )}</td>
+</tr>`;
+    return prev + item;
+  },
+  ""
+)}
 
-const HtmlToPrint = (): React.ReactElement => {
+
+</tbody>
+</table>
+<p>Sueldo Neto: ${currencyLocale(netEarnings(data, []))}</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="text-align: left;">&nbsp;</p>`;
+  // eslint-disable-next-line no-console
+  console.log(data);
+
   return (
     <PrintComponentGeneral>
       <div
-        style={{ width: '5cm' }}
+        // style={{  textAlign: 'center' }}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     </PrintComponentGeneral>
-  )
-}
+  );
+};
 
-export default HtmlToPrint
+export default HtmlToPrint;

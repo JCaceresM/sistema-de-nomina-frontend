@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
-import React, { ReactElement, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  EmployeeType,
-  getEmployee,
-} from "../../actions/employee/employee.actions";
-import { getAllPayroll } from "../../actions/payroll/payroll.actions";
+import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons"
+import React, { ReactElement, useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { EmployeeType, getEmployee } from "../../actions/employee/employee.actions"
+import { getAllPayroll } from "../../actions/payroll/payroll.actions"
 import {
   CustomButton,
   CustomCol,
@@ -14,22 +11,20 @@ import {
   CustomTable,
   CustomTitle,
   CustomTooltip,
-} from "../../common/components";
-import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow";
-import CustomPopConfirm from "../../common/components/CustomPopConfirm";
-import { addPropertyKey } from "../../common/utils/json/mutate-json";
-import { getTablePagination } from "../../common/utils/table/paginate";
-import { state } from "../../common/utils/table/transform.utils";
-import { RootState } from "../../reducers/root_reducers";
+} from "../../common/components"
+import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow"
+import CustomPopConfirm from "../../common/components/CustomPopConfirm"
+import { addPropertyKey } from "../../common/utils/json/mutate-json"
+import { getTablePagination } from "../../common/utils/table/paginate"
+import { state } from "../../common/utils/table/transform.utils"
+import { RootState } from "../../reducers/root_reducers"
 
 const FixPayrollEmployeeConsulting = (): ReactElement => {
-  const dispatch = useDispatch();
-  const [createEditIsVisible, setCreateEditIsVisible] = useState(false);
-  const {
-    employees,
-    employeesMetadata,
-    getEmployeesIsLoading: isLoading,
-  } = useSelector((state: RootState) => state.employee);
+  const dispatch = useDispatch()
+  const [createEditIsVisible, setCreateEditIsVisible] = useState(false)
+  const { employees, employeesMetadata, getEmployeesIsLoading: isLoading } = useSelector(
+    (state: RootState) => state.employee
+  )  
   const { payroll } = useSelector((state: RootState) => state.payroll);
 
   const columns = [
@@ -41,10 +36,8 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
     {
       title: "Name",
       render: (record: EmployeeType) => {
-        const name = `${record.first_name ? record.first_name : "-"} ${
-          record.last_name ? record.last_name : "-"
-        }`;
-        return name;
+        const  name = `${record.first_name ? record.first_name:'-'  } ${record.last_name ? record.last_name:'-'}`
+        return name
       },
     },
     {
@@ -53,8 +46,8 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
     },
     {
       title: "Estado",
-      dataIndex: "status",
-      render: (value: string) => state[value],
+      dataIndex: "status",      render: (value: string) => state[value],
+
     },
     {
       title: "Operaciones",
@@ -92,35 +85,49 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
               </CustomPopConfirm>
             </CustomCol>
           </CustomRow>
-        );
+        )
       },
     },
-  ];
+  ]
   useEffect(() => {
-    const searchConditions = [
-      {
-        field: "TYPE",
-        operator: "=",
-        condition: "F",
-      },
-    ];
+
+      
+      if (payroll.length) {
+        const   searchConditions= [
+            {
+                "field": "payroll_id",
+                "operator": "IN",
+                "condition": payroll.map((item)=> item.id).join()
+            }
+        ]
+          dispatch(getEmployee({searchConditions,pagination:{ skip: 0, take: 15 }}))
+      }
+ 
+  }, [payroll])
+  useEffect(() => {
     dispatch(
-      getEmployee({ searchConditions, pagination: { skip: 0, take: 15 } })
+      getAllPayroll([
+        {
+          field: "type",
+          operator: "=",
+          condition: "F",
+        },
+      ])
     );
   }, []);
-
   const hideCreateEditModal = () => {
-    setCreateEditIsVisible(false);
-  };
+    setCreateEditIsVisible(false)
+  }
   const Title = () => {
     return (
       <CustomRow>
         <CustomCol xs={24}>
           <CustomTitle level={3}>Consulta</CustomTitle>
         </CustomCol>
+       
       </CustomRow>
-    );
-  };
+    )
+  }
   return (
     <CustomLayoutBoxShadow>
       <CustomRow>
@@ -140,8 +147,10 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
             }}
           ></CustomTable>
         </CustomCol>
+        
       </CustomRow>
+      
     </CustomLayoutBoxShadow>
-  );
-};
-export default FixPayrollEmployeeConsulting;
+  )
+}
+export default FixPayrollEmployeeConsulting
