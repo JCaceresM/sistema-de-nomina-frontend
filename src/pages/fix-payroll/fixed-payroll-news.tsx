@@ -32,9 +32,12 @@ import {
 import { PropsType } from "../../common/types/modal.type";
 import { state } from "../../common/utils/table/transform.utils";
 import CustomPopConfirm from "../../common/components/CustomPopConfirm";
+import { useLocation } from "react-router-dom";
 
 const FixPayrollNews = (): ReactElement => {
   const dispatch = useDispatch();
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const [createEditIsVisible, setCreateEditIsVisible] = useState(false);
   const [viewIsVisible, setViewIsVisible] = useState(false);
   const [employeeSelected, setEmployeeSelected] = useState<EmployeeType>();
@@ -97,7 +100,11 @@ const FixPayrollNews = (): ReactElement => {
                   onClick={() => {
                     setViewIsVisible(true);
                     // setEmployeeSelected(record);
-                    dispatch(getPayrollNewsEmployee(record.id));
+                    dispatch(getPayrollNewsEmployee(record.id, [{
+                      field: "type",
+                      operator: "=",
+                      condition: locationState.type
+                    }],));
                   }}
                   type={"link"}
                   icon={<EyeTwoTone />}
@@ -114,13 +121,13 @@ const FixPayrollNews = (): ReactElement => {
       {
         field: "type",
         operator: "=",
-        condition: "F",
+        condition: locationState.type
       },
     ];
     dispatch(
       getEmployee({ searchConditions, pagination: { skip: 0, take: 150 } })
     );
-  }, []);
+  }, [location]);
 
   const Title = () => {
     return (

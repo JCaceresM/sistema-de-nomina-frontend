@@ -34,6 +34,13 @@ function* createPayrollRecordSaga (body: CreatePayrollRecordAction) {
 
     yield put(createPayrollRecordSuccess(data))
   } catch (error) {
+    
+    showNotification({
+      title: 'Advertencia',
+      description: `${(error as any).response.data.message}`  || 'Ha ocurrido un error inesperado',
+      type: 'warning'
+      
+    })
     yield put(createPayrollRecordFailure())
   }
 }

@@ -2,6 +2,7 @@
 import { DeleteTwoTone, EditTwoTone, PlusOutlined } from "@ant-design/icons";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   EmployeeType,
   getEmployee,
@@ -24,6 +25,8 @@ import { RootState } from "../../reducers/root_reducers";
 
 const FixPayrollEmployeeConsulting = (): ReactElement => {
   const dispatch = useDispatch();
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const [createEditIsVisible, setCreateEditIsVisible] = useState(false);
   const {
     employees,
@@ -101,13 +104,13 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
       {
         field: "TYPE",
         operator: "=",
-        condition: "F",
+        condition: locationState.type
       },
     ];
     dispatch(
       getEmployee({ searchConditions, pagination: { skip: 0, take: 15 } })
     );
-  }, []);
+  }, [location]);
 
   const hideCreateEditModal = () => {
     setCreateEditIsVisible(false);

@@ -37,14 +37,17 @@ import { netEarnings, sumNews } from "../../common/utils/tax/index.helpers";
 import { ColumnsType } from "antd/lib/table";
 import PrintComponentGeneral from "../../common/components/PrintComponentGeneral";
 import HtmlToPrint from "../../common/components/HtmlToPrint";
+import { useLocation, useNavigate } from "react-router-dom";
 const Consulting = (): ReactElement => {
   const dispatch = useDispatch();
   const { payroll } = useSelector((state: RootState) => state.payroll);
   const [visible, setVisible] = useState(false);
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const [payrollSelected, setPayrollSelected] = useState<Record<string, any>>(
     {}
   );
-
+  
   const {
     payrollRecord,
     isPayrollRecordUpdated,
@@ -119,9 +122,10 @@ const Consulting = (): ReactElement => {
     dispatch(
       getPayrollRecordCollection([
         { field: "status", operator: "=", condition: "AU" },
+        { field: "type", operator: "=", condition: locationState.type },
       ])
     );
-  }, []);
+  }, [location]);
 
   return (
     <CustomLayoutBoxShadow>
@@ -153,6 +157,9 @@ const ViewModal = ({
   payrollSelected, dataView,
 }: PropsType & { payrollSelected: Record<string, any>, dataView:  Record<string, any> }): ReactElement => {
   const dispatch = useDispatch();
+ 
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const [printIsVisible, setPrintiIsVisible] = useState(false);
   const [employeeSelected, setEmployee] = useState<Record<string, any>>({});
   const viewColumns: ColumnsType<any> = [
@@ -206,6 +213,11 @@ const ViewModal = ({
             operator: "=",
             condition: payrollSelected.id,
           },
+          {
+            field: "type",
+            operator: "=",
+            condition: locationState.type
+          },
         ])
       );
       dispatch(
@@ -215,7 +227,7 @@ const ViewModal = ({
             {
               field: "type",
               operator: "=",
-              condition: "F",
+              condition: locationState.type
             },
             {
               field: "payroll_id",

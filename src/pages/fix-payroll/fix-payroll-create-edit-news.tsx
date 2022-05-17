@@ -2,6 +2,7 @@
 import React, { Form, Select } from "antd";
 import { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { EmployeeType } from "../../actions/employee/employee.actions";
 import {
   createPayrollNews,
@@ -58,6 +59,8 @@ const FixPayrollCreatEditNews = ({
 }): ReactElement => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const { Option } = Select;
   const [newsName, setNewsName] = useState("");
   const {
@@ -85,7 +88,7 @@ const FixPayrollCreatEditNews = ({
 
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
       const payrollNews = {
-        type: "F",
+        type: locationState.type,
         description: data.description,
         name: data.name,
         operation: type === "Descuentos" ? "RESTA" : "SUMA",
@@ -241,131 +244,5 @@ const FixPayrollCreatEditNews = ({
     </CustomModal>
   );
 };
-/*const FixPayrollCreatEditNews = ({
-  visible,
-  width,
-  hideModal,
-}: PropsType): ReactElement => {
-  const [form] = Form.useForm();
-  const dispatch = useDispatch();
-  const { Option } = Select;
-  const { createPayrollNewsIsLoading, isPayrollNewsCreated } = useSelector(
-    (state: RootState) => state.payrollNews
-  );
-  const { payroll, getPayrollIsLoading } = useSelector(
-    (state: RootState) => state.payroll
-  );
 
-  const cancelPayment = () => {
-    CustomModalConfirmation({
-      content: "¿Seguro que desea cancelar la operación?",
-      onOk: () => {
-        hideModal();
-        form.resetFields()
-      },
-    });
-  };
-  const handleSubmit = async () => {
-    const data = await form.validateFields().catch((e) => e);    
-    if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
-     dispatch(createPayrollNews({...data, company_id: getSessionInfo().businessId, status: "A", type: "F"}))
-    }
-  };
-  useEffect(() => {
-    if (isPayrollNewsCreated) {
-      form.resetFields();
-      isPayrollNewsCreated && hideModal();
-      dispatch(payrollNewsManagerReduxState({ isPayrollNewsCreated: false }));
-    }
-  }, [isPayrollNewsCreated]);
- 
-  return (
-    <CustomModal
-      title={"Modal"}
-      onCancel={cancelPayment}
-      visible={visible}
-      width={width}
-      onOk={handleSubmit}
-      confirmLoading={createPayrollNewsIsLoading}
-      closable={!createPayrollNewsIsLoading}
-      maskClosable={!createPayrollNewsIsLoading}
-      cancelButtonProps={{ disabled: createPayrollNewsIsLoading }}
-      okButtonProps={{ disabled: createPayrollNewsIsLoading }}
-
-    >
-      <CustomSpin spinning={createPayrollNewsIsLoading}>
-        <CustomContent>
-          <CustomForm
-            {...formItemLayout}
-            name={"payroll_news"}
-            validateMessages={validateMessages}
-            form={form}
-          >
-            <CustomRow gutter={[5, 5]}>
-              <CustomCol xs={12}>
-                <CustomFormItem
-                  rules={[{ required: true }]}
-                  name={"name"}
-                  label={"Nombre"}
-                >
-                  <CustomInput />
-                </CustomFormItem>
-              </CustomCol>
-              <CustomCol xs={12}>
-                <CustomFormItem
-                  rules={[{ required: true }]}
-                  name={"amount"}
-                  label={"Monto"}
-                >
-                  <CustomInputNumber style={{ width: "100%" }} />
-                </CustomFormItem>
-              </CustomCol>
-              <CustomCol xs={12}>
-                <CustomFormItem
-                  rules={[{ required: true }]}
-                  name={"operation"}
-                  label={"Operacion"}
-                >
-                  <CustomSelect>
-                    <Option value={"RESTA"}>Suma</Option>
-                    <Option value={"RESTA"}>Resta</Option>
-                  </CustomSelect>
-                </CustomFormItem>
-              </CustomCol>
-              <CustomCol xs={12}>
-                <CustomFormItem
-                  rules={[{ required: true }]}
-                  name={"payroll_id"}
-                  label={"Nomina"}
-                  
-                >
-                  <CustomSelect loading={getPayrollIsLoading}>
-                  {(payroll || []).map((province: PayrollType, ind) => (
-                <Option key={`${ind}`} value={province.id} data={province}>
-                  {province.name}
-                </Option>
-              ))}
-                  </CustomSelect>
-                </CustomFormItem>
-              </CustomCol>
-              <CustomCol xs={24} />
-
-              <CustomCol xs={24}>
-                <CustomFormItem
-                labelCol={{span:3}}
-                wrapperCol={{span:21}}
-                  rules={[{ required: true }]}
-                  name={"description"}
-                  label={"Descripcion"}
-                >
-                  <CustomTextArea />
-                </CustomFormItem>
-              </CustomCol>
-            </CustomRow>
-          </CustomForm>
-        </CustomContent>
-      </CustomSpin>
-    </CustomModal>
-  );
-};*/
 export default FixPayrollCreatEditNews;

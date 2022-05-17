@@ -9,7 +9,7 @@ export type MenuOption = {
   id_actividad: string
   user_update: string
   user_insert: string
-  CHILDREN:MenuOption[]
+  CHILDREN:MenuOption[],parameters: string
 }
 export type SelectConditionType = {
   field: string;

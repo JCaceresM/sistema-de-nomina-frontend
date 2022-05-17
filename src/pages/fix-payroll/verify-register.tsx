@@ -50,6 +50,7 @@ import {
 import { RootState } from "../../reducers/root_reducers";
 import { getDepartmentEmployees } from "../../actions/department/department.actions";
 import { getDateAsSpanishLongDate } from "../../common/components/CustomDateFormatFunction";
+import { useLocation } from "react-router-dom";
 
 const formItemLayout = {
   labelCol: {
@@ -67,6 +68,8 @@ const formItemLayout = {
 };
 const VerifyRegisterFixedPayroll = (): React.ReactElement => {
   const dispatch = useDispatch();
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const [form] = Form.useForm();
   const [registerIsVisible, setRegisterIsVisible] = useState(false);
   const [payrollSelected, setPayrollSelected] = useState<PayrollType>(
@@ -283,6 +286,10 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         condition: record.deparments_ids
           .map((item) => item.departmentId)
           .join(),
+      },{
+        field: "type",
+        operator: "=",
+        condition: locationState.type
       },
     ];
     dispatch(
@@ -336,11 +343,11 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       {
         field: "type",
         operator: "=",
-        condition: `F`,
+        condition: locationState.type
       },
     ];
     dispatch(getAllPayroll(condition));
-  }, []);
+  }, [location]);
   useEffect(() => {
     if (!getDepartmentEmployeesIsLoading && deparmentEmployees.length) {
       for (let index = 0; index < deparmentEmployees.length; index++) {

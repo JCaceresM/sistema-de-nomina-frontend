@@ -51,9 +51,12 @@ import {
 } from "../../common/utils/tax/index.helpers";
 import { RootState } from "../../reducers/root_reducers";
 import FixPayrollModalDetail from "./fix-payroll-datails";
+import { useLocation } from "react-router-dom";
 
 const ApproveFixedPayroll = (): ReactElement => {
   const dispatch = useDispatch();
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const [visible, setVisible] = useState(false);
   const [dataView, setDataView] = useState([]);
   const [payrollSelected, setPayrollSelected] = useState<Record<string, any>>(
@@ -189,7 +192,11 @@ const ApproveFixedPayroll = (): ReactElement => {
     if (isPayrollRecordUpdated) {
       dispatch(
         getPayrollRecordCollection([
-          { field: "status", operator: "=", condition: "R" },
+          { field: "status", operator: "=", condition: "R",  },{
+            field: "type",
+            operator: "=",
+            condition: locationState.type
+          },
         ])
       );
       dispatch(
@@ -200,10 +207,14 @@ const ApproveFixedPayroll = (): ReactElement => {
   useEffect(() => {
     dispatch(
       getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "R" },
+        { field: "status", operator: "=", condition: "R" },{
+          field: "type",
+          operator: "=",
+          condition: locationState.type
+        },
       ])
     );
-  }, []);
+  }, [location]);
 
   return (
     <CustomLayoutBoxShadow>

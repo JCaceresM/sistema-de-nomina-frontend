@@ -7,6 +7,7 @@ import {
 import { Form, Select } from "antd";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   AccountType,
   getAccounts,
@@ -45,6 +46,8 @@ import { RootState } from "../../reducers/root_reducers";
 
 const FixedPayrollAuthorization = (): ReactElement => {
   const dispatch = useDispatch();
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const { payrollRecord, isPayrollRecordUpdated, paymentIsComplete, paymentIsLoading } = useSelector(
     (state: RootState) => state.payrollRecord
   );
@@ -174,7 +177,11 @@ const FixedPayrollAuthorization = (): ReactElement => {
     if (isPayrollRecordUpdated) {
       dispatch(
         getPayrollRecordCollection([
-          { field: "status", operator: "=", condition: "A" },
+          { field: "status", operator: "=", condition: "A" },{
+            field: "type",
+            operator: "=",
+            condition: locationState.type
+          },
         ])
       );
       dispatch(
@@ -185,7 +192,11 @@ const FixedPayrollAuthorization = (): ReactElement => {
   useEffect(() => {
     dispatch(
       getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "A" },
+        { field: "status", operator: "=", condition: "A" },{
+          field: "type",
+          operator: "=",
+          condition: locationState.type
+        },
       ])
     );
     dispatch(
@@ -194,13 +205,17 @@ const FixedPayrollAuthorization = (): ReactElement => {
         pagination: { take: 10, skip: 0 },
       })
     );
-  }, []);
+  }, [location]);
   useEffect(() => {
    if (paymentIsComplete) {
     hideModal()
     dispatch(
       getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "A" },
+        { field: "status", operator: "=", condition: "A" },{
+          field: "type",
+          operator: "=",
+          condition: locationState.type
+        },
       ])
     );
     dispatch(payrollRecordManagerReduxState({paymentIsComplete: false}))

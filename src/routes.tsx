@@ -5,18 +5,18 @@ import {
   PATH_CONFIG_DEPARTMENT_CONSULTING,
   PATH_CONFIG_EMPLOYEE_CONSULTING,
   PATH_CONFIG_POSITIONS_CONSULTING,
-  PATH_FIXED_CONSULTING,
-  PATH_FIXED_DISCOUNT,
-  PATH_FIXED_EMPLOYEES,
-  PATH_FIXED_PAYROLL,
-  PATH_FIXED_PAYROLL_APPROVE,
-  PATH_FIXED_PAYROLL_AUTHORIZATION,
-  PATH_FIXED_PAYROLL_CHECK_REGISTER,
-  PATH_FIXED_PAYROLL_CREATE,
-  PATH_FIXED_PAYROLL_NEWS,
-  PATH_FIXED_REVERT,
+  PATH_CONSULTING,
+  PATH_DISCOUNT,
+  PATH_EMPLOYEES,
   PATH_LOGIN,
   PATH_MAIN,
+  PATH_PAYROLL,
+  PATH_PAYROLL_APPROVE,
+  PATH_PAYROLL_AUTHORIZATION,
+  PATH_PAYROLL_CHECK_REGISTER,
+  PATH_PAYROLL_CREATE,
+  PATH_PAYROLL_NEWS,
+  PATH_REVERT,
 } from "./common/constants/web-site-route.constants"
 import CompanyLogo from "./common/components/CompanyLogo"
 import Login from "./pages/login/Login"
@@ -48,7 +48,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_CONSULTING}
+            path={PATH_CONSULTING}
             element={
               <ProtectedRoutesWrapper>
                 <Consulting />
@@ -56,7 +56,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_DISCOUNT}
+            path={PATH_DISCOUNT}
             element={
               <ProtectedRoutesWrapper>
                 <FixPayrollDiscount />
@@ -64,7 +64,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_REVERT}
+            path={PATH_REVERT}
             element={
               <ProtectedRoutesWrapper>
                 <FixedPayrollRevert />
@@ -72,7 +72,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_EMPLOYEES}
+            path={PATH_EMPLOYEES}
             element={
               <ProtectedRoutesWrapper>
                 <FixPayrollEmployeeConsulting />
@@ -104,7 +104,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_PAYROLL_CHECK_REGISTER}
+            path={PATH_PAYROLL_CHECK_REGISTER}
             element={
               <ProtectedRoutesWrapper>
                 <VerifyRegisterFixedPayroll />
@@ -112,7 +112,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_PAYROLL_NEWS}
+            path={PATH_PAYROLL_NEWS}
             element={
               <ProtectedRoutesWrapper>
                 <FixPayrollNews />
@@ -120,7 +120,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_PAYROLL}
+            path={PATH_PAYROLL}
             element={
               <ProtectedRoutesWrapper>
                 <Payroll />
@@ -128,7 +128,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_PAYROLL_APPROVE}
+            path={PATH_PAYROLL_APPROVE}
             element={
               <ProtectedRoutesWrapper>
                 <ApproveFixedPayroll />
@@ -136,7 +136,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_PAYROLL_AUTHORIZATION}
+            path={PATH_PAYROLL_AUTHORIZATION}
             element={
               <ProtectedRoutesWrapper>
                 <FixedPayrollAuthorization />
@@ -144,7 +144,7 @@ const WebSiteRoutes = (): ReactElement => {
             }
           />
           <Route
-            path={PATH_FIXED_PAYROLL_CREATE}
+            path={PATH_PAYROLL_CREATE}
             element={
               <ProtectedRoutesWrapper>
                 <Payroll />

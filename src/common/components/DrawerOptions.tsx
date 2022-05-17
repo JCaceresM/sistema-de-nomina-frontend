@@ -35,13 +35,18 @@ const getMenuItems = (userOptions: MenuOption[], history: NavigateFunction) => {
         key={route.id_actividad}
         onClick={() => {
           if (route.route) {
-            if (location.pathname !== `/${route.route}`) {
+            let parameters ={}
+            try {
+              parameters=JSON.parse(route.parameters)
+            } catch (error) {
+              parameters={}
+            }
               dispatch(setInitialState());
               history("/" + route.route, {
                 replace: true,
-                state: { activityId: route.id_actividad },
+                state: { activityId: route.id_actividad,...parameters  },
               });
-            }
+            
           }
         }}
       >

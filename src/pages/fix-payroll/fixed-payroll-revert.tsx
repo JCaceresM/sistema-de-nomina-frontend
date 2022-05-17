@@ -4,6 +4,7 @@ import {
 } from "@ant-design/icons";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   getPayrollRecordCollection,
   payrollRecordManagerReduxState,
@@ -26,6 +27,8 @@ import FixPayrollModalDetail from "./fix-payroll-datails";
 
 const FixedPayrollRevert = (): ReactElement => {
   const dispatch = useDispatch();
+  const location = useLocation()
+  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
   const { payrollRecord, isPayrollRecordUpdated } = useSelector(
     (state: RootState) => state.payrollRecord
   );
@@ -118,7 +121,11 @@ const FixedPayrollRevert = (): ReactElement => {
     if (isPayrollRecordUpdated) {
       dispatch(
         getPayrollRecordCollection([
-          { field: "status", operator: "=", condition: "D" },
+          { field: "status", operator: "=", condition: "D" },{
+            field: "type",
+            operator: "=",
+            condition: locationState.type
+          },
         ])
       );
       dispatch(
@@ -129,10 +136,14 @@ const FixedPayrollRevert = (): ReactElement => {
   useEffect(() => {
     dispatch(
       getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "D" },
+        { field: "status", operator: "=", condition: "D" },{
+          field: "type",
+          operator: "=",
+          condition: locationState.type
+        },
       ])
     );
-  }, []);
+  }, [location]);
   return (
     <CustomLayoutBoxShadow>
       <CustomRow>
