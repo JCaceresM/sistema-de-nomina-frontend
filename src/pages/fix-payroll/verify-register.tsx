@@ -68,8 +68,10 @@ const formItemLayout = {
 };
 const VerifyRegisterFixedPayroll = (): React.ReactElement => {
   const dispatch = useDispatch();
-  const location = useLocation()
-  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
+  const location = useLocation();
+  const locationState = { ...(location.state as Record<string, string>) } as {
+    [key: string]: any;
+  };
   const [form] = Form.useForm();
   const [registerIsVisible, setRegisterIsVisible] = useState(false);
   const [payrollSelected, setPayrollSelected] = useState<PayrollType>(
@@ -286,10 +288,11 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
         condition: record.deparments_ids
           .map((item) => item.departmentId)
           .join(),
-      },{
+      },
+      {
         field: "type",
         operator: "=",
-        condition: locationState.type
+        condition: locationState.type,
       },
     ];
     dispatch(
@@ -339,11 +342,21 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
     }
   };
   useEffect(() => {
+    setRegisterIsVisible(false);
+    setPayrollSelected({} as PayrollType);
+    setDiscounts([]);
+    setAddPersonalDiscount(false);
+    setVisible(false);
+    setIsPayrollSelected(false);
+    setEmployeeToRegister([]);
+    setPayrollDiscounts([]);
+    setEmployeeNews([]);
+    setTotals({});
     const condition = [
       {
         field: "type",
         operator: "=",
-        condition: locationState.type
+        condition: locationState.type,
       },
     ];
     dispatch(getAllPayroll(condition));
