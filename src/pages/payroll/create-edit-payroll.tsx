@@ -8,7 +8,7 @@ import {
   EditTwoTone,
   PlusOutlined,
   ReloadOutlined,
-} from "@ant-design/icons"
+} from "@ant-design/icons";
 import {
   createDepartment,
   departmentManagerReduxState,
@@ -17,7 +17,10 @@ import {
   getDeparmentNotInPayroll,
 } from "../../actions/department/department.actions";
 import { setLocalState } from "../../actions/local/localState.actions";
-import { createPayroll, payrollManagerReduxState } from "../../actions/payroll/payroll.actions";
+import {
+  createPayroll,
+  payrollManagerReduxState,
+} from "../../actions/payroll/payroll.actions";
 import {
   CustomButton,
   CustomCol,
@@ -40,9 +43,7 @@ import CustomPopConfirm from "../../common/components/CustomPopConfirm";
 import CustomSpin from "../../common/components/CustomSpin";
 import { PropsType } from "../../common/types/modal.type";
 import { addPropertyKey, getSessionInfo } from "../../common/utils";
-import {
-  validateMessages,
-} from "../../common/utils/forms/validations";
+import { validateMessages } from "../../common/utils/forms/validations";
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
 import { state } from "../../common/utils/table/transform.utils";
 import { RootState } from "../../reducers/root_reducers";
@@ -65,7 +66,7 @@ const formItemLayout = {
     xl: { span: 16 },
     xxl: { span: 16 },
   },
-}
+};
 const CreatEditPayroll = ({
   visible,
   width,
@@ -76,34 +77,32 @@ const CreatEditPayroll = ({
   const { createPayrollIsLoading, isPayrollCreated } = useSelector(
     (state: RootState) => state.payroll
   );
-  const [deparmentsSelected, setDeparmentSelected]=useState<DepartmentType[]>([])
-  const { departmentsNotInPayroll, getDepartmentNotInPayrollIsLoading } = useSelector(
-    (state: RootState) => state.departments
+  const [deparmentsSelected, setDeparmentSelected] = useState<DepartmentType[]>(
+    []
   );
+  const { departmentsNotInPayroll, getDepartmentNotInPayrollIsLoading } =
+    useSelector((state: RootState) => state.departments);
   const columns = [
     {
       key: 4,
       title: "id",
-      dataIndex: "id",    width: '25%',
-
+      dataIndex: "id",
+      width: "25%",
     },
     {
       title: "Name",
-      dataIndex: "name",    width: '25%',
-
+      dataIndex: "name",
+      width: "25%",
     },
     {
       title: "Estado",
-      dataIndex: "status",    width: '25%',
+      dataIndex: "status",
+      width: "25%",
 
       render: (value: string) => state[value],
     },
     {
-      title: (
-        
-            <CustomText>Operaciones</CustomText>
-         
-      ),
+      title: <CustomText>Operaciones</CustomText>,
       ellipsis: true,
       width: "25%",
       render: (record: DepartmentType) => {
@@ -114,7 +113,10 @@ const CreatEditPayroll = ({
               <CustomPopConfirm
                 title={"Quitar de la Nomina?"}
                 onConfirm={() => {
- setDeparmentSelected(deparmentsSelected.filter((dep)=> dep.id !== record.id))                }}
+                  setDeparmentSelected(
+                    deparmentsSelected.filter((dep) => dep.id !== record.id)
+                  );
+                }}
               >
                 <CustomTooltip placement={"bottom"} title={"Editar"}>
                   <CustomButton
@@ -125,10 +127,10 @@ const CreatEditPayroll = ({
               </CustomPopConfirm>
             </CustomCol>
           </CustomRow>
-        )
+        );
       },
     },
-  ]
+  ];
   const cancelPayment = () => {
     CustomModalConfirmation({
       content: "¿Seguro que desea cancelar la operación?",
@@ -140,11 +142,20 @@ const CreatEditPayroll = ({
   const handleSubmit = async () => {
     const data = await form.validateFields().catch((e) => e);
     if (!Object.getOwnPropertyDescriptor(data, "errorFields")) {
-      dispatch(createPayroll({ ...data, company_id: getSessionInfo().businessId, status: "A",  type: "F",   user_insert: getSessionInfo().username, deparments: deparmentsSelected}));
+      dispatch(
+        createPayroll({
+          ...data,
+          company_id: getSessionInfo().businessId,
+          status: "A",
+          type: "F",
+          user_insert: getSessionInfo().username,
+          deparments: deparmentsSelected,
+        })
+      );
     }
   };
   useEffect(() => {
-    visible&&dispatch(getDeparmentNotInPayroll({}));
+    visible && dispatch(getDeparmentNotInPayroll({}));
   }, [visible]);
   useEffect(() => {
     if (isPayrollCreated) {
@@ -176,80 +187,82 @@ const CreatEditPayroll = ({
         >
           <CustomSpin spinning={createPayrollIsLoading}>
             <CustomRow gutter={[5, 5]} justify={"space-around"} align="top">
-         
-              <CustomCol span={12} >
-              <CustomCol xs={24}>
-                <CustomFormItem
-                  rules={[{ required: true }]}
-                  name={"name"}
-                  label={"Name"}
-                  required
-                >
-                  <CustomInput placeholder={"Escriba el nombre"} />
-                </CustomFormItem>
-              </CustomCol>
-              <CustomCol xs={24}>
-                <CustomFormItem
-                  rules={[{ required: true }]}
-                  name={"bank_account"}
-                  label={"Debitado de"}
-                  required
-                >
-                  <CustomSelect
-                  style={{ width: "100%" }}
-                    placeholder={"Seleccione Cuenta predeterminada"}
+              <CustomCol span={12}>
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    rules={[{ required: true }]}
+                    name={"name"}
+                    label={"Name"}
+                    required
                   >
-                    <Option value={1}>Activo</Option>
-                    <Option value={2}>Inactivo</Option>
-                  </CustomSelect>
-                </CustomFormItem>
-              </CustomCol>
-              
-             
+                    <CustomInput placeholder={"Escriba el nombre"} />
+                  </CustomFormItem>
+                </CustomCol>
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    rules={[{ required: true }]}
+                    name={"bank_account"}
+                    label={"Debitado de"}
+                    required
+                  >
+                    <CustomSelect
+                      style={{ width: "100%" }}
+                      placeholder={"Seleccione Cuenta predeterminada"}
+                    >
+                      <Option value={1}>Activo</Option>
+                      <Option value={2}>Inactivo</Option>
+                    </CustomSelect>
+                  </CustomFormItem>
+                </CustomCol>
 
-              <CustomCol xs={24}>
-                <CustomFormItem
-                 required
-                 rules={[{ required: true }]}
-                  name={"description"}
-                  label={"Descripcion"}
-                >
-                  <CustomTextArea
-                    placeholder={"Escriba una descripcion de la nomina"}
-                  />
-                </CustomFormItem>
-              </CustomCol>
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    required
+                    rules={[{ required: true }]}
+                    name={"description"}
+                    label={"Descripcion"}
+                  >
+                    <CustomTextArea
+                      placeholder={"Escriba una descripcion de la nomina"}
+                    />
+                  </CustomFormItem>
+                </CustomCol>
               </CustomCol>
               <CustomCol span={12}>
-                 <CustomCol xs={24}>
-                <CustomFormItem
-                  required
-                  rules={[{ required: true }]}
-                  label={"Departamento"}
-                >
-                  <CustomSelect
-                  style={{ width: "100%" }}
-                    loading={getDepartmentNotInPayrollIsLoading}
-                    placeholder={"Seleccione el departamento"}
-                    onSelect={(_: any, e: Record<string, DepartmentType>) => {                      
-                      setDeparmentSelected(
-                        [...deparmentsSelected,(e )?.data ]
-                      )
-                      
-                    }}
+                <CustomCol xs={24}>
+                  <CustomFormItem
+                    required
+                    rules={[{ required: true }]}
+                    label={"Departamento"}
                   >
-                    {(departmentsNotInPayroll.filter((dep)=> deparmentsSelected.every((item)=> item.id != dep.id) ) || []).map((dep: DepartmentType, ind) => (
-                      <Option key={`${ind}`} value={dep.id} data={dep}>
-                        {dep.name}
-                      </Option>
-                    ))}
-                  </CustomSelect>
-                </CustomFormItem>
-              </CustomCol>
-              <CustomCol xs={24}>
-
-                <CustomTable pagination={false} columns={columns} dataSource={addPropertyKey(deparmentsSelected)} scroll={{y: 200, x:200}}/>
-              </CustomCol>
+                    <CustomSelect
+                      style={{ width: "100%" }}
+                      loading={getDepartmentNotInPayrollIsLoading}
+                      placeholder={"Seleccione el departamento"}
+                      onSelect={(_: any, e: Record<string, DepartmentType>) => {
+                        setDeparmentSelected([...deparmentsSelected, e?.data]);
+                      }}
+                    >
+                      {(
+                        departmentsNotInPayroll.filter((dep) =>
+                          deparmentsSelected.every((item) => item.id != dep.id)
+                        ) || []
+                      ).map((dep: DepartmentType, ind) => (
+                        <Option key={`${ind}`} value={dep.id} data={dep}>
+                          {dep.name}
+                        </Option>
+                      ))}
+                    </CustomSelect>
+                  </CustomFormItem>
+                </CustomCol>
+                <CustomCol xs={24}>
+                  <CustomTable
+                    pagination={false}
+                    columns={columns}
+                    dataSource={addPropertyKey(deparmentsSelected)}
+                    scroll={{ y: 200, x: 200 }}
+                  />
+                </CustomCol>
               </CustomCol>
             </CustomRow>
           </CustomSpin>

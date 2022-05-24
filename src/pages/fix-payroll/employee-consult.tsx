@@ -59,45 +59,7 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
       dataIndex: "status",
       render: (value: string) => state[value],
     },
-    {
-      title: "Operaciones",
-      width: "15%",
-      render: () => {
-        return (
-          <CustomRow justify={"center"}>
-            <CustomCol xs={4}>
-              {" "}
-              <CustomPopConfirm
-                title={"Editar"}
-                onConfirm={() => {
-                  // dispatch(disableShift(record.IDAPERTURATURNO))
-                }}
-              >
-                <CustomTooltip placement={"bottom"} title={"Editar"}>
-                  <CustomButton type={"link"} icon={<EditTwoTone />} />
-                </CustomTooltip>
-              </CustomPopConfirm>
-            </CustomCol>
-            <CustomCol xs={4}>
-              {" "}
-              <CustomPopConfirm
-                title={"¿Eliminar turno?"}
-                onConfirm={() => {
-                  // dispatch(disableShift(record.IDAPERTURATURNO))
-                }}
-              >
-                <CustomTooltip placement={"bottom"} title={"Editar"}>
-                  <CustomButton
-                    type={"link"}
-                    icon={<DeleteTwoTone twoToneColor={"red"} />}
-                  />
-                </CustomTooltip>
-              </CustomPopConfirm>
-            </CustomCol>
-          </CustomRow>
-        );
-      },
-    },
+
   ];
   useEffect(() => {
     const searchConditions = [
