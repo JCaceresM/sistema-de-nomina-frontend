@@ -18,23 +18,66 @@ import {
 } from "../../constants/payroll-record/payroll-record.constants";
 import { PayrollRecordState } from "../../reducers/payroll-record/payroll-record.reducer";
 
-import { PayrollNewsType } from "../payroll-news/payroll-news.actions";
 
 export type PayrollRecordType = {
-  id: number;
-  company_id: number;
-  name: string;
-  type: string;
-  description: string;
-  status: string;
-  updated_at: string;
-  created_at: string;
-  user_update: string;
-  user_insert: string;
-  bank_account_id: number;
-  department_id: number;
-  payroll_news: PayrollNewsType[];
+  
+    id: number
+    company_id: number
+    name: string
+    type: string
+    registered_at: Date
+    description: string
+    status: string
+    updated_at: Date
+    created_at: Date
+    user_update: string
+    user_insert:string
+    payroll_id: number
+    payroll_record_detail: PayrollRecordDetailType[
+      
+      
+   
+    ],
+  
 };
+export type PayrollRecordDetailType = {
+
+    id: number
+    updated_at: Date
+    created_at: Date
+    user_update: string
+    user_insert: string
+    voucher: number,
+    salary:number
+    payroll_record_id: number
+    employee_id: number
+    payroll_news_record: payrolNewsRecord[
+
+    ],
+    first_name: string
+    last_name: string
+    gender: string
+    payment_method: string
+    document_id: string
+    position_name: string
+  
+}
+export type payrolNewsRecord={
+  id: number
+  updated_at: Date
+  created_at: Date
+  user_update: string
+  user_insert: string
+  amount: number
+  type: string
+  description:
+   string
+  name: string
+  operation: string
+  company_id: number
+  status: string
+  payroll_record_detail_id: number
+}
 // export type PayrollRecordExtendedType  = PayrollRecordType &{
 //   payroll_record_detail: PayrollRecordDetailType & { payroll_news_record: PayrollNewsType[] }[]
 // }
@@ -171,18 +214,18 @@ export type PayrollRecordAuthorizedAction = {
   type: typeof PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD;
   payroll_record_id: number;
   bank_account_id: number;
-  transaction_type: string
+  transaction_type: string;
 };
 
 export const payrollRecordAuthorized = (
   bank_account_id: number,
   payroll_record_id: number,
   transaction_type: string
-
 ): PayrollRecordAuthorizedAction => {
   return {
     bank_account_id,
-    payroll_record_id,transaction_type,
+    payroll_record_id,
+    transaction_type,
     type: PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD,
   };
 };

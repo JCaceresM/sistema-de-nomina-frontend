@@ -82,7 +82,7 @@ const FixPayrollCreatEditNews = ({
     });
   };
   const handleSubmit = async () => {
-    const data = await form.validateFields().catch((e) => e);
+    const data = await form.validateFields().catch((e: any) => e);
     // eslint-disable-next-line no-console
     console.log(data);
 
@@ -142,7 +142,7 @@ const FixPayrollCreatEditNews = ({
                   label={`${type}`}
                 >
                   <CustomSelect
-                    onChange={(value) => {
+                    onChange={(value: any) => {
                       setNewsName(`${value}`);
                     }}
                     placeholder={`Seleccione el tipo de ${type}`}
@@ -162,7 +162,7 @@ const FixPayrollCreatEditNews = ({
                 </CustomFormItem>
               </CustomCol>
 
-              {newsName === `Escriba ${type}` ? (
+              {newsName === `Escriba ${type}` ?? (
                 <CustomCol xs={12}>
                   <CustomFormItem
                     rules={[{ required: true }]}
@@ -173,9 +173,7 @@ const FixPayrollCreatEditNews = ({
                     <CustomInput></CustomInput>
                   </CustomFormItem>
                 </CustomCol>
-              ) : (
-                <p />
-              )}
+              ) }
 
               <CustomCol xs={12}>
                 <CustomFormItem

@@ -8,6 +8,7 @@ import {
 import {
   CustomButton,
   CustomCol,
+  CustomFormItem,
   CustomModal,
   CustomRow,
   CustomTable,
@@ -19,7 +20,7 @@ import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow
 import { addPropertyKey } from "../../common/utils";
 import { state } from "../../common/utils/table/transform.utils";
 import { RootState } from "../../reducers/root_reducers";
-import { EyeTwoTone , PrinterTwoTone} from "@ant-design/icons";
+import { EyeTwoTone, PrinterTwoTone } from "@ant-design/icons";
 import { PropsType } from "../../common/types/modal.type";
 import {
   employeeManagerReduxState,
@@ -40,19 +41,18 @@ import HtmlToPrint from "../../common/components/HtmlToPrint";
 import { useLocation, useNavigate } from "react-router-dom";
 const Consulting = (): ReactElement => {
   const dispatch = useDispatch();
-  const { payroll } = useSelector((state: RootState) => state.payroll);
   const [visible, setVisible] = useState(false);
-  const location = useLocation()
-  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
+  const location = useLocation();
+  const locationState = { ...(location.state as Record<string, string>) } as {
+    [key: string]: any;
+  };
   const [payrollSelected, setPayrollSelected] = useState<Record<string, any>>(
     {}
   );
-  
+
   const {
     payrollRecord,
-    isPayrollRecordUpdated,
-    paymentIsComplete,
-    paymentIsLoading,
+
   } = useSelector((state: RootState) => state.payrollRecord);
   const hideModal = () => {
     setVisible(false);
@@ -154,13 +154,19 @@ const Consulting = (): ReactElement => {
 const ViewModal = ({
   visible,
   hideModal,
-  payrollSelected, dataView,
-}: PropsType & { payrollSelected: Record<string, any>, dataView:  Record<string, any> }): ReactElement => {
+  payrollSelected,
+  dataView,
+}: PropsType & {
+  payrollSelected: Record<string, any>;
+  dataView: Record<string, any>;
+}): ReactElement => {
   const dispatch = useDispatch();
- 
-  const location = useLocation()
-  const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
-  const [printIsVisible, setPrintiIsVisible] = useState(false);
+
+  const location = useLocation();
+  const locationState = { ...(location.state as Record<string, string>) } as {
+    [key: string]: any;
+  };
+  const [printIsVisible, setPrintIsVisible] = useState(false);
   const [employeeSelected, setEmployee] = useState<Record<string, any>>({});
   const viewColumns: ColumnsType<any> = [
     {
@@ -179,26 +185,24 @@ const ViewModal = ({
       render: (record) => {
         return (
           <CustomRow justify={"center"}>
-    
             <CustomCol xs={4}>
-           
-                <CustomTooltip placement={"bottom"} title={"Editar"}>
-                  <CustomButton
-                    type={"link"}
-                    icon={<PrinterTwoTone />}
-                    onClick={()=> {
-                      setEmployee(record)
-                      setPrintiIsVisible(true)}}
-                  />
-                </CustomTooltip>
+              <CustomTooltip placement={"bottom"} title={"Editar"}>
+                <CustomButton
+                  type={"link"}
+                  icon={<PrinterTwoTone />}
+                  onClick={() => {
+                    setEmployee(record);
+                    setPrintIsVisible(true);
+                  }}
+                />
+              </CustomTooltip>
             </CustomCol>
           </CustomRow>
         );
       },
     },
-
   ];
-  
+
   const beforeHideModal = () => {
     hideModal();
     dispatch(employeeManagerReduxState({ employees: [] }));
@@ -216,7 +220,7 @@ const ViewModal = ({
           {
             field: "type",
             operator: "=",
-            condition: locationState.type
+            condition: locationState.type,
           },
         ])
       );
@@ -227,7 +231,7 @@ const ViewModal = ({
             {
               field: "type",
               operator: "=",
-              condition: locationState.type
+              condition: locationState.type,
             },
             {
               field: "payroll_id",
@@ -250,27 +254,45 @@ const ViewModal = ({
     >
       <CustomRow gutter={[5, 5]}>
         <CustomCol xs={24}>
+          <CustomFormItem label="Imprimir todo">
+              <CustomTooltip placement={"bottom"} title={"Editar"}>
+                <CustomButton
+                  type={"link"}
+                  icon={<PrinterTwoTone />}
+                  onClick={() => {
+                    setEmployee( payrollSelected.payroll_record_detail || []);
+                    setPrintIsVisible(true);
+                  }}
+                />
+              </CustomTooltip>
+              </CustomFormItem>
+        </CustomCol>
+        <CustomCol xs={24}>
           <CustomTable
-            dataSource={addPropertyKey(payrollSelected.payroll_record_detail||[])}
+            dataSource={addPropertyKey(
+              payrollSelected.payroll_record_detail || []
+            )}
             columns={viewColumns}
             pagination={false}
             scroll={{ y: 400 }}
           />
         </CustomCol>
         <CustomCol xs={24}>
-        <CustomModal
-      title={"Visualizacion de recibo"}
-      visible={printIsVisible}
-      width={"40%"}
-      onCancel={()=>setPrintiIsVisible(false)}
-      cancelText
-      onOk={()=>setPrintiIsVisible(false)}
-    >
-      <CustomRow gutter={[5, 5]}>
-        <CustomCol xs={24}>          <HtmlToPrint data={employeeSelected}/>
-</CustomCol>
-      </CustomRow>
-    </CustomModal>
+          <CustomModal
+            title={"Visualizacion de recibo"}
+            visible={printIsVisible}
+            width={"40%"}
+            onCancel={() => setPrintIsVisible(false)}
+            cancelText
+            onOk={() => setPrintIsVisible(false)}
+          >
+            <CustomRow gutter={[5, 5]}>
+              <CustomCol xs={24}>
+                {" "}
+                <HtmlToPrint data={employeeSelected} />
+              </CustomCol>
+            </CustomRow>
+          </CustomModal>
         </CustomCol>
       </CustomRow>
     </CustomModal>

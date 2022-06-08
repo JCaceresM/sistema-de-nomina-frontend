@@ -64,11 +64,13 @@ const PrintComponentGeneral: React.FC<{}> = ({ children }) => {
     <CustomSpin spinning={loading}
      
     >
+       
+      <CustomButton onClick={handlePrint}>Imprimir</CustomButton>
+      <CustomDivider></CustomDivider>
       <div
       
       ref={componentRef}>{children}</div>
-      <CustomDivider></CustomDivider>
-      <CustomButton onClick={handlePrint}>Imprimir</CustomButton>
+     
     </CustomSpin>
   );
 };

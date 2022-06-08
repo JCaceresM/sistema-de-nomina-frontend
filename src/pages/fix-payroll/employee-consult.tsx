@@ -27,13 +27,11 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
   const dispatch = useDispatch();
   const location = useLocation()
   const locationState = {...location.state as Record<string, string>} as {[key:string]: any}
-  const [createEditIsVisible, setCreateEditIsVisible] = useState(false);
   const {
     employees,
     employeesMetadata,
     getEmployeesIsLoading: isLoading,
   } = useSelector((state: RootState) => state.employee);
-  const { payroll } = useSelector((state: RootState) => state.payroll);
 
   const columns = [
     {
@@ -74,9 +72,7 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
     );
   }, [location]);
 
-  const hideCreateEditModal = () => {
-    setCreateEditIsVisible(false);
-  };
+ 
   const Title = () => {
     return (
       <CustomRow>

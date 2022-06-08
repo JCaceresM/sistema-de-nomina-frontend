@@ -22,7 +22,7 @@ export const getDateAsSpanishShortDate = (
   dateAsString = 'notSet',
   country = 'es-ES',
 ): DateType => {
-  try {
+ 
     const data = (
       dateAsString === 'notSet' ? new Date() : new Date(dateAsString)
     ).toLocaleDateString(country, {
@@ -39,15 +39,13 @@ export const getDateAsSpanishShortDate = (
       date: date.replace(/[/]/g, '-').replace(',', ''),
       hour: `${hour} ${Periods}`,
     };
-  } catch (error) {
-    throw error;
-  }
+ 
 };
 type SpanishLongDateType = {
   dateString?: string | Date;
   language?: string;
 };
-export function getDateAsSpanishLongDate({
+export function getDateAsSpanishLongDate ({
   dateString = 'currentDate',
   language = 'es-ES',
 }: SpanishLongDateType): string {

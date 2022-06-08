@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck - may need to be at the start of file
 import React from 'react'
 import DatePicker, { DatePickerProps } from 'antd/lib/date-picker'
 import localeProp from 'antd/es/date-picker/locale/es_ES'

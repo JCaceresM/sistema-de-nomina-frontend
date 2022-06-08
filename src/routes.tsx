@@ -16,6 +16,8 @@ import {
   PATH_PAYROLL_CHECK_REGISTER,
   PATH_PAYROLL_CREATE,
   PATH_PAYROLL_NEWS,
+  PATH_REPORTS_EMPLOYEES,
+  PATH_REPORTS_PAYROLL,
   PATH_REVERT,
 } from "./common/constants/web-site-route.constants"
 import CompanyLogo from "./common/components/CompanyLogo"
@@ -33,6 +35,8 @@ import FixPayrollNews from "./pages/fix-payroll/fixed-payroll-news"
 import FixPayrollDiscount from "./pages/fix-payroll/fix-payroll-discount"
 import FixedPayrollRevert from "./pages/fix-payroll/fixed-payroll-revert"
 import FixPayrollEmployeeConsulting from "./pages/fix-payroll/employee-consult"
+import ReportsPayroll from "./pages/reports/reports-payroll"
+import ReportsEmployees from "./pages/reports/reports-employee"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>
@@ -148,6 +152,22 @@ const WebSiteRoutes = (): ReactElement => {
             element={
               <ProtectedRoutesWrapper>
                 <Payroll />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_REPORTS_PAYROLL}
+            element={
+              <ProtectedRoutesWrapper>
+                <ReportsPayroll />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_REPORTS_EMPLOYEES}
+            element={
+              <ProtectedRoutesWrapper>
+                <ReportsEmployees />
               </ProtectedRoutesWrapper>
             }
           />
