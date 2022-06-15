@@ -5,6 +5,9 @@ import {
   PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD,
   PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE,
   PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_SUCCESS,
+  PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD,
+  PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_FAILURE,
+  PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_SUCCESS,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_FAILURE,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_SUCCESS,
@@ -18,66 +21,54 @@ import {
 } from "../../constants/payroll-record/payroll-record.constants";
 import { PayrollRecordState } from "../../reducers/payroll-record/payroll-record.reducer";
 
-
 export type PayrollRecordType = {
-  
-    id: number
-    company_id: number
-    name: string
-    type: string
-    registered_at: Date
-    description: string
-    status: string
-    updated_at: Date
-    created_at: Date
-    user_update: string
-    user_insert:string
-    payroll_id: number
-    payroll_record_detail: PayrollRecordDetailType[
-      
-      
-   
-    ],
-  
+  id: number;
+  company_id: number;
+  name: string;
+  type: string;
+  registered_at: Date;
+  description: string;
+  status: string;
+  updated_at: Date;
+  created_at: Date;
+  user_update: string;
+  user_insert: string;
+  payroll_id: number;
+  payroll_record_detail: PayrollRecordDetailType[];
 };
 export type PayrollRecordDetailType = {
-
-    id: number
-    updated_at: Date
-    created_at: Date
-    user_update: string
-    user_insert: string
-    voucher: number,
-    salary:number
-    payroll_record_id: number
-    employee_id: number
-    payroll_news_record: payrolNewsRecord[
-
-    ],
-    first_name: string
-    last_name: string
-    gender: string
-    payment_method: string
-    document_id: string
-    position_name: string
-  
-}
-export type payrolNewsRecord={
-  id: number
-  updated_at: Date
-  created_at: Date
-  user_update: string
-  user_insert: string
-  amount: number
-  type: string
-  description:
-   string
-  name: string
-  operation: string
-  company_id: number
-  status: string
-  payroll_record_detail_id: number
-}
+  id: number;
+  updated_at: Date;
+  created_at: Date;
+  user_update: string;
+  user_insert: string;
+  voucher: number;
+  salary: number;
+  payroll_record_id: number;
+  employee_id: number;
+  payroll_news_record: payrolNewsRecord[];
+  first_name: string;
+  last_name: string;
+  gender: string;
+  payment_method: string;
+  document_id: string;
+  position_name: string;
+};
+export type payrolNewsRecord = {
+  id: number;
+  updated_at: Date;
+  created_at: Date;
+  user_update: string;
+  user_insert: string;
+  amount: number;
+  type: string;
+  description: string;
+  name: string;
+  operation: string;
+  company_id: number;
+  status: string;
+  payroll_record_detail_id: number;
+};
 // export type PayrollRecordExtendedType  = PayrollRecordType &{
 //   payroll_record_detail: PayrollRecordDetailType & { payroll_news_record: PayrollNewsType[] }[]
 // }
@@ -169,6 +160,44 @@ export const createPayrollRecordFailure =
   (): CreatePayrollRecordFailureAction => {
     return {
       type: PAYROLL_RECORD_CREATE_PAYROLL_RECORD_FAILURE,
+    };
+  };
+export type CreatePayrollLawBonusRecordAction = {
+  type: typeof PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD;
+  PayrollRecord: any;
+};
+
+export const createPayrollLawBonusRecord = (
+  PayrollRecord: any
+): CreatePayrollLawBonusRecordAction => {
+  return {
+    PayrollRecord,
+    type: PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD,
+  };
+};
+
+type CreatePayrollLawBonusRecordSuccessAction = {
+  type: typeof PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_SUCCESS;
+  createdPayrollRecord: any;
+};
+
+export const createPayrollLawBonusRecordSuccess = (
+  createdPayrollRecord: any
+): CreatePayrollLawBonusRecordSuccessAction => {
+  return {
+    type: PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_SUCCESS,
+    createdPayrollRecord,
+  };
+};
+
+type CreatePayrollLawBonusRecordFailureAction = {
+  type: typeof PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_FAILURE;
+};
+
+export const createPayrollLawBonusRecordFailure =
+  (): CreatePayrollLawBonusRecordFailureAction => {
+    return {
+      type: PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_FAILURE,
     };
   };
 // ---------------------------update-------------------------------------
@@ -265,4 +294,7 @@ export type PayrollRecordActions =
   | PayrollRecordManagerReduxStateAction
   | UpdatePayrollRecordAction
   | UpdatePayrollRecordSuccessAction
-  | UpdatePayrollRecordFailureAction;
+  | UpdatePayrollRecordFailureAction
+  | CreatePayrollLawBonusRecordAction
+  | CreatePayrollLawBonusRecordSuccessAction
+  | CreatePayrollLawBonusRecordFailureAction;

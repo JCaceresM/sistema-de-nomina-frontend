@@ -175,7 +175,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
       title: "Sueldo Neto",
       dataIndex: "position",
       render: (_: number, record: EmployeeType) =>
-        currencyLocale(netEarnings(record, payrollDiscounts)),
+        currencyLocale(netEarnings(record, payrollDiscounts, true)),
       ellipsis: true,
       align: "right",
     },

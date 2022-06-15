@@ -15,6 +15,7 @@ import {
 import {
   watchCreateEmployee,
   watchGetEmployee,
+  watchGetEmployeeLawBonus,
   watchUpdateEmployee,
 } from "./employee/employee.sagas";
 import { watchLocalState } from "./local/localState.sagas";
@@ -30,6 +31,7 @@ import {
   watchCreatePayrollRecord,
   watchGetAllPayrollRecord,
   watchPayrollRecordAuthorized,
+  watchPayrollRecordLawBonus,
   watchUpdatePayrollRecord,
 } from "./payroll-record/payroll.sagas";
 import {
@@ -83,6 +85,6 @@ export default function* rootSaga (): Generator {
     watchGetDepartmentEmployees(),
     watchGetDepartmentsNotInPayroll(),
     watchGetDepartmentsInPayroll(),
-    watchDeleteDepartmentsInPayroll(),
+    watchDeleteDepartmentsInPayroll(),watchGetEmployeeLawBonus(),watchPayrollRecordLawBonus(), 
   ]);
 }

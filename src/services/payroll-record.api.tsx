@@ -24,6 +24,11 @@ const createPayrollRecord = (
 ): Promise<AxiosResponse<PayrollType>> => {
   return postRequest(WEB_SERVICE_API_PAYROLL_RECORD_CREATE, creatData);
 };
+const createPayrollRecordLawBonus = (
+  creatData: PayrollRecordType
+): Promise<AxiosResponse<PayrollType>> => {
+  return postRequest(`${WEB_SERVICE_API_PAYROLL_RECORD_CREATE}/law-bonus-done`, creatData);
+};
 const updatePayrollRecord = (
   id: number,
   creatData: PayrollRecordType
@@ -49,5 +54,5 @@ export const PayrollRecordApiRequest = {
   getPayrollRecord,
   createPayrollRecord,
   updatePayrollRecord,
-   payrollRecordAuthorize,
+   payrollRecordAuthorize,createPayrollRecordLawBonus
 };

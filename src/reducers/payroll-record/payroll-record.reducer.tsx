@@ -2,6 +2,9 @@ import {
   PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD,
   PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_FAILURE,
   PAYROLL_RECORD_AUTHORIZED_PAYROLL_RECORD_SUCCESS,
+  PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD,
+  PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_FAILURE,
+  PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_SUCCESS,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_FAILURE,
   PAYROLL_RECORD_CREATE_PAYROLL_RECORD_SUCCESS,
@@ -26,13 +29,17 @@ export type PayrollRecordState = {
   isPayrollRecordCreated: boolean;
   isPayrollRecordUpdated: boolean;
   paymentIsLoading: boolean;
+  isPayrollRecordLawBonusCreated: boolean;
   paymentIsComplete: boolean;
   payrollRecord: PayrollRecordType[];
+  payrollRecordLawBonus: Record<string,any>;
+  payrollRecordCreated: PayrollRecordType[];
   payrollRecordUpdated: PayrollRecordType[];
   payrollRecordMetadata: ResponseMetadata;
 };
 
 const initialState = {
+  isPayrollRecordLawBonusCreated: false,
   getPayrollRecordIsLoading: false,
   paymentIsComplete: false,
   paymentIsLoading: false,
@@ -40,6 +47,8 @@ const initialState = {
   createPayrollRecordIsLoading: false,
   isPayrollRecordUpdated: false,
   payrollRecord: new Array<PayrollRecordType>(),
+  payrollRecordLawBonus: {},
+  payrollRecordCreated: new Array<PayrollRecordType>(),
   payrollRecordUpdated: new Array<PayrollRecordType>(),
   payrollRecordMetadata: {} as ResponseMetadata,
 };
@@ -76,11 +85,22 @@ const payrollRecord = (
         createPayrollRecordIsLoading: false,
       };
     case PAYROLL_RECORD_CREATE_PAYROLL_RECORD_SUCCESS:
+    case PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD:
       return {
         ...state,
-        payrollRecord: [...state.payrollRecord, action.createdPayrollRecord],
+        getPayrollRecordIsLoading: true,
+      };
+    case PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_FAILURE:
+      return {
+        ...state,
         createPayrollRecordIsLoading: false,
-        isPayrollRecordCreated: true,
+      };
+    case PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD_SUCCESS:
+      return {
+        ...state,
+        payrollRecordLawBonus: action.createdPayrollRecord,
+        createPayrollRecordIsLoading: false,
+        isPayrollRecordLawBonusCreated: true,
       };
     case PAYROLL_RECORD_MANAGER_REDUX_STATE_PAYROLL_RECORD:
       return {

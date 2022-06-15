@@ -32,6 +32,11 @@ const createEmployee = (
 ): Promise<AxiosResponse<EmployeeType>> => {
   return postRequest(WEB_SERVICE_API_EMPLOYEE_CREATE, create)
 }
+const getEmployeesLawBonus = (
+  searchConditions: SelectConditionType[]
+): Promise<AxiosResponse<EmployeeType>> => {
+  return postRequest(`${WEB_SERVICE_API_EMPLOYEE_CREATE}/law-bonus`, {searchConditions})
+}
 const updateEmployee = (
   id: number,
   data: Partial<EmployeeType>
@@ -42,5 +47,6 @@ const updateEmployee = (
 export const EmployeeApiRequest = {
   getEmployees,
   createEmployee,
-  updateEmployee
+  updateEmployee,
+  getEmployeesLawBonus
 }

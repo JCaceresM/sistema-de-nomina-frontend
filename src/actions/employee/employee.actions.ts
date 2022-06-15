@@ -9,13 +9,16 @@ import {
   EMPLOYEE_CREATE_EMPLOYEE_SUCCESS,
   EMPLOYEE_GET_EMPLOYEE,
   EMPLOYEE_GET_EMPLOYEE_FAILURE,
+  EMPLOYEE_GET_EMPLOYEE_LAW_BONUS,
+  EMPLOYEE_GET_EMPLOYEE_LAW_BONUS_FAILURE,
+  EMPLOYEE_GET_EMPLOYEE_LAW_BONUS_SUCCESS,
   EMPLOYEE_GET_EMPLOYEE_SUCCESS,
   EMPLOYEE_MANAGER_REDUX_STATE_EMPLOYEE,
   EMPLOYEE_UPDATE_EMPLOYEE,
   EMPLOYEE_UPDATE_EMPLOYEE_FAILURE,
   EMPLOYEE_UPDATE_EMPLOYEE_SUCCESS,
 } from "../../constants/employee/employee.constants";
-import { EmployeeState } from "../../reducers/employee/employee.reducer";
+import { EmployeeState, LawBonusType } from "../../reducers/employee/employee.reducer";
 import { PayrollNewsType } from "../payroll-news/payroll-news.actions";
 export type EmployeeType = {
   age: number;
@@ -113,6 +116,45 @@ export const getEmployeeFailure = (): GetEmployeeFailureAction => {
     type: EMPLOYEE_GET_EMPLOYEE_FAILURE,
   };
 };
+// -------------------------------------------------------
+export type GetEmployeeLawBonusAction = {
+  type: typeof EMPLOYEE_GET_EMPLOYEE_LAW_BONUS;
+  searchConditions?: SelectConditionType[];
+};
+
+export const getEmployeeLawBonus = ({
+  searchConditions = [],
+}: {
+  searchConditions?: SelectConditionType[];
+}): GetEmployeeLawBonusAction => {
+  return {
+    type: EMPLOYEE_GET_EMPLOYEE_LAW_BONUS,
+    searchConditions,
+  };
+};
+
+type GetEmployeeLawBonusSuccessAction = {
+  type: typeof EMPLOYEE_GET_EMPLOYEE_LAW_BONUS_SUCCESS;
+  data: LawBonusType[]
+};
+
+export const getEmployeeLawBonusSuccess = (
+  data: LawBonusType[]
+): GetEmployeeLawBonusSuccessAction => ({
+  type: EMPLOYEE_GET_EMPLOYEE_LAW_BONUS_SUCCESS,
+  data,
+});
+
+type GetEmployeeLawBonusFailureAction = {
+  type: typeof EMPLOYEE_GET_EMPLOYEE_LAW_BONUS_FAILURE;
+};
+
+export const getEmployeeLawBonusFailure =
+  (): GetEmployeeLawBonusFailureAction => {
+    return {
+      type: EMPLOYEE_GET_EMPLOYEE_LAW_BONUS_FAILURE,
+    };
+  };
 // -----------------create------------------------
 export type CreateEmployeeAction = {
   type: typeof EMPLOYEE_CREATE_EMPLOYEE;
@@ -198,4 +240,7 @@ export type EmployeeAction =
   | employeeManagerReduxStateAction
   | UpdateEmployeeAction
   | UpdateEmployeeSuccessAction
-  | UpdateEmployeeFailureAction;
+  | UpdateEmployeeFailureAction
+  | GetEmployeeLawBonusAction
+  | GetEmployeeLawBonusSuccessAction
+  | GetEmployeeLawBonusFailureAction;

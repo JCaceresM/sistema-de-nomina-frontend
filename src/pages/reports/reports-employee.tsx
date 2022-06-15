@@ -64,30 +64,7 @@ const ReportsEmployees = (): ReactElement => {
       dataIndex: "status",      render: (value: string) => state[value],
 
     },
-    // {
-    //   title: "Operaciones",
-    //   width: "15%",
-    //   render: (record: EmployeeType) => {
-    //     return (
-    //       <CustomRow justify={"center"}>
-    //         <CustomCol xs={4}>
-    //           {" "}
-    //           <CustomPopConfirm
-    //             title={"Editar"}
-    //             onConfirm={() => {
-    //               // dispatch(disableShift(record.IDAPERTURATURNO))
-    //             }}
-    //           >
-    //             <CustomTooltip placement={"bottom"} title={"Editar"}>
-    //               {/* <Download record={record} /> */}
-    //             </CustomTooltip>
-    //           </CustomPopConfirm>
-    //         </CustomCol>
-            
-    //       </CustomRow>
-    //     )
-    //   },
-    // },
+
   ]
   useEffect(() => {
  

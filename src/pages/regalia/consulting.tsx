@@ -39,15 +39,11 @@ import { ColumnsType } from "antd/lib/table";
 import PrintComponentGeneral from "../../common/components/PrintComponentGeneral";
 import HtmlToPrint from "../../common/components/HtmlToPrint";
 import { useLocation, useNavigate } from "react-router-dom";
-const Consulting = (): ReactElement => {
+const ConsultingEasterBonus = (): ReactElement => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
-  const location = useLocation();
-  const locationState = { ...(location.state as Record<string, string>) } as {
-    [key: string]: any;
-  };
-  const [payrollSelected, setPayrollSelected] = useState<Record<string, any>>(
-    {}
+  const [payrollSelected, setPayrollSelected] = useState<any>(
+    []
   );
 
   const {
@@ -70,7 +66,6 @@ const Consulting = (): ReactElement => {
     {
       title: "Cant. Emp.",
       render: (record: any)=>  record.payroll_record_detail.length
-
     },
 
     {
@@ -80,7 +75,6 @@ const Consulting = (): ReactElement => {
       },
       ellipsis: true,
     },
-
     {
       title: "Operaciones",
       render: (record: any) => {
@@ -107,10 +101,10 @@ const Consulting = (): ReactElement => {
     dispatch(
       getPayrollRecordCollection([
         { field: "status", operator: "=", condition: "AU" },
-        { field: "type", operator: "=", condition: locationState.type },
+        { field: "type", operator: "=", condition: "R" },
       ])
     );
-  }, [location]);
+  }, []);
 
   return (
     <CustomLayoutBoxShadow>
@@ -140,17 +134,12 @@ const ViewModal = ({
   visible,
   hideModal,
   payrollSelected,
-  dataView,
 }: PropsType & {
   payrollSelected: Record<string, any>;
   dataView: Record<string, any>;
 }): ReactElement => {
   const dispatch = useDispatch();
 
-  const location = useLocation();
-  const locationState = { ...(location.state as Record<string, string>) } as {
-    [key: string]: any;
-  };
   const [printIsVisible, setPrintIsVisible] = useState(false);
   const [employeeSelected, setEmployee] = useState<Record<string, any>>({});
   const viewColumns: ColumnsType<any> = [
@@ -193,41 +182,41 @@ const ViewModal = ({
     dispatch(employeeManagerReduxState({ employees: [] }));
     dispatch(payrollNewsManagerReduxState({ payrollNews: [] }));
   };
-  useEffect(() => {
-    if (payrollSelected.id && visible) {
-      dispatch(
-        getPayrollnewsCollection([
-          {
-            field: "payroll_id",
-            operator: "=",
-            condition: payrollSelected.id,
-          },
-          {
-            field: "type",
-            operator: "=",
-            condition: locationState.type,
-          },
-        ])
-      );
-      dispatch(
-        getEmployee({
-          pagination: { take: 10, skip: 0 },
-          searchConditions: [
-            {
-              field: "type",
-              operator: "=",
-              condition: locationState.type,
-            },
-            {
-              field: "payroll_id",
-              operator: "=",
-              condition: payrollSelected.id,
-            },
-          ],
-        })
-      );
-    }
-  }, [visible]);
+  // useEffect(() => {
+  //   if (payrollSelected.id && visible) {
+  //     dispatch(
+  //       getPayrollnewsCollection([
+  //         {
+  //           field: "payroll_id",
+  //           operator: "=",
+  //           condition: payrollSelected.id,
+  //         },
+  //         {
+  //           field: "type",
+  //           operator: "=",
+  //           condition: "R"
+  //         },
+  //       ])
+  //     );
+  //     dispatch(
+  //       getEmployee({
+  //         pagination: { take: 100, skip: 0 },
+  //         searchConditions: [
+  //           // {
+  //           //   field: "type",
+  //           //   operator: "=",
+  //           //   condition: ""
+  //           // },
+  //           {
+  //             field: "payroll_id",
+  //             operator: "=",
+  //             condition: payrollSelected.id,
+  //           },
+  //         ],
+  //       })
+  //     );
+  //   }
+  // }, [visible]);
   return (
     <CustomModal
       title={"Informacion de la nomina"}
@@ -247,6 +236,9 @@ const ViewModal = ({
                   onClick={() => {
                     setEmployee( payrollSelected.payroll_record_detail || []);
                     setPrintIsVisible(true);
+                    // eslint-disable-next-line no-console
+                    console.log(employeeSelected);
+                    
                   }}
                 />
               </CustomTooltip>
@@ -283,4 +275,4 @@ const ViewModal = ({
     </CustomModal>
   );
 };
-export default Consulting;
+export default ConsultingEasterBonus;

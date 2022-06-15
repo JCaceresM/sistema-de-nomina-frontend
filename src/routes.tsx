@@ -8,6 +8,8 @@ import {
   PATH_CONSULTING,
   PATH_DISCOUNT,
   PATH_EMPLOYEES,
+  PATH_ESTER_BONUS_EMPLOYEES,
+  PATH_ESTER_BONUS_PAYMENT,
   PATH_LOGIN,
   PATH_MAIN,
   PATH_PAYROLL,
@@ -37,6 +39,8 @@ import FixedPayrollRevert from "./pages/fix-payroll/fixed-payroll-revert"
 import FixPayrollEmployeeConsulting from "./pages/fix-payroll/employee-consult"
 import ReportsPayroll from "./pages/reports/reports-payroll"
 import ReportsEmployees from "./pages/reports/reports-employee"
+import EasterBonusPayment from "./pages/regalia/payment"
+import ConsultingEasterBonus from "./pages/regalia/consulting"
 const WebSiteRoutes = (): ReactElement => {
   return (
     <Router>
@@ -168,6 +172,22 @@ const WebSiteRoutes = (): ReactElement => {
             element={
               <ProtectedRoutesWrapper>
                 <ReportsEmployees />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_ESTER_BONUS_PAYMENT}
+            element={
+              <ProtectedRoutesWrapper>
+                <EasterBonusPayment />
+              </ProtectedRoutesWrapper>
+            }
+          />
+          <Route
+            path={PATH_ESTER_BONUS_EMPLOYEES}
+            element={
+              <ProtectedRoutesWrapper>
+                <ConsultingEasterBonus />
               </ProtectedRoutesWrapper>
             }
           />

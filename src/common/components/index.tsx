@@ -48,7 +48,6 @@ import {
 import CustomStep from './CustomStep'
 import CustomSteps from './CustomSteps'
 import CustomFormProvider from './CustomFormProvider'
-import CustomMaskedInput from './CustomMaskedInput'
 import CustomRangePicker from './CustomRangePicker'
 
 export {
@@ -100,6 +99,5 @@ export {
   SecondaryParagraph,
   CustomFormContainer,
  
-  CustomMaskedInput,
   CustomRangePicker,
 }
