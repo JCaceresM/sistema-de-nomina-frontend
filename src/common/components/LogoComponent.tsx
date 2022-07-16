@@ -2,7 +2,7 @@ import React from 'react'
 import { Image } from 'antd'
 import { ImageProps } from 'antd/lib/image'
 import { CustomRow } from '.'
-import logo from '../../assets/logo.jpeg'
+import logo from '../../assets/logo.jpg'
 
 
 

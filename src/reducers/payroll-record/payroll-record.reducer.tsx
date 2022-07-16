@@ -77,7 +77,7 @@ const payrollRecord = (
     case PAYROLL_RECORD_CREATE_PAYROLL_RECORD:
       return {
         ...state,
-        getPayrollRecordIsLoading: true,
+        createPayrollRecordIsLoading: true,
       };
     case PAYROLL_RECORD_CREATE_PAYROLL_RECORD_FAILURE:
       return {
@@ -85,6 +85,11 @@ const payrollRecord = (
         createPayrollRecordIsLoading: false,
       };
     case PAYROLL_RECORD_CREATE_PAYROLL_RECORD_SUCCESS:
+      return {
+        ...state,
+        createPayrollRecordIsLoading: false,
+        isPayrollRecordCreated: true,
+      };
     case PAYROLL_RECORD_CREATE_PAYROLL_LAW_BONUS_RECORD:
       return {
         ...state,

@@ -229,16 +229,14 @@ const ViewModal = ({
       <CustomRow gutter={[5, 5]}>
         <CustomCol xs={24}>
           <CustomFormItem label="Imprimir todo">
-              <CustomTooltip placement={"bottom"} title={"Editar"}>
+              <CustomTooltip placement={"bottom"} title={"Imprimir"}>
                 <CustomButton
                   type={"link"}
                   icon={<PrinterTwoTone />}
                   onClick={() => {
                     setEmployee( payrollSelected.payroll_record_detail || []);
                     setPrintIsVisible(true);
-                    // eslint-disable-next-line no-console
-                    console.log(employeeSelected);
-                    
+                                     
                   }}
                 />
               </CustomTooltip>

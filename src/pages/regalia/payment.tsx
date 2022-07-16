@@ -136,6 +136,9 @@ const EasterBonusPayment = (): ReactElement => {
     CustomModalConfirmation({
       type: "info",
       onOk: () => {
+        // eslint-disable-next-line no-console
+        console.log(payroll.length , employeesLawBonus.length);
+        
         if (payroll.length && employeesLawBonus.length) {
           const data = {
             description: payroll[0].description,

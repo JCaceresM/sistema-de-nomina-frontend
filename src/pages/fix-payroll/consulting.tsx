@@ -240,7 +240,7 @@ const ViewModal = ({
       <CustomRow gutter={[5, 5]}>
         <CustomCol xs={24}>
           <CustomFormItem label="Imprimir todo">
-              <CustomTooltip placement={"bottom"} title={"Editar"}>
+              <CustomTooltip placement={"bottom"} title={"Imprimir"}>
                 <CustomButton
                   type={"link"}
                   icon={<PrinterTwoTone />}
