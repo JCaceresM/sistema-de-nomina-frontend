@@ -263,7 +263,7 @@ const ApproveFixedPayroll = (): ReactElement => {
           <CustomModal
             title={"Visualizacion de recibo"}
             visible={printIsVisible}
-            width={"40%"}
+            width={"60%"}
             onCancel={() => setPrintIsVisible(false)}
             cancelText
             onOk={() => setPrintIsVisible(false)}

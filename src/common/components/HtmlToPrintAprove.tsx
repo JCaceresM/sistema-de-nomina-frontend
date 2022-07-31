@@ -111,7 +111,34 @@ const HtmlToPrintApprove = ({ data }: { data: any, }): React.ReactElement => {
 
       `;
     });
- 
+  content = content + `<div style="box-sizing: content-box; width: 100%;"><table style="width: 100%;" border="0" cellspacing="0" cellpadding="5">
+<tbody>
+<tr>
+<td style=" padding-top: 20px"><hr />
+<p style="text-align: center;">Encargado de Nomina</p>
+</td>
+<td style=" padding-top: 20px"><hr />
+<p style="text-align: center; padding: 0px;">Encargado de contabilidad</p>
+</td>
+<td style=" padding-top: 20px"><hr />
+<p style="text-align: center;">Contraloria Municipal</p>
+</td>
+</tr>
+<tr>
+<td style=" padding-top: 20px"><hr />
+<p style="margin-left: 0px; margin-right: 0px; text-align: center;">Gerente Financiero</p>
+</td>
+<td style=" padding-top: 20px"><hr />
+<p style="text-align: center;">Tesorero Municipal</p>
+</td>
+<td style=" padding-top: 20px"><hr />
+<p style="text-align: center;">Alcalde Municipal</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+`
   // eslint-disable-next-line no-console
   console.log(data);
 

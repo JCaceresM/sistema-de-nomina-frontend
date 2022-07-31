@@ -184,7 +184,9 @@ ${data?.payroll_news_record.reduce(
 </tr>
 </tbody>
 </table>
-<p style="text-align: left;">&nbsp;</p>`;
+<p style="text-align: left;">&nbsp;</p>
+
+`;
   }
 // eslint-disable-next-line no-console
 console.log(data);

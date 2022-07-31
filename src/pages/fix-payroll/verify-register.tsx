@@ -368,7 +368,7 @@ const VerifyRegisterFixedPayroll = (): React.ReactElement => {
           ...item,
           departmentName: deparmentEmployees[index].name,
         }));
-        setEmployeeToRegister(data);
+        setEmployeeToRegister(e=> [...e,...data]);
       }
       setIsPayrollSelected(false);
     }
