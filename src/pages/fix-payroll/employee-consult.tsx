@@ -68,7 +68,7 @@ const FixPayrollEmployeeConsulting = (): ReactElement => {
       },
     ];
     dispatch(
-      getEmployee({ searchConditions, pagination: { skip: 0, take: 100 } })
+      getEmployee({ searchConditions, pagination: { skip: 1, take: 100 } })
     );
   }, [location]);
 

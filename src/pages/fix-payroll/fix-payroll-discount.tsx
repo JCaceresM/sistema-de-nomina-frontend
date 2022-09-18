@@ -133,7 +133,7 @@ const FixPayrollDiscount = (): ReactElement => {
       },
     ];
     dispatch(
-      getEmployee({ searchConditions, pagination: { skip: 0, take: 150 } })
+      getEmployee({ searchConditions, pagination: { skip: 1, take: 150 } })
     );
   }, [location]);
 

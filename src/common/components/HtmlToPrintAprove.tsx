@@ -6,13 +6,20 @@ import PrintComponentGeneral from "./PrintComponentGeneral";
 
 const HtmlToPrintApprove = ({ data }: { data: any, }): React.ReactElement => {
   const record = data.payroll_record_detail || []
-  let content = `<h3 style="text-align:center">${data.name || '--'}</h3>
+  
+  const registered = new Intl.DateTimeFormat('es-ES', {month: 'long', year: 'numeric'}).format(new Date(data.registered_at))
+  // eslint-disable-next-line no-console
+  console.log("🚀 ~ file: HtmlToPrintAprove.tsx ~ line 9 ~ HtmlToPrintApprove ~ data", registered)
+  let content = `<p><strong>TESORERIA MUNICIPAL: Junta de distrito municipal de Don Juan Rodriguez<br /></strong>Listado de pago de persona <span style="text-decoration: underline;">Administrativo Municipal<br />Mes ${registered}</span></p>
+  <br/>
+  <h3 style="text-align:center">${data.name || '--'}</h3>
 
  
   `
   
   record.forEach((item: any) => {
       content += ` 
+      
       <table border="0" cellspacing="0" style="border-collapse:collapse; height:108px; width:100%">
         <tbody>
           <tr>
@@ -126,7 +133,7 @@ const HtmlToPrintApprove = ({ data }: { data: any, }): React.ReactElement => {
 </tr>
 <tr>
 <td style=" padding-top: 20px"><hr />
-<p style="margin-left: 0px; margin-right: 0px; text-align: center;">Gerente Financiero</p>
+<p style="margin-left: 0px; margin-right: 0px; text-align: center;">Gerente Financiero</p> 
 </td>
 <td style=" padding-top: 20px"><hr />
 <p style="text-align: center;">Tesorero Municipal</p>

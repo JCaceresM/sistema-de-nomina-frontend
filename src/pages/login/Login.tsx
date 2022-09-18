@@ -1,12 +1,11 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
-import { Modal } from "antd"
+import { Avatar, Modal } from "antd"
 import { LockOutlined, UserOutlined } from "@ant-design/icons"
 import styled from "styled-components"
 import {
   Copyright,
-  CustomAvatar,
   CustomButton,
   CustomCol,
   CustomContent,
@@ -81,10 +80,7 @@ const Login: React.FunctionComponent = () => {
           <StyledCol  xs={13}  sm={11} md={9} lg={8} xl={5}>
             <ContentContainer>
               <ContentContainer1>
-              <CustomAvatar
-                size={40}
-                icon={<LockOutlined />}
-              />
+              <Avatar size={64} icon={<UserOutlined />} />
               <Heading2>Iniciar Sesión</Heading2>
               <CustomDivider />
               <CustomForm

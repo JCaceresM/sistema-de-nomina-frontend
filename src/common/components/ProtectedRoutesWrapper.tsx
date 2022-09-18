@@ -81,9 +81,6 @@ const ProtectedRoutesWrapper = (props: Props): ReactElement => {
   }
   const PerfilMenu = (
     <CustomMenu>
-      <CustomMenuItem key="1" icon={<UserOutlined />}>
-        Perfil
-      </CustomMenuItem>
       <CustomMenuItem key="2" icon={<LoginOutlined />}>
         <span
           onClick={() => {

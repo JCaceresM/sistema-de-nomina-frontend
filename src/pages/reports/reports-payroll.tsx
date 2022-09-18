@@ -237,6 +237,7 @@ const Download = ({ record }: { record: PayrollRecordType }) => {
       <ExcelSheet data={record.payroll_record_detail || []} name={`Nomina`}>
         <ExcelColumn label="Nombre" value="first_name" />
         <ExcelColumn label="Apellido" value="last_name" />
+        <ExcelColumn label="Cedula" value="document_id" />
         <ExcelColumn label="Genero" value="gender" />
         <ExcelColumn
           label="descuentos"
