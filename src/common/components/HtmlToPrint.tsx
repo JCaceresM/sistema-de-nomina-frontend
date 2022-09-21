@@ -89,7 +89,7 @@ const HtmlToPrint = ({ data }: { data: any }): React.ReactElement => {
       
       </tbody>
       </table>
-      <p>Sueldo Neto: ${currencyLocale(netEarnings(item, []))}</p>
+      <p>Sueldo Neto: ${currencyLocale(netEarnings(item, item.payroll_news_record||[])-sumNews(item.payroll_news_record, "RESTA")||0)}</p>
       </td>
       </tr>
       </tbody>
@@ -179,7 +179,7 @@ ${data?.payroll_news_record.reduce(
 
 </tbody>
 </table>
-<p>Sueldo Neto: ${currencyLocale(netEarnings(data, []))}</p>
+<p>Sueldo Neto: ${currencyLocale(netEarnings(data, data.payroll_news_record||[])-sumNews(data.payroll_news_record, "RESTA")||0)}</p>
 </td>
 </tr>
 </tbody>

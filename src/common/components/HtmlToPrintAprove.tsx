@@ -113,7 +113,7 @@ const HtmlToPrintApprove = ({ data }: { data: any, }): React.ReactElement => {
       
       <p>&nbsp;</p>
       
-      <p>Sueldo Neto: ${currencyLocale(netEarnings(item, []))}</p>
+      <p>Sueldo Neto: ${currencyLocale(netEarnings(item, item.payroll_news_record||[])-sumNews(item.payroll_news_record, "RESTA")||0)}</p>
       <hr>
 
       `;
