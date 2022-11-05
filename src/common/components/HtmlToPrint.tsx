@@ -34,8 +34,7 @@ const HtmlToPrint = ({ data }: { data: any }): React.ReactElement => {
       <td style="width: 50%; height: 18px;">${item.department || '--'}</td>
       </tr>
       <tr style="height: 18px;">
-      <td style="width: 50%; height: 18px;"><strong>Cargo:</strong></td>
-      <td style="width: 50%; height: 18px;">${item.position_name || "--"}</td>
+  
    
       </tbody>
       </table>

@@ -39,8 +39,7 @@ const HtmlToPrintApprove = ({ data }: { data: any, }): React.ReactElement => {
             <td style="height:18px; width:1051px">${item.department || '--'}</td>
           </tr>
           <tr>
-            <td style="height:18px; width:139px"><strong>Cargo:</strong></td>
-            <td style="height:18px; width:1051px">${item.position_name || '--'}</td>
+
           </tr>
         
         </tbody>

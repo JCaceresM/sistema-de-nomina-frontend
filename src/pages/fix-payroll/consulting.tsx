@@ -1,9 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { ReactElement, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, {
+  ReactElement,
+  useEffect,
+  useState
+} from "react";
+import {
+  useDispatch,
+  useSelector
+} from "react-redux";
 import {
   getAllPayroll,
-  payrollManagerReduxState,
+  payrollManagerReduxState
 } from "../../actions/payroll/payroll.actions";
 import {
   CustomButton,
@@ -14,46 +21,58 @@ import {
   CustomTable,
   CustomText,
   CustomTitle,
-  CustomTooltip,
+  CustomTooltip
 } from "../../common/components";
 import CustomLayoutBoxShadow from "../../common/components/CustomLayoutBoxShadow";
 import { addPropertyKey } from "../../common/utils";
 import { state } from "../../common/utils/table/transform.utils";
 import { RootState } from "../../reducers/root_reducers";
-import { EyeTwoTone, PrinterTwoTone } from "@ant-design/icons";
+import {
+  EyeTwoTone,
+  PrinterTwoTone
+} from "@ant-design/icons";
 import { PropsType } from "../../common/types/modal.type";
 import {
   employeeManagerReduxState,
   EmployeeType,
-  getEmployee,
+  getEmployee
 } from "../../actions/employee/employee.actions";
 import {
   getPayrollnewsCollection,
-  payrollNewsManagerReduxState,
+  payrollNewsManagerReduxState
 } from "../../actions/payroll-news/payroll-news.actions";
 import { currencyLocale } from "../../common/utils/locale/locale.format.utils";
 import { getPayrollRecordCollection } from "../../actions/payroll record/payroll-record.actions";
 import { Table } from "antd";
-import { netEarnings, sumNews } from "../../common/utils/tax/index.helpers";
+import {
+  netEarnings,
+  sumNews
+} from "../../common/utils/tax/index.helpers";
 import { ColumnsType } from "antd/lib/table";
 import PrintComponentGeneral from "../../common/components/PrintComponentGeneral";
 import HtmlToPrint from "../../common/components/HtmlToPrint";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate
+} from "react-router-dom";
+import moment from "moment";
 const Consulting = (): ReactElement => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const location = useLocation();
-  const locationState = { ...(location.state as Record<string, string>) } as {
+  const locationState = {
+    ...(location.state as Record<string, string>)
+  } as {
     [key: string]: any;
   };
-  const [payrollSelected, setPayrollSelected] = useState<Record<string, any>>(
-    {}
+  const [
+    payrollSelected,
+    setPayrollSelected
+  ] = useState<Record<string, any>>({});
+
+  const { payrollRecord } = useSelector(
+    (state: RootState) => state.payrollRecord
   );
-
-  const {
-    payrollRecord,
-
-  } = useSelector((state: RootState) => state.payrollRecord);
   const hideModal = () => {
     setVisible(false);
   };
@@ -61,16 +80,16 @@ const Consulting = (): ReactElement => {
   const columns = [
     {
       title: "código",
-      dataIndex: "id",
+      dataIndex: "id"
     },
     {
       title: "Nómina",
-      dataIndex: "name",
+      dataIndex: "name"
     },
     {
       title: "Cant. Emp.",
-      render: (record: any)=>  record.payroll_record_detail.length
-
+      render: (record: any) =>
+        record.payroll_record_detail.length
     },
 
     {
@@ -78,36 +97,73 @@ const Consulting = (): ReactElement => {
       render: (record: Record<string, any>) => {
         return record?.description;
       },
-      ellipsis: true,
+      ellipsis: true
     },
-
+    {
+      title: "Fecha de registro",
+      render: (record: Record<string, any>) => {
+        return record?.registered_at
+          ? moment
+              .utc(record?.registered_at)
+              .local()
+              .format("MM/DD/YYYY HH:mm:ss")
+          : "-";
+      }
+    },
+    {
+      title: "Fecha actualizacion",
+      render: (record: Record<string, any>) => {
+        return record?.updated_at
+          ? moment
+              .utc(record?.updated_at)
+              .local()
+              .format("MM/DD/YYYY HH:mm:ss")
+          : "-";
+      }
+    },
     {
       title: "Operaciones",
       render: (record: any) => {
         return (
           <CustomRow justify={"center"}>
-            <CustomCol style={{ textAlign: "center" }} xs={8}>
-              <CustomTooltip placement={"bottom"} title={"Revisar"}>
+            <CustomCol
+              style={{ textAlign: "center" }}
+              xs={8}
+            >
+              <CustomTooltip
+                placement={"bottom"}
+                title={"Revisar"}
+              >
                 <CustomButton
                   type={"link"}
                   icon={<EyeTwoTone />}
                   onClick={() => {
                     setVisible(true);
-                    setPayrollSelected(record || {});
+                    setPayrollSelected(
+                      record || {}
+                    );
                   }}
                 />
               </CustomTooltip>
             </CustomCol>
           </CustomRow>
         );
-      },
-    },
+      }
+    }
   ];
   useEffect(() => {
     dispatch(
       getPayrollRecordCollection([
-        { field: "status", operator: "=", condition: "AU" },
-        { field: "type", operator: "=", condition: locationState.type },
+        {
+          field: "status",
+          operator: "=",
+          condition: "AU"
+        },
+        {
+          field: "type",
+          operator: "=",
+          condition: locationState.type
+        }
       ])
     );
   }, [location]);
@@ -116,11 +172,15 @@ const Consulting = (): ReactElement => {
     <CustomLayoutBoxShadow>
       <CustomRow>
         <CustomCol xs={24}>
-          <CustomTitle level={3}>Consulta</CustomTitle>
+          <CustomTitle level={3}>
+            Consulta
+          </CustomTitle>
         </CustomCol>
         <CustomCol xs={24}>
           <CustomTable
-            dataSource={addPropertyKey(payrollRecord)}
+            dataSource={addPropertyKey(
+              payrollRecord
+            )}
             columns={columns}
           ></CustomTable>
         </CustomCol>
@@ -140,7 +200,7 @@ const ViewModal = ({
   visible,
   hideModal,
   payrollSelected,
-  dataView,
+  dataView
 }: PropsType & {
   payrollSelected: Record<string, any>;
   dataView: Record<string, any>;
@@ -148,22 +208,35 @@ const ViewModal = ({
   const dispatch = useDispatch();
 
   const location = useLocation();
-  const locationState = { ...(location.state as Record<string, string>) } as {
+  const locationState = {
+    ...(location.state as Record<string, string>)
+  } as {
     [key: string]: any;
   };
-  const [printIsVisible, setPrintIsVisible] = useState(false);
-  const [employeeSelected, setEmployee] = useState<Record<string, any>>({});
+  const [
+    printIsVisible,
+    setPrintIsVisible
+  ] = useState(false);
+  const [
+    employeeSelected,
+    setEmployee
+  ] = useState<Record<string, any>>({});
   const viewColumns: ColumnsType<any> = [
     {
       title: "ID",
-      dataIndex: "id",
+      dataIndex: "id"
     },
     {
       title: "nombre",
       render: (record: Record<string, any>) => {
-        return record.first_name || "-" + record.last_name || "-";
-      },
+        return (
+          record.first_name ||
+          "-" + record.last_name ||
+          "-"
+        );
+      }
     },
+
     {
       title: "Operaciones",
       width: "15%",
@@ -171,7 +244,10 @@ const ViewModal = ({
         return (
           <CustomRow justify={"center"}>
             <CustomCol xs={4}>
-              <CustomTooltip placement={"bottom"} title={"Editar"}>
+              <CustomTooltip
+                placement={"bottom"}
+                title={"Editar"}
+              >
                 <CustomButton
                   type={"link"}
                   icon={<PrinterTwoTone />}
@@ -184,14 +260,20 @@ const ViewModal = ({
             </CustomCol>
           </CustomRow>
         );
-      },
-    },
+      }
+    }
   ];
 
   const beforeHideModal = () => {
     hideModal();
-    dispatch(employeeManagerReduxState({ employees: [] }));
-    dispatch(payrollNewsManagerReduxState({ payrollNews: [] }));
+    dispatch(
+      employeeManagerReduxState({ employees: [] })
+    );
+    dispatch(
+      payrollNewsManagerReduxState({
+        payrollNews: []
+      })
+    );
   };
   useEffect(() => {
     if (payrollSelected.id && visible) {
@@ -200,13 +282,13 @@ const ViewModal = ({
           {
             field: "payroll_id",
             operator: "=",
-            condition: payrollSelected.id,
+            condition: payrollSelected.id
           },
           {
             field: "type",
             operator: "=",
-            condition: locationState.type,
-          },
+            condition: locationState.type
+          }
         ])
       );
       dispatch(
@@ -216,14 +298,14 @@ const ViewModal = ({
             {
               field: "type",
               operator: "=",
-              condition: locationState.type,
+              condition: locationState.type
             },
             {
               field: "payroll_id",
               operator: "=",
-              condition: payrollSelected.id,
-            },
-          ],
+              condition: payrollSelected.id
+            }
+          ]
         })
       );
     }
@@ -240,22 +322,29 @@ const ViewModal = ({
       <CustomRow gutter={[5, 5]}>
         <CustomCol xs={24}>
           <CustomFormItem label="Imprimir todo">
-              <CustomTooltip placement={"bottom"} title={"Imprimir"}>
-                <CustomButton
-                  type={"link"}
-                  icon={<PrinterTwoTone />}
-                  onClick={() => {
-                    setEmployee( payrollSelected.payroll_record_detail || []);
-                    setPrintIsVisible(true);
-                  }}
-                />
-              </CustomTooltip>
-              </CustomFormItem>
+            <CustomTooltip
+              placement={"bottom"}
+              title={"Imprimir"}
+            >
+              <CustomButton
+                type={"link"}
+                icon={<PrinterTwoTone />}
+                onClick={() => {
+                  setEmployee(
+                    payrollSelected.payroll_record_detail ||
+                      []
+                  );
+                  setPrintIsVisible(true);
+                }}
+              />
+            </CustomTooltip>
+          </CustomFormItem>
         </CustomCol>
         <CustomCol xs={24}>
           <CustomTable
             dataSource={addPropertyKey(
-              payrollSelected.payroll_record_detail || []
+              payrollSelected.payroll_record_detail ||
+                []
             )}
             columns={viewColumns}
             pagination={false}
@@ -267,14 +356,18 @@ const ViewModal = ({
             title={"Visualizacion de recibo"}
             visible={printIsVisible}
             width={"40%"}
-            onCancel={() => setPrintIsVisible(false)}
+            onCancel={() =>
+              setPrintIsVisible(false)
+            }
             cancelText
             onOk={() => setPrintIsVisible(false)}
           >
             <CustomRow gutter={[5, 5]}>
               <CustomCol xs={24}>
                 {" "}
-                <HtmlToPrint data={employeeSelected} />
+                <HtmlToPrint
+                  data={employeeSelected}
+                />
               </CustomCol>
             </CustomRow>
           </CustomModal>

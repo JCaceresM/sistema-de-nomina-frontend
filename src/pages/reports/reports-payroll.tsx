@@ -179,6 +179,8 @@ const ReportsPayroll = (): ReactElement => {
                   <CustomDatePicker
                     onChange={(e) => {
                       const currentDate = new Date(e?.toISOString() || "");
+                      // eslint-disable-next-line no-console
+                      console.log('🚀 ~ file: reports-payroll.tsx ~ line 182 ~ ReportsPayroll ~ currentDate.getMonth()', currentDate.getMonth())
                       e?.toISOString() &&
                         setConditions((item) => [
                           ...item.filter((item) => item.field !== "created_at"),
@@ -188,7 +190,7 @@ const ReportsPayroll = (): ReactElement => {
                             condition: `${currentDate.getFullYear()}-${
                               currentDate.getMonth() + 1
                             }-01 , ${currentDate.getFullYear()}-${
-                              currentDate.getMonth() === 10
+                              currentDate.getMonth() === 11
                                 ? 1
                                 : currentDate.getMonth() + 2
                             }-01 `,
